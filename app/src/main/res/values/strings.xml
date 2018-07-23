@@ -2,7 +2,7 @@
     <string name="app_name">Traffic Tracker</string>
     <string name="launch_button">Launch Traffic Tracker</string>
     <string name="settings_button">Configure Settings</string>
-    <string name="settings_menu_label">Settings</string>
+    <string name="settings_activity_label">Settings</string>
     <string name="pref_key_show_camera_preview" translatable="false">show_camera_preview</string>
     <string name="pref_summaryOff_show_camera_preview">Camera Preview Disabled</string>
     <string name="pref_summaryOn_show_camera_preview">Camera Preview Enabled</string>
@@ -23,5 +23,10 @@
     <string name="pref_key_zone2_label" translatable="false">zone2_label</string>
     <string name="pref_title_zone2_name">Zone 2</string>
     <string name="pref_default_camera_selection">0</string>
+
+    <string name="arrays_cameras_video_mode">Video Mode</string>
+    <string name="arrays_cameras_default_camera">Default Camera</string>
+    <string name="camera_activity_label">Camera Mode</string>
+    <string name="video_activity_label">Video Mode</string>
 
 </resources>

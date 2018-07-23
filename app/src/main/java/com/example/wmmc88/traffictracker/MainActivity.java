@@ -9,14 +9,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
 import java.util.Map;
 
 //TODO Permission Requests
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private static final String TAG = MainActivity.class.getName();
+    private static final String TAG = MainActivity.class.getSimpleName();
     private TextView mCurrentSettingsTextView;
+
+    private int mLaunchMode;
+    private static final int VIDEO_LAUNCH = 0;
+    private static final int CAMERA_LAUNCH = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mLaunchButton.setOnClickListener(this);
         mConfigureSettingsButton.setOnClickListener(this);
         setupSettingsTextView();
+        mLaunchMode = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.pref_key_camera_selection), null));
     }
 
     @Override
@@ -49,10 +55,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int clickViewId = view.getId();
         switch (clickViewId) {
             case R.id.b_launch:
-                //TODO Launch Code
+                Log.v(TAG, "b_launch");
+
+                switch (mLaunchMode) {
+                    case VIDEO_LAUNCH:
+                        Intent intentToStartVideoMode = new Intent(MainActivity.this, VideoActivity.class);
+                        startActivity(intentToStartVideoMode);
+                        break;
+
+                    case CAMERA_LAUNCH:
+                        Intent intentToStartCameraMode = new Intent(MainActivity.this, CameraActivity.class);
+                        startActivity(intentToStartCameraMode);
+                        break;
+
+                    default:
+                        Log.e(TAG, "INVALID LAUNCH MODE");
+                        break;
+                }
                 break;
 
             case R.id.b_configure_settings:
+                Log.v(TAG, "b_configure_settings");
                 Intent intentToOpenSettings = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(intentToOpenSettings);
                 break;
@@ -83,5 +106,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         Log.d(TAG, "onSharedPreferenceChanged");
         updateSettingsTextView(sharedPreferences);
+        mLaunchMode = Integer.parseInt(sharedPreferences.getString(getString(R.string.pref_key_camera_selection), null));
     }
 }

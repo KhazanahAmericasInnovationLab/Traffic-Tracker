@@ -9,7 +9,7 @@ import android.support.v7.preference.PreferenceScreen;
 import android.util.Log;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener{
-    private static final String TAG = SettingsActivity.class.getName();
+    private static final String TAG = SettingsActivity.class.getSimpleName();
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
