@@ -11,7 +11,9 @@ import org.opencv.core.Mat;
 
 public class BackgroundSubtractor extends Algorithm {
 
-    protected BackgroundSubtractor(long addr) { super(addr); }
+    public BackgroundSubtractor(long addr) {
+        super(addr);
+    }
 
     // internal usage only
     public static BackgroundSubtractor __fromPtr__(long addr) { return new BackgroundSubtractor(addr); }
