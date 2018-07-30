@@ -9,6 +9,7 @@
 
     <!--TODO remove title bar-->
     <!--TODO Camera Selection-->
+    <!--TODO Performance of javacameraview vs javacameraview2-->
     <org.opencv.android.JavaCameraView
         android:id="@+id/cbvb_camera"
         android:layout_width="fill_parent"
