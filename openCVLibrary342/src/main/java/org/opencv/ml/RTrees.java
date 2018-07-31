@@ -58,60 +58,121 @@ public class RTrees extends DTrees {
         return retVal;
     }
 
-    // C++:  Mat getVarImportance()
-    private static native long getVarImportance_0(long nativeObj);
+    //javadoc: RTrees::getVarImportance()
+    public Mat getVarImportance() {
+
+        Mat retVal = new Mat(getVarImportance_0(nativeObj));
+
+        return retVal;
+    }
 
 
     //
     // C++:  TermCriteria getTermCriteria()
     //
 
-    // C++: static Ptr_RTrees create()
-    private static native long create_0();
+    // C++:  Mat getVarImportance()
+    private static native long getVarImportance_0(long nativeObj);
 
 
     //
     // C++:  bool getCalculateVarImportance()
     //
 
-    // C++: static Ptr_RTrees load(String filepath, String nodeName = String())
-    private static native long load_0(String filepath, String nodeName);
+    //javadoc: RTrees::setTermCriteria(val)
+    public void setTermCriteria(TermCriteria val) {
+
+        setTermCriteria_0(nativeObj, val.type, val.maxCount, val.epsilon);
+
+        return;
+    }
 
 
     //
     // C++:  int getActiveVarCount()
     //
 
-    private static native long load_1(String filepath);
+    //javadoc: RTrees::getCalculateVarImportance()
+    public boolean getCalculateVarImportance() {
+
+        boolean retVal = getCalculateVarImportance_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  void getVotes(Mat samples, Mat& results, int flags)
     //
 
-    // C++:  TermCriteria getTermCriteria()
-    private static native double[] getTermCriteria_0(long nativeObj);
+    //javadoc: RTrees::setCalculateVarImportance(val)
+    public void setCalculateVarImportance(boolean val) {
+
+        setCalculateVarImportance_0(nativeObj, val);
+
+        return;
+    }
 
 
     //
     // C++:  void setActiveVarCount(int val)
     //
 
-    // C++:  bool getCalculateVarImportance()
-    private static native boolean getCalculateVarImportance_0(long nativeObj);
+    //javadoc: RTrees::getActiveVarCount()
+    public int getActiveVarCount() {
+
+        int retVal = getActiveVarCount_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  void setCalculateVarImportance(bool val)
     //
 
-    // C++:  int getActiveVarCount()
-    private static native int getActiveVarCount_0(long nativeObj);
+    //javadoc: RTrees::setActiveVarCount(val)
+    public void setActiveVarCount(int val) {
+
+        setActiveVarCount_0(nativeObj, val);
+
+        return;
+    }
 
 
     //
     // C++:  void setTermCriteria(TermCriteria val)
     //
+
+    //javadoc: RTrees::getVotes(samples, results, flags)
+    public void getVotes(Mat samples, Mat results, int flags) {
+
+        getVotes_0(nativeObj, samples.nativeObj, results.nativeObj, flags);
+
+        return;
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
+    // C++: static Ptr_RTrees create()
+    private static native long create_0();
+
+    // C++: static Ptr_RTrees load(String filepath, String nodeName = String())
+    private static native long load_0(String filepath, String nodeName);
+
+    private static native long load_1(String filepath);
+
+    // C++:  TermCriteria getTermCriteria()
+    private static native double[] getTermCriteria_0(long nativeObj);
+
+    // C++:  bool getCalculateVarImportance()
+    private static native boolean getCalculateVarImportance_0(long nativeObj);
+
+    // C++:  int getActiveVarCount()
+    private static native int getActiveVarCount_0(long nativeObj);
 
     // C++:  void getVotes(Mat samples, Mat& results, int flags)
     private static native void getVotes_0(long nativeObj, long samples_nativeObj, long results_nativeObj, int flags);
@@ -128,73 +189,12 @@ public class RTrees extends DTrees {
     // native support for java finalize()
     private static native void delete(long nativeObj);
 
-    //javadoc: RTrees::getVarImportance()
-    public Mat getVarImportance() {
-
-        Mat retVal = new Mat(getVarImportance_0(nativeObj));
-
-        return retVal;
-    }
-
     //javadoc: RTrees::getTermCriteria()
     public TermCriteria getTermCriteria() {
 
         TermCriteria retVal = new TermCriteria(getTermCriteria_0(nativeObj));
 
         return retVal;
-    }
-
-    //javadoc: RTrees::setTermCriteria(val)
-    public void setTermCriteria(TermCriteria val) {
-
-        setTermCriteria_0(nativeObj, val.type, val.maxCount, val.epsilon);
-
-        return;
-    }
-
-    //javadoc: RTrees::getCalculateVarImportance()
-    public boolean getCalculateVarImportance() {
-
-        boolean retVal = getCalculateVarImportance_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: RTrees::setCalculateVarImportance(val)
-    public void setCalculateVarImportance(boolean val) {
-
-        setCalculateVarImportance_0(nativeObj, val);
-
-        return;
-    }
-
-    //javadoc: RTrees::getActiveVarCount()
-    public int getActiveVarCount() {
-
-        int retVal = getActiveVarCount_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: RTrees::setActiveVarCount(val)
-    public void setActiveVarCount(int val) {
-
-        setActiveVarCount_0(nativeObj, val);
-
-        return;
-    }
-
-    //javadoc: RTrees::getVotes(samples, results, flags)
-    public void getVotes(Mat samples, Mat results, int flags) {
-
-        getVotes_0(nativeObj, samples.nativeObj, results.nativeObj, flags);
-
-        return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

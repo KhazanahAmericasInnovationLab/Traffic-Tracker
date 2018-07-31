@@ -307,6 +307,12 @@ public class Net {
     // C++:  void setPreferableBackend(int backendId)
     private static native void setPreferableBackend_0(long nativeObj, int backendId);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // C++:  void setPreferableTarget(int targetId)
     private static native void setPreferableTarget_0(long nativeObj, int targetId);
 
@@ -582,11 +588,6 @@ public class Net {
         setPreferableTarget_0(nativeObj, targetId);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

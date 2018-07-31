@@ -79,9 +79,8 @@ public class Utils {
      * <br>The output Mat is always created of the same size as the input Bitmap and of the 'CV_8UC4' type,
      * it keeps the image in RGBA format.
      * <br>This function throws an exception if the conversion fails.
-     *
-     * @param bmp                is a valid input Bitmap object of the type 'ARGB_8888' or 'RGB_565'.
-     * @param mat                is a valid output Mat object, it will be reallocated if needed, so it may be empty.
+     * @param bmp is a valid input Bitmap object of the type 'ARGB_8888' or 'RGB_565'.
+     * @param mat is a valid output Mat object, it will be reallocated if needed, so it may be empty.
      * @param unPremultiplyAlpha is a flag, that determines, whether the bitmap needs to be converted from alpha premultiplied format (like Android keeps 'ARGB_8888' ones) to regular one; this flag is ignored for 'RGB_565' bitmaps.
      */
     public static void bitmapToMat(Bitmap bmp, Mat mat, boolean unPremultiplyAlpha) {
@@ -94,7 +93,6 @@ public class Utils {
 
     /**
      * Short form of the bitmapToMat(bmp, mat, unPremultiplyAlpha=false).
-     *
      * @param bmp is a valid input Bitmap object of the type 'ARGB_8888' or 'RGB_565'.
      * @param mat is a valid output Mat object, it will be reallocated if needed, so Mat may be empty.
      */
@@ -111,8 +109,8 @@ public class Utils {
      * <br>The output Bitmap object has to be of the same size as the input Mat and of the types 'ARGB_8888' or 'RGB_565'.
      * <br>This function throws an exception if the conversion fails.
      *
-     * @param mat              is a valid input Mat object of types 'CV_8UC1', 'CV_8UC3' or 'CV_8UC4'.
-     * @param bmp              is a valid Bitmap object of the same size as the Mat and of type 'ARGB_8888' or 'RGB_565'.
+     * @param mat is a valid input Mat object of types 'CV_8UC1', 'CV_8UC3' or 'CV_8UC4'.
+     * @param bmp is a valid Bitmap object of the same size as the Mat and of type 'ARGB_8888' or 'RGB_565'.
      * @param premultiplyAlpha is a flag, that determines, whether the Mat needs to be converted to alpha premultiplied format (like Android keeps 'ARGB_8888' bitmaps); the flag is ignored for 'RGB_565' bitmaps.
      */
     public static void matToBitmap(Mat mat, Bitmap bmp, boolean premultiplyAlpha) {
@@ -125,7 +123,6 @@ public class Utils {
 
     /**
      * Short form of the <b>matToBitmap(mat, bmp, premultiplyAlpha=false)</b>
-     *
      * @param mat is a valid input Mat object of the types 'CV_8UC1', 'CV_8UC3' or 'CV_8UC4'.
      * @param bmp is a valid Bitmap object of the same size as the Mat and of type 'ARGB_8888' or 'RGB_565'.
      */

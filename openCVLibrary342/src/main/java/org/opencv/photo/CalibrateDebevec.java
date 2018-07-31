@@ -64,6 +64,12 @@ public class CalibrateDebevec extends CalibrateCRF {
     // C++:  void setSamples(int samples)
     private static native void setSamples_0(long nativeObj, int samples);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // native support for java finalize()
     private static native void delete(long nativeObj);
 
@@ -113,11 +119,6 @@ public class CalibrateDebevec extends CalibrateCRF {
         setSamples_0(nativeObj, samples);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

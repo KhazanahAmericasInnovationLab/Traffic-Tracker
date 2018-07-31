@@ -16,18 +16,19 @@ import java.io.File;
 import java.util.StringTokenizer;
 
 class AsyncServiceHelper {
-    protected static final String TAG = "OpenCVManager/Helper";
-    protected static final int MINIMUM_ENGINE_VERSION = 2;
     /**
-     * URL of OpenCV Manager page on Google Play Market.
+     *  URL of OpenCV Manager page on Google Play Market.
      */
     protected static final String OPEN_CV_SERVICE_URL = "market://details?id=org.opencv.engine";
     protected static boolean mServiceInstallationProgress = false;
-    protected static boolean mLibraryInstallationProgress = false;
+
+    protected static final String TAG = "OpenCVManager/Helper";
+    protected static final int MINIMUM_ENGINE_VERSION = 2;
     protected OpenCVEngineInterface mEngineService;
     protected LoaderCallbackInterface mUserAppCallback;
     protected String mOpenCVersion;
     protected Context mAppContext;
+    protected static boolean mLibraryInstallationProgress = false;
     protected ServiceConnection mServiceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
             Log.d(TAG, "Service connection created");
@@ -55,7 +56,6 @@ class AsyncServiceHelper {
                                 public String getPackageName() {
                                     return "OpenCV library";
                                 }
-
                                 public void install() {
                                     Log.d(TAG, "Trying to install OpenCV lib via Google Play");
                                     try {
@@ -74,6 +74,7 @@ class AsyncServiceHelper {
                                         }
                                     } catch (RemoteException e) {
                                         e.printStackTrace();
+                                        ;
                                         Log.d(TAG, "Init finished with status " + LoaderCallbackInterface.INIT_FAILED);
                                         Log.d(TAG, "Unbind from service");
                                         mAppContext.unbindService(mServiceConnection);
@@ -81,7 +82,6 @@ class AsyncServiceHelper {
                                         mUserAppCallback.onManagerConnected(LoaderCallbackInterface.INIT_FAILED);
                                     }
                                 }
-
                                 public void cancel() {
                                     Log.d(TAG, "OpenCV library installation was canceled");
                                     Log.d(TAG, "Init finished with status " + LoaderCallbackInterface.INSTALL_CANCELED);
@@ -90,7 +90,6 @@ class AsyncServiceHelper {
                                     Log.d(TAG, "Calling using callback");
                                     mUserAppCallback.onManagerConnected(LoaderCallbackInterface.INSTALL_CANCELED);
                                 }
-
                                 public void wait_install() {
                                     Log.e(TAG, "Installation was not started! Nothing to wait!");
                                 }
@@ -116,7 +115,6 @@ class AsyncServiceHelper {
                                     Log.d(TAG, "Calling using callback");
                                     mUserAppCallback.onManagerConnected(LoaderCallbackInterface.INSTALL_CANCELED);
                                 }
-
                                 public void wait_install() {
                                     Log.d(TAG, "Waiting for current installation");
                                     try {
@@ -229,7 +227,6 @@ class AsyncServiceHelper {
                 public String getPackageName() {
                     return "OpenCV Manager";
                 }
-
                 public void install() {
                     Log.d(TAG, "Trying to install OpenCV Manager via Google Play");
 

@@ -37,6 +37,12 @@ public class MergeRobertson extends MergeExposures {
     // C++:  void process(vector_Mat src, Mat& dst, Mat times)
     private static native void process_1(long nativeObj, long src_mat_nativeObj, long dst_nativeObj, long times_nativeObj);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // native support for java finalize()
     private static native void delete(long nativeObj);
 
@@ -54,11 +60,6 @@ public class MergeRobertson extends MergeExposures {
         process_1(nativeObj, src_mat.nativeObj, dst.nativeObj, times.nativeObj);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

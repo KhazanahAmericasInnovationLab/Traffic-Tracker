@@ -48,6 +48,12 @@ public class TonemapMantiuk extends Tonemap {
     // C++:  void setScale(float scale)
     private static native void setScale_0(long nativeObj, float scale);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // native support for java finalize()
     private static native void delete(long nativeObj);
 
@@ -81,11 +87,6 @@ public class TonemapMantiuk extends Tonemap {
         setScale_0(nativeObj, scale);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

@@ -140,6 +140,12 @@ public class Feature2D extends Algorithm {
     // C++:  void write(String fileName)
     private static native void write_0(long nativeObj, String fileName);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // native support for java finalize()
     private static native void delete(long nativeObj);
 
@@ -272,11 +278,6 @@ public class Feature2D extends Algorithm {
         write_0(nativeObj, fileName);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

@@ -4,6 +4,7 @@
 package org.opencv.core;
 
 
+
 // C++: class TickMeter
 //javadoc: TickMeter
 
@@ -99,6 +100,12 @@ public class TickMeter {
     // C++:  void stop()
     private static native void stop_0(long nativeObj);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // native support for java finalize()
     private static native void delete(long nativeObj);
 
@@ -168,11 +175,6 @@ public class TickMeter {
         stop_0(nativeObj);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

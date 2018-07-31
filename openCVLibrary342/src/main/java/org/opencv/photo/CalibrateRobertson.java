@@ -58,6 +58,12 @@ public class CalibrateRobertson extends CalibrateCRF {
     // C++:  void setThreshold(float threshold)
     private static native void setThreshold_0(long nativeObj, float threshold);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // native support for java finalize()
     private static native void delete(long nativeObj);
 
@@ -99,11 +105,6 @@ public class CalibrateRobertson extends CalibrateCRF {
         setMaxIter_0(nativeObj, max_iter);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

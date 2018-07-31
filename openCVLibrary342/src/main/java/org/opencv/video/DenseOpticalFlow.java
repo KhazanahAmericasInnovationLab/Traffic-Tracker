@@ -35,6 +35,12 @@ public class DenseOpticalFlow extends Algorithm {
     // C++:  void collectGarbage()
     private static native void collectGarbage_0(long nativeObj);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // native support for java finalize()
     private static native void delete(long nativeObj);
 
@@ -52,11 +58,6 @@ public class DenseOpticalFlow extends Algorithm {
         collectGarbage_0(nativeObj);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

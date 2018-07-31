@@ -11,12 +11,6 @@ import org.opencv.core.Mat;
 
 public class StatModel extends Algorithm {
 
-    public static final int
-            UPDATE_MODEL = 1,
-            RAW_OUTPUT = 1,
-            COMPRESSED_INPUT = 2,
-            PREPROCESSED_INPUT = 4;
-
     protected StatModel(long addr) {
         super(addr);
     }
@@ -25,6 +19,12 @@ public class StatModel extends Algorithm {
     public static StatModel __fromPtr__(long addr) {
         return new StatModel(addr);
     }
+
+    public static final int
+            UPDATE_MODEL = 1,
+            RAW_OUTPUT = 1,
+            COMPRESSED_INPUT = 2,
+            PREPROCESSED_INPUT = 4;
 
 
     //
@@ -93,6 +93,12 @@ public class StatModel extends Algorithm {
 
     // C++:  int getVarCount()
     private static native int getVarCount_0(long nativeObj);
+
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
 
     // native support for java finalize()
     private static native void delete(long nativeObj);
@@ -175,11 +181,6 @@ public class StatModel extends Algorithm {
         int retVal = getVarCount_0(nativeObj);
 
         return retVal;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

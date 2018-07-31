@@ -80,6 +80,12 @@ public class ANN_MLP_ANNEAL extends ANN_MLP {
     // C++:  void setAnnealItePerStep(int val)
     private static native void setAnnealItePerStep_0(long nativeObj, int val);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // native support for java finalize()
     private static native void delete(long nativeObj);
 
@@ -145,11 +151,6 @@ public class ANN_MLP_ANNEAL extends ANN_MLP {
         setAnnealItePerStep_0(nativeObj, val);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

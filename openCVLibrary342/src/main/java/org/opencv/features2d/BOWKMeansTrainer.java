@@ -55,6 +55,12 @@ public class BOWKMeansTrainer extends BOWTrainer {
 
     private static native long BOWKMeansTrainer_1(int clusterCount);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // C++:  Mat cluster(Mat descriptors)
     private static native long cluster_0(long nativeObj, long descriptors_nativeObj);
 
@@ -78,11 +84,6 @@ public class BOWKMeansTrainer extends BOWTrainer {
         Mat retVal = new Mat(cluster_1(nativeObj));
 
         return retVal;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

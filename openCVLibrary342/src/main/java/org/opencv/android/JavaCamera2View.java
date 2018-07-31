@@ -52,27 +52,6 @@ public class JavaCamera2View extends CameraBridgeViewBase {
 
     private HandlerThread mBackgroundThread;
     private Handler mBackgroundHandler;
-    private final CameraDevice.StateCallback mStateCallback = new CameraDevice.StateCallback() {
-
-        @Override
-        public void onOpened(CameraDevice cameraDevice) {
-            mCameraDevice = cameraDevice;
-            createCameraPreviewSession();
-        }
-
-        @Override
-        public void onDisconnected(CameraDevice cameraDevice) {
-            cameraDevice.close();
-            mCameraDevice = null;
-        }
-
-        @Override
-        public void onError(CameraDevice cameraDevice, int error) {
-            cameraDevice.close();
-            mCameraDevice = null;
-        }
-
-    };
 
     public JavaCamera2View(Context context, int cameraId) {
         super(context, cameraId);
@@ -103,6 +82,28 @@ public class JavaCamera2View extends CameraBridgeViewBase {
             Log.e(LOGTAG, "stopBackgroundThread", e);
         }
     }
+
+    private final CameraDevice.StateCallback mStateCallback = new CameraDevice.StateCallback() {
+
+        @Override
+        public void onOpened(CameraDevice cameraDevice) {
+            mCameraDevice = cameraDevice;
+            createCameraPreviewSession();
+        }
+
+        @Override
+        public void onDisconnected(CameraDevice cameraDevice) {
+            cameraDevice.close();
+            mCameraDevice = null;
+        }
+
+        @Override
+        public void onError(CameraDevice cameraDevice, int error) {
+            cameraDevice.close();
+            mCameraDevice = null;
+        }
+
+    };
 
     protected boolean initializeCamera() {
         Log.i(LOGTAG, "initializeCamera");
@@ -322,30 +323,6 @@ public class JavaCamera2View extends CameraBridgeViewBase {
     }
 
     private class JavaCamera2Frame implements CvCameraViewFrame {
-        private Mat mYuvFrameData;
-        private Mat mUVFrameData;
-        private Mat mRgba;
-        private int mWidth;
-        private int mHeight;
-
-        public JavaCamera2Frame(Mat Yuv420sp, int width, int height) {
-            super();
-            mWidth = width;
-            mHeight = height;
-            mYuvFrameData = Yuv420sp;
-            mUVFrameData = null;
-            mRgba = new Mat();
-        }
-
-        public JavaCamera2Frame(Mat Y, Mat UV, int width, int height) {
-            super();
-            mWidth = width;
-            mHeight = height;
-            mYuvFrameData = Y;
-            mUVFrameData = UV;
-            mRgba = new Mat();
-        }
-
         @Override
         public Mat gray() {
             return mYuvFrameData.submat(0, mHeight, 0, mWidth);
@@ -366,8 +343,32 @@ public class JavaCamera2View extends CameraBridgeViewBase {
             return mRgba;
         }
 
+        private Mat mYuvFrameData;
+        private Mat mUVFrameData;
+
         public void release() {
             mRgba.release();
         }
+        private Mat mRgba;
+        private int mWidth;
+        private int mHeight;
+        public JavaCamera2Frame(Mat Yuv420sp, int width, int height) {
+            super();
+            mWidth = width;
+            mHeight = height;
+            mYuvFrameData = Yuv420sp;
+            mUVFrameData = null;
+            mRgba = new Mat();
+        }
+        public JavaCamera2Frame(Mat Y, Mat UV, int width, int height) {
+            super();
+            mWidth = width;
+            mHeight = height;
+            mYuvFrameData = Y;
+            mUVFrameData = UV;
+            mRgba = new Mat();
+        }
     }
+
+    ;
 }

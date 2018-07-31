@@ -553,6 +553,210 @@ public class Mat {
     // C++: Mat Mat::setTo(Mat value, Mat mask = Mat())
     private static native long n_setTo(long nativeObj, long value_nativeObj, long mask_nativeObj);
 
+    @Override
+    protected void finalize() throws Throwable {
+        n_delete(nativeObj);
+        super.finalize();
+    }
+
+    // javadoc:Mat::toString()
+    @Override
+    public String toString() {
+        return "Mat [ " +
+                rows() + "*" + cols() + "*" + CvType.typeToString(type()) +
+                ", isCont=" + isContinuous() + ", isSubmat=" + isSubmatrix() +
+                ", nativeObj=0x" + Long.toHexString(nativeObj) +
+                ", dataAddr=0x" + Long.toHexString(dataAddr()) +
+                " ]";
+    }
+
+    // javadoc:Mat::dump()
+    public String dump() {
+        return nDump(nativeObj);
+    }
+
+    // javadoc:Mat::put(row,col,data)
+    public int put(int row, int col, double... data) {
+        int t = type();
+        if (data == null || data.length % CvType.channels(t) != 0)
+            throw new java.lang.UnsupportedOperationException(
+                    "Provided data element number (" +
+                            (data == null ? 0 : data.length) +
+                            ") should be multiple of the Mat channels count (" +
+                            CvType.channels(t) + ")");
+        return nPutD(nativeObj, row, col, data.length, data);
+    }
+
+    // javadoc:Mat::put(row,col,data)
+    public int put(int row, int col, float[] data) {
+        int t = type();
+        if (data == null || data.length % CvType.channels(t) != 0)
+            throw new java.lang.UnsupportedOperationException(
+                    "Provided data element number (" +
+                            (data == null ? 0 : data.length) +
+                            ") should be multiple of the Mat channels count (" +
+                            CvType.channels(t) + ")");
+        if (CvType.depth(t) == CvType.CV_32F) {
+            return nPutF(nativeObj, row, col, data.length, data);
+        }
+        throw new java.lang.UnsupportedOperationException("Mat data type is not compatible: " + t);
+    }
+
+    // javadoc:Mat::put(row,col,data)
+    public int put(int row, int col, int[] data) {
+        int t = type();
+        if (data == null || data.length % CvType.channels(t) != 0)
+            throw new java.lang.UnsupportedOperationException(
+                    "Provided data element number (" +
+                            (data == null ? 0 : data.length) +
+                            ") should be multiple of the Mat channels count (" +
+                            CvType.channels(t) + ")");
+        if (CvType.depth(t) == CvType.CV_32S) {
+            return nPutI(nativeObj, row, col, data.length, data);
+        }
+        throw new java.lang.UnsupportedOperationException("Mat data type is not compatible: " + t);
+    }
+
+    // javadoc:Mat::put(row,col,data)
+    public int put(int row, int col, short[] data) {
+        int t = type();
+        if (data == null || data.length % CvType.channels(t) != 0)
+            throw new java.lang.UnsupportedOperationException(
+                    "Provided data element number (" +
+                            (data == null ? 0 : data.length) +
+                            ") should be multiple of the Mat channels count (" +
+                            CvType.channels(t) + ")");
+        if (CvType.depth(t) == CvType.CV_16U || CvType.depth(t) == CvType.CV_16S) {
+            return nPutS(nativeObj, row, col, data.length, data);
+        }
+        throw new java.lang.UnsupportedOperationException("Mat data type is not compatible: " + t);
+    }
+
+    // javadoc:Mat::put(row,col,data)
+    public int put(int row, int col, byte[] data) {
+        int t = type();
+        if (data == null || data.length % CvType.channels(t) != 0)
+            throw new java.lang.UnsupportedOperationException(
+                    "Provided data element number (" +
+                            (data == null ? 0 : data.length) +
+                            ") should be multiple of the Mat channels count (" +
+                            CvType.channels(t) + ")");
+        if (CvType.depth(t) == CvType.CV_8U || CvType.depth(t) == CvType.CV_8S) {
+            return nPutB(nativeObj, row, col, data.length, data);
+        }
+        throw new java.lang.UnsupportedOperationException("Mat data type is not compatible: " + t);
+    }
+
+    // javadoc:Mat::put(row,col,data,offset,length)
+    public int put(int row, int col, byte[] data, int offset, int length) {
+        int t = type();
+        if (data == null || length % CvType.channels(t) != 0)
+            throw new java.lang.UnsupportedOperationException(
+                    "Provided data element number (" +
+                            (data == null ? 0 : data.length) +
+                            ") should be multiple of the Mat channels count (" +
+                            CvType.channels(t) + ")");
+        if (CvType.depth(t) == CvType.CV_8U || CvType.depth(t) == CvType.CV_8S) {
+            return nPutBwOffset(nativeObj, row, col, length, offset, data);
+        }
+        throw new java.lang.UnsupportedOperationException("Mat data type is not compatible: " + t);
+    }
+
+    // javadoc:Mat::get(row,col,data)
+    public int get(int row, int col, byte[] data) {
+        int t = type();
+        if (data == null || data.length % CvType.channels(t) != 0)
+            throw new java.lang.UnsupportedOperationException(
+                    "Provided data element number (" +
+                            (data == null ? 0 : data.length) +
+                            ") should be multiple of the Mat channels count (" +
+                            CvType.channels(t) + ")");
+        if (CvType.depth(t) == CvType.CV_8U || CvType.depth(t) == CvType.CV_8S) {
+            return nGetB(nativeObj, row, col, data.length, data);
+        }
+        throw new java.lang.UnsupportedOperationException("Mat data type is not compatible: " + t);
+    }
+
+    // javadoc:Mat::get(row,col,data)
+    public int get(int row, int col, short[] data) {
+        int t = type();
+        if (data == null || data.length % CvType.channels(t) != 0)
+            throw new java.lang.UnsupportedOperationException(
+                    "Provided data element number (" +
+                            (data == null ? 0 : data.length) +
+                            ") should be multiple of the Mat channels count (" +
+                            CvType.channels(t) + ")");
+        if (CvType.depth(t) == CvType.CV_16U || CvType.depth(t) == CvType.CV_16S) {
+            return nGetS(nativeObj, row, col, data.length, data);
+        }
+        throw new java.lang.UnsupportedOperationException("Mat data type is not compatible: " + t);
+    }
+
+    // javadoc:Mat::get(row,col,data)
+    public int get(int row, int col, int[] data) {
+        int t = type();
+        if (data == null || data.length % CvType.channels(t) != 0)
+            throw new java.lang.UnsupportedOperationException(
+                    "Provided data element number (" +
+                            (data == null ? 0 : data.length) +
+                            ") should be multiple of the Mat channels count (" +
+                            CvType.channels(t) + ")");
+        if (CvType.depth(t) == CvType.CV_32S) {
+            return nGetI(nativeObj, row, col, data.length, data);
+        }
+        throw new java.lang.UnsupportedOperationException("Mat data type is not compatible: " + t);
+    }
+
+    // javadoc:Mat::get(row,col,data)
+    public int get(int row, int col, float[] data) {
+        int t = type();
+        if (data == null || data.length % CvType.channels(t) != 0)
+            throw new java.lang.UnsupportedOperationException(
+                    "Provided data element number (" +
+                            (data == null ? 0 : data.length) +
+                            ") should be multiple of the Mat channels count (" +
+                            CvType.channels(t) + ")");
+        if (CvType.depth(t) == CvType.CV_32F) {
+            return nGetF(nativeObj, row, col, data.length, data);
+        }
+        throw new java.lang.UnsupportedOperationException("Mat data type is not compatible: " + t);
+    }
+
+    // javadoc:Mat::get(row,col,data)
+    public int get(int row, int col, double[] data) {
+        int t = type();
+        if (data == null || data.length % CvType.channels(t) != 0)
+            throw new java.lang.UnsupportedOperationException(
+                    "Provided data element number (" +
+                            (data == null ? 0 : data.length) +
+                            ") should be multiple of the Mat channels count (" +
+                            CvType.channels(t) + ")");
+        if (CvType.depth(t) == CvType.CV_64F) {
+            return nGetD(nativeObj, row, col, data.length, data);
+        }
+        throw new java.lang.UnsupportedOperationException("Mat data type is not compatible: " + t);
+    }
+
+    // javadoc:Mat::get(row,col)
+    public double[] get(int row, int col) {
+        return nGet(nativeObj, row, col);
+    }
+
+    // javadoc:Mat::height()
+    public int height() {
+        return rows();
+    }
+
+    // javadoc:Mat::width()
+    public int width() {
+        return cols();
+    }
+
+    // javadoc:Mat::getNativeObjAddr()
+    public long getNativeObjAddr() {
+        return nativeObj;
+    }
+
     private static native long n_setTo(long nativeObj, long value_nativeObj);
 
     // C++: Size Mat::size()
@@ -1075,209 +1279,5 @@ public class Mat {
         int retVal = n_type(nativeObj);
 
         return retVal;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        n_delete(nativeObj);
-        super.finalize();
-    }
-
-    // javadoc:Mat::toString()
-    @Override
-    public String toString() {
-        return "Mat [ " +
-                rows() + "*" + cols() + "*" + CvType.typeToString(type()) +
-                ", isCont=" + isContinuous() + ", isSubmat=" + isSubmatrix() +
-                ", nativeObj=0x" + Long.toHexString(nativeObj) +
-                ", dataAddr=0x" + Long.toHexString(dataAddr()) +
-                " ]";
-    }
-
-    // javadoc:Mat::dump()
-    public String dump() {
-        return nDump(nativeObj);
-    }
-
-    // javadoc:Mat::put(row,col,data)
-    public int put(int row, int col, double... data) {
-        int t = type();
-        if (data == null || data.length % CvType.channels(t) != 0)
-            throw new java.lang.UnsupportedOperationException(
-                    "Provided data element number (" +
-                            (data == null ? 0 : data.length) +
-                            ") should be multiple of the Mat channels count (" +
-                            CvType.channels(t) + ")");
-        return nPutD(nativeObj, row, col, data.length, data);
-    }
-
-    // javadoc:Mat::put(row,col,data)
-    public int put(int row, int col, float[] data) {
-        int t = type();
-        if (data == null || data.length % CvType.channels(t) != 0)
-            throw new java.lang.UnsupportedOperationException(
-                    "Provided data element number (" +
-                            (data == null ? 0 : data.length) +
-                            ") should be multiple of the Mat channels count (" +
-                            CvType.channels(t) + ")");
-        if (CvType.depth(t) == CvType.CV_32F) {
-            return nPutF(nativeObj, row, col, data.length, data);
-        }
-        throw new java.lang.UnsupportedOperationException("Mat data type is not compatible: " + t);
-    }
-
-    // javadoc:Mat::put(row,col,data)
-    public int put(int row, int col, int[] data) {
-        int t = type();
-        if (data == null || data.length % CvType.channels(t) != 0)
-            throw new java.lang.UnsupportedOperationException(
-                    "Provided data element number (" +
-                            (data == null ? 0 : data.length) +
-                            ") should be multiple of the Mat channels count (" +
-                            CvType.channels(t) + ")");
-        if (CvType.depth(t) == CvType.CV_32S) {
-            return nPutI(nativeObj, row, col, data.length, data);
-        }
-        throw new java.lang.UnsupportedOperationException("Mat data type is not compatible: " + t);
-    }
-
-    // javadoc:Mat::put(row,col,data)
-    public int put(int row, int col, short[] data) {
-        int t = type();
-        if (data == null || data.length % CvType.channels(t) != 0)
-            throw new java.lang.UnsupportedOperationException(
-                    "Provided data element number (" +
-                            (data == null ? 0 : data.length) +
-                            ") should be multiple of the Mat channels count (" +
-                            CvType.channels(t) + ")");
-        if (CvType.depth(t) == CvType.CV_16U || CvType.depth(t) == CvType.CV_16S) {
-            return nPutS(nativeObj, row, col, data.length, data);
-        }
-        throw new java.lang.UnsupportedOperationException("Mat data type is not compatible: " + t);
-    }
-
-    // javadoc:Mat::put(row,col,data)
-    public int put(int row, int col, byte[] data) {
-        int t = type();
-        if (data == null || data.length % CvType.channels(t) != 0)
-            throw new java.lang.UnsupportedOperationException(
-                    "Provided data element number (" +
-                            (data == null ? 0 : data.length) +
-                            ") should be multiple of the Mat channels count (" +
-                            CvType.channels(t) + ")");
-        if (CvType.depth(t) == CvType.CV_8U || CvType.depth(t) == CvType.CV_8S) {
-            return nPutB(nativeObj, row, col, data.length, data);
-        }
-        throw new java.lang.UnsupportedOperationException("Mat data type is not compatible: " + t);
-    }
-
-    // javadoc:Mat::put(row,col,data,offset,length)
-    public int put(int row, int col, byte[] data, int offset, int length) {
-        int t = type();
-        if (data == null || length % CvType.channels(t) != 0)
-            throw new java.lang.UnsupportedOperationException(
-                    "Provided data element number (" +
-                            (data == null ? 0 : data.length) +
-                            ") should be multiple of the Mat channels count (" +
-                            CvType.channels(t) + ")");
-        if (CvType.depth(t) == CvType.CV_8U || CvType.depth(t) == CvType.CV_8S) {
-            return nPutBwOffset(nativeObj, row, col, length, offset, data);
-        }
-        throw new java.lang.UnsupportedOperationException("Mat data type is not compatible: " + t);
-    }
-
-    // javadoc:Mat::get(row,col,data)
-    public int get(int row, int col, byte[] data) {
-        int t = type();
-        if (data == null || data.length % CvType.channels(t) != 0)
-            throw new java.lang.UnsupportedOperationException(
-                    "Provided data element number (" +
-                            (data == null ? 0 : data.length) +
-                            ") should be multiple of the Mat channels count (" +
-                            CvType.channels(t) + ")");
-        if (CvType.depth(t) == CvType.CV_8U || CvType.depth(t) == CvType.CV_8S) {
-            return nGetB(nativeObj, row, col, data.length, data);
-        }
-        throw new java.lang.UnsupportedOperationException("Mat data type is not compatible: " + t);
-    }
-
-    // javadoc:Mat::get(row,col,data)
-    public int get(int row, int col, short[] data) {
-        int t = type();
-        if (data == null || data.length % CvType.channels(t) != 0)
-            throw new java.lang.UnsupportedOperationException(
-                    "Provided data element number (" +
-                            (data == null ? 0 : data.length) +
-                            ") should be multiple of the Mat channels count (" +
-                            CvType.channels(t) + ")");
-        if (CvType.depth(t) == CvType.CV_16U || CvType.depth(t) == CvType.CV_16S) {
-            return nGetS(nativeObj, row, col, data.length, data);
-        }
-        throw new java.lang.UnsupportedOperationException("Mat data type is not compatible: " + t);
-    }
-
-    // javadoc:Mat::get(row,col,data)
-    public int get(int row, int col, int[] data) {
-        int t = type();
-        if (data == null || data.length % CvType.channels(t) != 0)
-            throw new java.lang.UnsupportedOperationException(
-                    "Provided data element number (" +
-                            (data == null ? 0 : data.length) +
-                            ") should be multiple of the Mat channels count (" +
-                            CvType.channels(t) + ")");
-        if (CvType.depth(t) == CvType.CV_32S) {
-            return nGetI(nativeObj, row, col, data.length, data);
-        }
-        throw new java.lang.UnsupportedOperationException("Mat data type is not compatible: " + t);
-    }
-
-    // javadoc:Mat::get(row,col,data)
-    public int get(int row, int col, float[] data) {
-        int t = type();
-        if (data == null || data.length % CvType.channels(t) != 0)
-            throw new java.lang.UnsupportedOperationException(
-                    "Provided data element number (" +
-                            (data == null ? 0 : data.length) +
-                            ") should be multiple of the Mat channels count (" +
-                            CvType.channels(t) + ")");
-        if (CvType.depth(t) == CvType.CV_32F) {
-            return nGetF(nativeObj, row, col, data.length, data);
-        }
-        throw new java.lang.UnsupportedOperationException("Mat data type is not compatible: " + t);
-    }
-
-    // javadoc:Mat::get(row,col,data)
-    public int get(int row, int col, double[] data) {
-        int t = type();
-        if (data == null || data.length % CvType.channels(t) != 0)
-            throw new java.lang.UnsupportedOperationException(
-                    "Provided data element number (" +
-                            (data == null ? 0 : data.length) +
-                            ") should be multiple of the Mat channels count (" +
-                            CvType.channels(t) + ")");
-        if (CvType.depth(t) == CvType.CV_64F) {
-            return nGetD(nativeObj, row, col, data.length, data);
-        }
-        throw new java.lang.UnsupportedOperationException("Mat data type is not compatible: " + t);
-    }
-
-    // javadoc:Mat::get(row,col)
-    public double[] get(int row, int col) {
-        return nGet(nativeObj, row, col);
-    }
-
-    // javadoc:Mat::height()
-    public int height() {
-        return rows();
-    }
-
-    // javadoc:Mat::width()
-    public int width() {
-        return cols();
-    }
-
-    // javadoc:Mat::getNativeObjAddr()
-    public long getNativeObjAddr() {
-        return nativeObj;
     }
 }

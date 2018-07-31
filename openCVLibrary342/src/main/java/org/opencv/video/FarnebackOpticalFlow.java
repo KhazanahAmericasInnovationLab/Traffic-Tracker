@@ -50,116 +50,226 @@ public class FarnebackOpticalFlow extends DenseOpticalFlow {
     // C++:  double getPolySigma()
     //
 
-    private static native long create_1();
+    //javadoc: FarnebackOpticalFlow::setFastPyramids(fastPyramids)
+    public void setFastPyramids(boolean fastPyramids) {
+
+        setFastPyramids_0(nativeObj, fastPyramids);
+
+        return;
+    }
 
 
     //
     // C++:  double getPyrScale()
     //
 
-    // C++:  bool getFastPyramids()
-    private static native boolean getFastPyramids_0(long nativeObj);
+    //javadoc: FarnebackOpticalFlow::getPolySigma()
+    public double getPolySigma() {
+
+        double retVal = getPolySigma_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  int getFlags()
     //
 
-    // C++:  double getPolySigma()
-    private static native double getPolySigma_0(long nativeObj);
+    //javadoc: FarnebackOpticalFlow::setPolySigma(polySigma)
+    public void setPolySigma(double polySigma) {
+
+        setPolySigma_0(nativeObj, polySigma);
+
+        return;
+    }
 
 
     //
     // C++:  int getNumIters()
     //
 
-    // C++:  double getPyrScale()
-    private static native double getPyrScale_0(long nativeObj);
+    //javadoc: FarnebackOpticalFlow::getPyrScale()
+    public double getPyrScale() {
+
+        double retVal = getPyrScale_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  int getNumLevels()
     //
 
-    // C++:  int getFlags()
-    private static native int getFlags_0(long nativeObj);
+    //javadoc: FarnebackOpticalFlow::setPyrScale(pyrScale)
+    public void setPyrScale(double pyrScale) {
+
+        setPyrScale_0(nativeObj, pyrScale);
+
+        return;
+    }
 
 
     //
     // C++:  int getPolyN()
     //
 
-    // C++:  int getNumIters()
-    private static native int getNumIters_0(long nativeObj);
+    //javadoc: FarnebackOpticalFlow::getFlags()
+    public int getFlags() {
+
+        int retVal = getFlags_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  int getWinSize()
     //
 
-    // C++:  int getNumLevels()
-    private static native int getNumLevels_0(long nativeObj);
+    //javadoc: FarnebackOpticalFlow::setFlags(flags)
+    public void setFlags(int flags) {
+
+        setFlags_0(nativeObj, flags);
+
+        return;
+    }
 
 
     //
     // C++:  void setFastPyramids(bool fastPyramids)
     //
 
-    // C++:  int getPolyN()
-    private static native int getPolyN_0(long nativeObj);
+    //javadoc: FarnebackOpticalFlow::getNumIters()
+    public int getNumIters() {
+
+        int retVal = getNumIters_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  void setFlags(int flags)
     //
 
-    // C++:  int getWinSize()
-    private static native int getWinSize_0(long nativeObj);
+    //javadoc: FarnebackOpticalFlow::setNumIters(numIters)
+    public void setNumIters(int numIters) {
+
+        setNumIters_0(nativeObj, numIters);
+
+        return;
+    }
 
 
     //
     // C++:  void setNumIters(int numIters)
     //
 
-    // C++:  void setFastPyramids(bool fastPyramids)
-    private static native void setFastPyramids_0(long nativeObj, boolean fastPyramids);
+    //javadoc: FarnebackOpticalFlow::getNumLevels()
+    public int getNumLevels() {
+
+        int retVal = getNumLevels_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  void setNumLevels(int numLevels)
     //
 
-    // C++:  void setFlags(int flags)
-    private static native void setFlags_0(long nativeObj, int flags);
+    private static native long create_1();
 
 
     //
     // C++:  void setPolyN(int polyN)
     //
 
-    // C++:  void setNumIters(int numIters)
-    private static native void setNumIters_0(long nativeObj, int numIters);
+    //javadoc: FarnebackOpticalFlow::getPolyN()
+    public int getPolyN() {
+
+        int retVal = getPolyN_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  void setPolySigma(double polySigma)
     //
 
-    // C++:  void setNumLevels(int numLevels)
-    private static native void setNumLevels_0(long nativeObj, int numLevels);
+    //javadoc: FarnebackOpticalFlow::setPolyN(polyN)
+    public void setPolyN(int polyN) {
+
+        setPolyN_0(nativeObj, polyN);
+
+        return;
+    }
 
 
     //
     // C++:  void setPyrScale(double pyrScale)
     //
 
-    // C++:  void setPolyN(int polyN)
-    private static native void setPolyN_0(long nativeObj, int polyN);
+    //javadoc: FarnebackOpticalFlow::getWinSize()
+    public int getWinSize() {
+
+        int retVal = getWinSize_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  void setWinSize(int winSize)
     //
+
+    // C++:  bool getFastPyramids()
+    private static native boolean getFastPyramids_0(long nativeObj);
+
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
+    // C++:  double getPolySigma()
+    private static native double getPolySigma_0(long nativeObj);
+
+    // C++:  double getPyrScale()
+    private static native double getPyrScale_0(long nativeObj);
+
+    // C++:  int getFlags()
+    private static native int getFlags_0(long nativeObj);
+
+    // C++:  int getNumIters()
+    private static native int getNumIters_0(long nativeObj);
+
+    // C++:  int getNumLevels()
+    private static native int getNumLevels_0(long nativeObj);
+
+    // C++:  int getPolyN()
+    private static native int getPolyN_0(long nativeObj);
+
+    // C++:  int getWinSize()
+    private static native int getWinSize_0(long nativeObj);
+
+    // C++:  void setFastPyramids(bool fastPyramids)
+    private static native void setFastPyramids_0(long nativeObj, boolean fastPyramids);
+
+    // C++:  void setFlags(int flags)
+    private static native void setFlags_0(long nativeObj, int flags);
+
+    // C++:  void setNumIters(int numIters)
+    private static native void setNumIters_0(long nativeObj, int numIters);
+
+    // C++:  void setNumLevels(int numLevels)
+    private static native void setNumLevels_0(long nativeObj, int numLevels);
+
+    // C++:  void setPolyN(int polyN)
+    private static native void setPolyN_0(long nativeObj, int polyN);
 
     // C++:  void setPolySigma(double polySigma)
     private static native void setPolySigma_0(long nativeObj, double polySigma);
@@ -181,86 +291,6 @@ public class FarnebackOpticalFlow extends DenseOpticalFlow {
         return retVal;
     }
 
-    //javadoc: FarnebackOpticalFlow::setFastPyramids(fastPyramids)
-    public void setFastPyramids(boolean fastPyramids) {
-
-        setFastPyramids_0(nativeObj, fastPyramids);
-
-        return;
-    }
-
-    //javadoc: FarnebackOpticalFlow::getPolySigma()
-    public double getPolySigma() {
-
-        double retVal = getPolySigma_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: FarnebackOpticalFlow::setPolySigma(polySigma)
-    public void setPolySigma(double polySigma) {
-
-        setPolySigma_0(nativeObj, polySigma);
-
-        return;
-    }
-
-    //javadoc: FarnebackOpticalFlow::getPyrScale()
-    public double getPyrScale() {
-
-        double retVal = getPyrScale_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: FarnebackOpticalFlow::setPyrScale(pyrScale)
-    public void setPyrScale(double pyrScale) {
-
-        setPyrScale_0(nativeObj, pyrScale);
-
-        return;
-    }
-
-    //javadoc: FarnebackOpticalFlow::getFlags()
-    public int getFlags() {
-
-        int retVal = getFlags_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: FarnebackOpticalFlow::setFlags(flags)
-    public void setFlags(int flags) {
-
-        setFlags_0(nativeObj, flags);
-
-        return;
-    }
-
-    //javadoc: FarnebackOpticalFlow::getNumIters()
-    public int getNumIters() {
-
-        int retVal = getNumIters_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: FarnebackOpticalFlow::setNumIters(numIters)
-    public void setNumIters(int numIters) {
-
-        setNumIters_0(nativeObj, numIters);
-
-        return;
-    }
-
-    //javadoc: FarnebackOpticalFlow::getNumLevels()
-    public int getNumLevels() {
-
-        int retVal = getNumLevels_0(nativeObj);
-
-        return retVal;
-    }
-
     //javadoc: FarnebackOpticalFlow::setNumLevels(numLevels)
     public void setNumLevels(int numLevels) {
 
@@ -269,41 +299,12 @@ public class FarnebackOpticalFlow extends DenseOpticalFlow {
         return;
     }
 
-    //javadoc: FarnebackOpticalFlow::getPolyN()
-    public int getPolyN() {
-
-        int retVal = getPolyN_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: FarnebackOpticalFlow::setPolyN(polyN)
-    public void setPolyN(int polyN) {
-
-        setPolyN_0(nativeObj, polyN);
-
-        return;
-    }
-
-    //javadoc: FarnebackOpticalFlow::getWinSize()
-    public int getWinSize() {
-
-        int retVal = getWinSize_0(nativeObj);
-
-        return retVal;
-    }
-
     //javadoc: FarnebackOpticalFlow::setWinSize(winSize)
     public void setWinSize(int winSize) {
 
         setWinSize_0(nativeObj, winSize);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

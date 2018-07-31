@@ -234,6 +234,12 @@ public class KalmanFilter {
     // C++: void KalmanFilter::gain
     private static native void set_gain_0(long nativeObj, long gain_nativeObj);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // C++: Mat KalmanFilter::errorCovPost
     private static native long get_errorCovPost_0(long nativeObj);
 
@@ -429,11 +435,6 @@ public class KalmanFilter {
         set_errorCovPost_0(nativeObj, errorCovPost.nativeObj);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

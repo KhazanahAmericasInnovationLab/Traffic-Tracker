@@ -150,6 +150,12 @@ public class VideoWriter {
 
     private static native boolean open_3(long nativeObj, String filename, int fourcc, double fps, double frameSize_width, double frameSize_height);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // C++:  bool set(int propId, double value)
     private static native boolean set_0(long nativeObj, int propId, double value);
 
@@ -242,11 +248,6 @@ public class VideoWriter {
         write_0(nativeObj, image.nativeObj);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

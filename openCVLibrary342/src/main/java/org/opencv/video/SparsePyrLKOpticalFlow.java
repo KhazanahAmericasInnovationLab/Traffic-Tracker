@@ -53,68 +53,145 @@ public class SparsePyrLKOpticalFlow extends SparseOpticalFlow {
     // C++:  TermCriteria getTermCriteria()
     //
 
-    private static native long create_1();
+    //javadoc: SparsePyrLKOpticalFlow::setWinSize(winSize)
+    public void setWinSize(Size winSize) {
+
+        setWinSize_0(nativeObj, winSize.width, winSize.height);
+
+        return;
+    }
 
 
     //
     // C++:  double getMinEigThreshold()
     //
 
-    // C++:  Size getWinSize()
-    private static native double[] getWinSize_0(long nativeObj);
+    //javadoc: SparsePyrLKOpticalFlow::getTermCriteria()
+    public TermCriteria getTermCriteria() {
+
+        TermCriteria retVal = new TermCriteria(getTermCriteria_0(nativeObj));
+
+        return retVal;
+    }
 
 
     //
     // C++:  int getFlags()
     //
 
-    // C++:  TermCriteria getTermCriteria()
-    private static native double[] getTermCriteria_0(long nativeObj);
+    //javadoc: SparsePyrLKOpticalFlow::setTermCriteria(crit)
+    public void setTermCriteria(TermCriteria crit) {
+
+        setTermCriteria_0(nativeObj, crit.type, crit.maxCount, crit.epsilon);
+
+        return;
+    }
 
 
     //
     // C++:  int getMaxLevel()
     //
 
-    // C++:  double getMinEigThreshold()
-    private static native double getMinEigThreshold_0(long nativeObj);
+    //javadoc: SparsePyrLKOpticalFlow::getMinEigThreshold()
+    public double getMinEigThreshold() {
+
+        double retVal = getMinEigThreshold_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  void setFlags(int flags)
     //
 
-    // C++:  int getFlags()
-    private static native int getFlags_0(long nativeObj);
+    //javadoc: SparsePyrLKOpticalFlow::setMinEigThreshold(minEigThreshold)
+    public void setMinEigThreshold(double minEigThreshold) {
+
+        setMinEigThreshold_0(nativeObj, minEigThreshold);
+
+        return;
+    }
 
 
     //
     // C++:  void setMaxLevel(int maxLevel)
     //
 
-    // C++:  int getMaxLevel()
-    private static native int getMaxLevel_0(long nativeObj);
+    //javadoc: SparsePyrLKOpticalFlow::getFlags()
+    public int getFlags() {
+
+        int retVal = getFlags_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  void setMinEigThreshold(double minEigThreshold)
     //
 
-    // C++:  void setFlags(int flags)
-    private static native void setFlags_0(long nativeObj, int flags);
+    //javadoc: SparsePyrLKOpticalFlow::setFlags(flags)
+    public void setFlags(int flags) {
+
+        setFlags_0(nativeObj, flags);
+
+        return;
+    }
 
 
     //
     // C++:  void setTermCriteria(TermCriteria crit)
     //
 
-    // C++:  void setMaxLevel(int maxLevel)
-    private static native void setMaxLevel_0(long nativeObj, int maxLevel);
+    //javadoc: SparsePyrLKOpticalFlow::getMaxLevel()
+    public int getMaxLevel() {
+
+        int retVal = getMaxLevel_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  void setWinSize(Size winSize)
     //
+
+    //javadoc: SparsePyrLKOpticalFlow::setMaxLevel(maxLevel)
+    public void setMaxLevel(int maxLevel) {
+
+        setMaxLevel_0(nativeObj, maxLevel);
+
+        return;
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
+    private static native long create_1();
+
+    // C++:  Size getWinSize()
+    private static native double[] getWinSize_0(long nativeObj);
+
+    // C++:  TermCriteria getTermCriteria()
+    private static native double[] getTermCriteria_0(long nativeObj);
+
+    // C++:  double getMinEigThreshold()
+    private static native double getMinEigThreshold_0(long nativeObj);
+
+    // C++:  int getFlags()
+    private static native int getFlags_0(long nativeObj);
+
+    // C++:  int getMaxLevel()
+    private static native int getMaxLevel_0(long nativeObj);
+
+    // C++:  void setFlags(int flags)
+    private static native void setFlags_0(long nativeObj, int flags);
+
+    // C++:  void setMaxLevel(int maxLevel)
+    private static native void setMaxLevel_0(long nativeObj, int maxLevel);
 
     // C++:  void setMinEigThreshold(double minEigThreshold)
     private static native void setMinEigThreshold_0(long nativeObj, double minEigThreshold);
@@ -134,83 +211,6 @@ public class SparsePyrLKOpticalFlow extends SparseOpticalFlow {
         Size retVal = new Size(getWinSize_0(nativeObj));
 
         return retVal;
-    }
-
-    //javadoc: SparsePyrLKOpticalFlow::setWinSize(winSize)
-    public void setWinSize(Size winSize) {
-
-        setWinSize_0(nativeObj, winSize.width, winSize.height);
-
-        return;
-    }
-
-    //javadoc: SparsePyrLKOpticalFlow::getTermCriteria()
-    public TermCriteria getTermCriteria() {
-
-        TermCriteria retVal = new TermCriteria(getTermCriteria_0(nativeObj));
-
-        return retVal;
-    }
-
-    //javadoc: SparsePyrLKOpticalFlow::setTermCriteria(crit)
-    public void setTermCriteria(TermCriteria crit) {
-
-        setTermCriteria_0(nativeObj, crit.type, crit.maxCount, crit.epsilon);
-
-        return;
-    }
-
-    //javadoc: SparsePyrLKOpticalFlow::getMinEigThreshold()
-    public double getMinEigThreshold() {
-
-        double retVal = getMinEigThreshold_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: SparsePyrLKOpticalFlow::setMinEigThreshold(minEigThreshold)
-    public void setMinEigThreshold(double minEigThreshold) {
-
-        setMinEigThreshold_0(nativeObj, minEigThreshold);
-
-        return;
-    }
-
-    //javadoc: SparsePyrLKOpticalFlow::getFlags()
-    public int getFlags() {
-
-        int retVal = getFlags_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: SparsePyrLKOpticalFlow::setFlags(flags)
-    public void setFlags(int flags) {
-
-        setFlags_0(nativeObj, flags);
-
-        return;
-    }
-
-    //javadoc: SparsePyrLKOpticalFlow::getMaxLevel()
-    public int getMaxLevel() {
-
-        int retVal = getMaxLevel_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: SparsePyrLKOpticalFlow::setMaxLevel(maxLevel)
-    public void setMaxLevel(int maxLevel) {
-
-        setMaxLevel_0(nativeObj, maxLevel);
-
-        return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

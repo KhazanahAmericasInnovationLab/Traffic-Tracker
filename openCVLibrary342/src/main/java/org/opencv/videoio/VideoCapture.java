@@ -165,6 +165,12 @@ public class VideoCapture {
 
     private static native boolean retrieve_1(long nativeObj, long image_nativeObj);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // C++:  bool set(int propId, double value)
     private static native boolean set_0(long nativeObj, int propId, double value);
 
@@ -275,11 +281,6 @@ public class VideoCapture {
         release_0(nativeObj);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

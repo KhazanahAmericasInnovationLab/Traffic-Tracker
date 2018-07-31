@@ -33,6 +33,26 @@ public class Camera2Renderer extends CameraGLRendererBase {
     private HandlerThread mBackgroundThread;
     private Handler mBackgroundHandler;
     private Semaphore mCameraOpenCloseLock = new Semaphore(1);
+
+    Camera2Renderer(CameraGLSurfaceView view) {
+        super(view);
+    }
+
+    @Override
+    protected void doStart() {
+        Log.d(LOGTAG, "doStart");
+        startBackgroundThread();
+        super.doStart();
+    }
+
+
+    @Override
+    protected void doStop() {
+        Log.d(LOGTAG, "doStop");
+        super.doStop();
+        stopBackgroundThread();
+    }
+
     private final CameraDevice.StateCallback mStateCallback = new CameraDevice.StateCallback() {
 
         @Override
@@ -57,24 +77,6 @@ public class Camera2Renderer extends CameraGLRendererBase {
         }
 
     };
-
-    Camera2Renderer(CameraGLSurfaceView view) {
-        super(view);
-    }
-
-    @Override
-    protected void doStart() {
-        Log.d(LOGTAG, "doStart");
-        startBackgroundThread();
-        super.doStart();
-    }
-
-    @Override
-    protected void doStop() {
-        Log.d(LOGTAG, "doStop");
-        super.doStop();
-        stopBackgroundThread();
-    }
 
     boolean cacPreviewSize(final int width, final int height) {
         Log.i(LOGTAG, "cacPreviewSize: " + width + "x" + height);
@@ -121,6 +123,26 @@ public class Camera2Renderer extends CameraGLRendererBase {
     }
 
     @Override
+    protected void closeCamera() {
+        Log.i(LOGTAG, "closeCamera");
+        try {
+            mCameraOpenCloseLock.acquire();
+            if (null != mCaptureSession) {
+                mCaptureSession.close();
+                mCaptureSession = null;
+            }
+            if (null != mCameraDevice) {
+                mCameraDevice.close();
+                mCameraDevice = null;
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException("Interrupted while trying to lock camera closing.", e);
+        } finally {
+            mCameraOpenCloseLock.release();
+        }
+    }
+
+    @Override
     protected void openCamera(int id) {
         Log.i(LOGTAG, "openCamera");
         CameraManager manager = (CameraManager) mView.getContext().getSystemService(Context.CAMERA_SERVICE);
@@ -160,26 +182,6 @@ public class Camera2Renderer extends CameraGLRendererBase {
             Log.e(LOGTAG, "OpenCamera - Security Exception");
         } catch (InterruptedException e) {
             Log.e(LOGTAG, "OpenCamera - Interrupted Exception");
-        }
-    }
-
-    @Override
-    protected void closeCamera() {
-        Log.i(LOGTAG, "closeCamera");
-        try {
-            mCameraOpenCloseLock.acquire();
-            if (null != mCaptureSession) {
-                mCaptureSession.close();
-                mCaptureSession = null;
-            }
-            if (null != mCameraDevice) {
-                mCameraDevice.close();
-                mCameraDevice = null;
-            }
-        } catch (InterruptedException e) {
-            throw new RuntimeException("Interrupted while trying to lock camera closing.", e);
-        } finally {
-            mCameraOpenCloseLock.release();
         }
     }
 

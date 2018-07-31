@@ -42,6 +42,14 @@ public class FlannBasedMatcher extends DescriptorMatcher {
         return retVal;
     }
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
+
+
     // C++:   FlannBasedMatcher(Ptr_flann_IndexParams indexParams = makePtr<flann::KDTreeIndexParams>(), Ptr_flann_SearchParams searchParams = makePtr<flann::SearchParams>())
     private static native long FlannBasedMatcher_0();
 
@@ -50,10 +58,5 @@ public class FlannBasedMatcher extends DescriptorMatcher {
 
     // native support for java finalize()
     private static native void delete(long nativeObj);
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
-    }
 
 }

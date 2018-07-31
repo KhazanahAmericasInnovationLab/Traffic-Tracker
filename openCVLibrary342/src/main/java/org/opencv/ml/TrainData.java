@@ -353,6 +353,12 @@ public class TrainData {
     // C++:  void setTrainTestSplitRatio(double ratio, bool shuffle = true)
     private static native void setTrainTestSplitRatio_0(long nativeObj, double ratio, boolean shuffle);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     private static native void setTrainTestSplitRatio_1(long nativeObj, double ratio);
 
     // C++:  void shuffleTrainTest()
@@ -675,11 +681,6 @@ public class TrainData {
         shuffleTrainTest_0(nativeObj);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

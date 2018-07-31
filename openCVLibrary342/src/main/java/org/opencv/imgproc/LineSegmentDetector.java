@@ -48,6 +48,12 @@ public class LineSegmentDetector extends Algorithm {
     // C++:  void drawSegments(Mat& _image, Mat lines)
     private static native void drawSegments_0(long nativeObj, long _image_nativeObj, long lines_nativeObj);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // native support for java finalize()
     private static native void delete(long nativeObj);
 
@@ -89,11 +95,6 @@ public class LineSegmentDetector extends Algorithm {
         drawSegments_0(nativeObj, _image.nativeObj, lines.nativeObj);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

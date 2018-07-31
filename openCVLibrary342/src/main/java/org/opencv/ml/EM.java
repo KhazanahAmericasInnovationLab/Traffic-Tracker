@@ -14,6 +14,15 @@ import java.util.List;
 
 public class EM extends StatModel {
 
+    protected EM(long addr) {
+        super(addr);
+    }
+
+    // internal usage only
+    public static EM __fromPtr__(long addr) {
+        return new EM(addr);
+    }
+
     public static final int
             COV_MAT_SPHERICAL = 0,
             COV_MAT_DIAGONAL = 1,
@@ -24,15 +33,6 @@ public class EM extends StatModel {
             START_E_STEP = 1,
             START_M_STEP = 2,
             START_AUTO_STEP = 0;
-
-    protected EM(long addr) {
-        super(addr);
-    }
-
-    // internal usage only
-    public static EM __fromPtr__(long addr) {
-        return new EM(addr);
-    }
 
 
     //
@@ -186,6 +186,12 @@ public class EM extends StatModel {
 
     // C++:  void getCovs(vector_Mat& covs)
     private static native void getCovs_0(long nativeObj, long covs_mat_nativeObj);
+
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
 
     // C++:  void setClustersNumber(int val)
     private static native void setClustersNumber_0(long nativeObj, int val);
@@ -342,11 +348,6 @@ public class EM extends StatModel {
         Converters.Mat_to_vector_Mat(covs_mat, covs);
         covs_mat.release();
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

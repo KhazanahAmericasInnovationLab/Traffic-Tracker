@@ -80,6 +80,12 @@ public class TonemapDurand extends Tonemap {
     // C++:  void setSigmaSpace(float sigma_space)
     private static native void setSigmaSpace_0(long nativeObj, float sigma_space);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // native support for java finalize()
     private static native void delete(long nativeObj);
 
@@ -145,11 +151,6 @@ public class TonemapDurand extends Tonemap {
         setSigmaSpace_0(nativeObj, sigma_space);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

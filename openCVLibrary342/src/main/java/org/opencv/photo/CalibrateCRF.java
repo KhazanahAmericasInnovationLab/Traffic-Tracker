@@ -30,6 +30,12 @@ public class CalibrateCRF extends Algorithm {
     // C++:  void process(vector_Mat src, Mat& dst, Mat times)
     private static native void process_0(long nativeObj, long src_mat_nativeObj, long dst_nativeObj, long times_nativeObj);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // native support for java finalize()
     private static native void delete(long nativeObj);
 
@@ -39,11 +45,6 @@ public class CalibrateCRF extends Algorithm {
         process_0(nativeObj, src_mat.nativeObj, dst.nativeObj, times.nativeObj);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

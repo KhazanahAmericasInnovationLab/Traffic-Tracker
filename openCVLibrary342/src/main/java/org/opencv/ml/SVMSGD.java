@@ -11,12 +11,6 @@ import org.opencv.core.TermCriteria;
 
 public class SVMSGD extends StatModel {
 
-    public static final int
-            SGD = 0,
-            ASGD = 1,
-            SOFT_MARGIN = 0,
-            HARD_MARGIN = 1;
-
     protected SVMSGD(long addr) {
         super(addr);
     }
@@ -25,6 +19,12 @@ public class SVMSGD extends StatModel {
     public static SVMSGD __fromPtr__(long addr) {
         return new SVMSGD(addr);
     }
+
+    public static final int
+            SGD = 0,
+            ASGD = 1,
+            SOFT_MARGIN = 0,
+            HARD_MARGIN = 1;
 
 
     //
@@ -65,134 +65,6 @@ public class SVMSGD extends StatModel {
         return retVal;
     }
 
-    // C++:  Mat getWeights()
-    private static native long getWeights_0(long nativeObj);
-
-
-    //
-    // C++:  TermCriteria getTermCriteria()
-    //
-
-    // C++: static Ptr_SVMSGD create()
-    private static native long create_0();
-
-
-    //
-    // C++:  float getInitialStepSize()
-    //
-
-    // C++: static Ptr_SVMSGD load(String filepath, String nodeName = String())
-    private static native long load_0(String filepath, String nodeName);
-
-
-    //
-    // C++:  float getMarginRegularization()
-    //
-
-    private static native long load_1(String filepath);
-
-
-    //
-    // C++:  float getShift()
-    //
-
-    // C++:  TermCriteria getTermCriteria()
-    private static native double[] getTermCriteria_0(long nativeObj);
-
-
-    //
-    // C++:  float getStepDecreasingPower()
-    //
-
-    // C++:  float getInitialStepSize()
-    private static native float getInitialStepSize_0(long nativeObj);
-
-
-    //
-    // C++:  int getMarginType()
-    //
-
-    // C++:  float getMarginRegularization()
-    private static native float getMarginRegularization_0(long nativeObj);
-
-
-    //
-    // C++:  int getSvmsgdType()
-    //
-
-    // C++:  float getShift()
-    private static native float getShift_0(long nativeObj);
-
-
-    //
-    // C++:  void setInitialStepSize(float InitialStepSize)
-    //
-
-    // C++:  float getStepDecreasingPower()
-    private static native float getStepDecreasingPower_0(long nativeObj);
-
-
-    //
-    // C++:  void setMarginRegularization(float marginRegularization)
-    //
-
-    // C++:  int getMarginType()
-    private static native int getMarginType_0(long nativeObj);
-
-
-    //
-    // C++:  void setMarginType(int marginType)
-    //
-
-    // C++:  int getSvmsgdType()
-    private static native int getSvmsgdType_0(long nativeObj);
-
-
-    //
-    // C++:  void setOptimalParameters(int svmsgdType = SVMSGD::ASGD, int marginType = SVMSGD::SOFT_MARGIN)
-    //
-
-    // C++:  void setInitialStepSize(float InitialStepSize)
-    private static native void setInitialStepSize_0(long nativeObj, float InitialStepSize);
-
-    // C++:  void setMarginRegularization(float marginRegularization)
-    private static native void setMarginRegularization_0(long nativeObj, float marginRegularization);
-
-
-    //
-    // C++:  void setStepDecreasingPower(float stepDecreasingPower)
-    //
-
-    // C++:  void setMarginType(int marginType)
-    private static native void setMarginType_0(long nativeObj, int marginType);
-
-
-    //
-    // C++:  void setSvmsgdType(int svmsgdType)
-    //
-
-    // C++:  void setOptimalParameters(int svmsgdType = SVMSGD::ASGD, int marginType = SVMSGD::SOFT_MARGIN)
-    private static native void setOptimalParameters_0(long nativeObj, int svmsgdType, int marginType);
-
-
-    //
-    // C++:  void setTermCriteria(TermCriteria val)
-    //
-
-    private static native void setOptimalParameters_1(long nativeObj);
-
-    // C++:  void setStepDecreasingPower(float stepDecreasingPower)
-    private static native void setStepDecreasingPower_0(long nativeObj, float stepDecreasingPower);
-
-    // C++:  void setSvmsgdType(int svmsgdType)
-    private static native void setSvmsgdType_0(long nativeObj, int svmsgdType);
-
-    // C++:  void setTermCriteria(TermCriteria val)
-    private static native void setTermCriteria_0(long nativeObj, int val_type, int val_maxCount, double val_epsilon);
-
-    // native support for java finalize()
-    private static native void delete(long nativeObj);
-
     //javadoc: SVMSGD::getWeights()
     public Mat getWeights() {
 
@@ -201,13 +73,18 @@ public class SVMSGD extends StatModel {
         return retVal;
     }
 
-    //javadoc: SVMSGD::getTermCriteria()
-    public TermCriteria getTermCriteria() {
 
-        TermCriteria retVal = new TermCriteria(getTermCriteria_0(nativeObj));
+    //
+    // C++:  TermCriteria getTermCriteria()
+    //
 
-        return retVal;
-    }
+    // C++:  Mat getWeights()
+    private static native long getWeights_0(long nativeObj);
+
+
+    //
+    // C++:  float getInitialStepSize()
+    //
 
     //javadoc: SVMSGD::setTermCriteria(val)
     public void setTermCriteria(TermCriteria val) {
@@ -217,6 +94,11 @@ public class SVMSGD extends StatModel {
         return;
     }
 
+
+    //
+    // C++:  float getMarginRegularization()
+    //
+
     //javadoc: SVMSGD::getInitialStepSize()
     public float getInitialStepSize() {
 
@@ -224,6 +106,11 @@ public class SVMSGD extends StatModel {
 
         return retVal;
     }
+
+
+    //
+    // C++:  float getShift()
+    //
 
     //javadoc: SVMSGD::setInitialStepSize(InitialStepSize)
     public void setInitialStepSize(float InitialStepSize) {
@@ -233,6 +120,11 @@ public class SVMSGD extends StatModel {
         return;
     }
 
+
+    //
+    // C++:  float getStepDecreasingPower()
+    //
+
     //javadoc: SVMSGD::getMarginRegularization()
     public float getMarginRegularization() {
 
@@ -240,6 +132,11 @@ public class SVMSGD extends StatModel {
 
         return retVal;
     }
+
+
+    //
+    // C++:  int getMarginType()
+    //
 
     //javadoc: SVMSGD::setMarginRegularization(marginRegularization)
     public void setMarginRegularization(float marginRegularization) {
@@ -249,6 +146,11 @@ public class SVMSGD extends StatModel {
         return;
     }
 
+
+    //
+    // C++:  int getSvmsgdType()
+    //
+
     //javadoc: SVMSGD::getShift()
     public float getShift() {
 
@@ -256,6 +158,11 @@ public class SVMSGD extends StatModel {
 
         return retVal;
     }
+
+
+    //
+    // C++:  void setInitialStepSize(float InitialStepSize)
+    //
 
     //javadoc: SVMSGD::getStepDecreasingPower()
     public float getStepDecreasingPower() {
@@ -265,6 +172,11 @@ public class SVMSGD extends StatModel {
         return retVal;
     }
 
+
+    //
+    // C++:  void setMarginRegularization(float marginRegularization)
+    //
+
     //javadoc: SVMSGD::setStepDecreasingPower(stepDecreasingPower)
     public void setStepDecreasingPower(float stepDecreasingPower) {
 
@@ -273,6 +185,11 @@ public class SVMSGD extends StatModel {
         return;
     }
 
+
+    //
+    // C++:  void setMarginType(int marginType)
+    //
+
     //javadoc: SVMSGD::getMarginType()
     public int getMarginType() {
 
@@ -280,6 +197,11 @@ public class SVMSGD extends StatModel {
 
         return retVal;
     }
+
+
+    //
+    // C++:  void setOptimalParameters(int svmsgdType = SVMSGD::ASGD, int marginType = SVMSGD::SOFT_MARGIN)
+    //
 
     //javadoc: SVMSGD::setMarginType(marginType)
     public void setMarginType(int marginType) {
@@ -297,6 +219,11 @@ public class SVMSGD extends StatModel {
         return retVal;
     }
 
+
+    //
+    // C++:  void setStepDecreasingPower(float stepDecreasingPower)
+    //
+
     //javadoc: SVMSGD::setSvmsgdType(svmsgdType)
     public void setSvmsgdType(int svmsgdType) {
 
@@ -305,6 +232,11 @@ public class SVMSGD extends StatModel {
         return;
     }
 
+
+    //
+    // C++:  void setSvmsgdType(int svmsgdType)
+    //
+
     //javadoc: SVMSGD::setOptimalParameters(svmsgdType, marginType)
     public void setOptimalParameters(int svmsgdType, int marginType) {
 
@@ -312,6 +244,11 @@ public class SVMSGD extends StatModel {
 
         return;
     }
+
+
+    //
+    // C++:  void setTermCriteria(TermCriteria val)
+    //
 
     //javadoc: SVMSGD::setOptimalParameters()
     public void setOptimalParameters() {
@@ -324,6 +261,69 @@ public class SVMSGD extends StatModel {
     @Override
     protected void finalize() throws Throwable {
         delete(nativeObj);
+    }
+
+    // C++: static Ptr_SVMSGD create()
+    private static native long create_0();
+
+    // C++: static Ptr_SVMSGD load(String filepath, String nodeName = String())
+    private static native long load_0(String filepath, String nodeName);
+
+    private static native long load_1(String filepath);
+
+    // C++:  TermCriteria getTermCriteria()
+    private static native double[] getTermCriteria_0(long nativeObj);
+
+    // C++:  float getInitialStepSize()
+    private static native float getInitialStepSize_0(long nativeObj);
+
+    // C++:  float getMarginRegularization()
+    private static native float getMarginRegularization_0(long nativeObj);
+
+    // C++:  float getShift()
+    private static native float getShift_0(long nativeObj);
+
+    // C++:  float getStepDecreasingPower()
+    private static native float getStepDecreasingPower_0(long nativeObj);
+
+    // C++:  int getMarginType()
+    private static native int getMarginType_0(long nativeObj);
+
+    // C++:  int getSvmsgdType()
+    private static native int getSvmsgdType_0(long nativeObj);
+
+    // C++:  void setInitialStepSize(float InitialStepSize)
+    private static native void setInitialStepSize_0(long nativeObj, float InitialStepSize);
+
+    // C++:  void setMarginRegularization(float marginRegularization)
+    private static native void setMarginRegularization_0(long nativeObj, float marginRegularization);
+
+    // C++:  void setMarginType(int marginType)
+    private static native void setMarginType_0(long nativeObj, int marginType);
+
+    // C++:  void setOptimalParameters(int svmsgdType = SVMSGD::ASGD, int marginType = SVMSGD::SOFT_MARGIN)
+    private static native void setOptimalParameters_0(long nativeObj, int svmsgdType, int marginType);
+
+    private static native void setOptimalParameters_1(long nativeObj);
+
+    // C++:  void setStepDecreasingPower(float stepDecreasingPower)
+    private static native void setStepDecreasingPower_0(long nativeObj, float stepDecreasingPower);
+
+    // C++:  void setSvmsgdType(int svmsgdType)
+    private static native void setSvmsgdType_0(long nativeObj, int svmsgdType);
+
+    // C++:  void setTermCriteria(TermCriteria val)
+    private static native void setTermCriteria_0(long nativeObj, int val_type, int val_maxCount, double val_epsilon);
+
+    // native support for java finalize()
+    private static native void delete(long nativeObj);
+
+    //javadoc: SVMSGD::getTermCriteria()
+    public TermCriteria getTermCriteria() {
+
+        TermCriteria retVal = new TermCriteria(getTermCriteria_0(nativeObj));
+
+        return retVal;
     }
 
 }

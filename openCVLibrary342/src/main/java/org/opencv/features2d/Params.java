@@ -4,6 +4,7 @@
 package org.opencv.features2d;
 
 
+
 // C++: class Params
 //javadoc: Params
 
@@ -337,6 +338,12 @@ public class Params {
     // C++: void Params::maxConvexity
     private static native void set_maxConvexity_0(long nativeObj, float maxConvexity);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // native support for java finalize()
     private static native void delete(long nativeObj);
 
@@ -630,11 +637,6 @@ public class Params {
         set_maxConvexity_0(nativeObj, maxConvexity);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

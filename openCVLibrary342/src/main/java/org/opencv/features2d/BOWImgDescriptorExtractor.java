@@ -71,6 +71,12 @@ public class BOWImgDescriptorExtractor {
     // native support for java finalize()
     private static native void delete(long nativeObj);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     public long getNativeObjAddr() {
         return nativeObj;
     }
@@ -113,11 +119,6 @@ public class BOWImgDescriptorExtractor {
         compute_0(nativeObj, image.nativeObj, keypoints_mat.nativeObj, imgDescriptor.nativeObj);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

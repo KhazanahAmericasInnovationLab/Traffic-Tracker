@@ -67,6 +67,12 @@ public class Algorithm {
 
     // Unknown type 'Ptr_FileStorage' (I), skipping the function
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     public long getNativeObjAddr() {
         return nativeObj;
     }
@@ -101,11 +107,6 @@ public class Algorithm {
         save_0(nativeObj, filename);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

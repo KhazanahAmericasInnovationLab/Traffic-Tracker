@@ -10,10 +10,6 @@ import org.opencv.core.Mat;
 
 public class KNearest extends StatModel {
 
-    public static final int
-            BRUTE_FORCE = 1,
-            KDTREE = 2;
-
     protected KNearest(long addr) {
         super(addr);
     }
@@ -22,6 +18,10 @@ public class KNearest extends StatModel {
     public static KNearest __fromPtr__(long addr) {
         return new KNearest(addr);
     }
+
+    public static final int
+            BRUTE_FORCE = 1,
+            KDTREE = 2;
 
 
     //
@@ -110,6 +110,12 @@ public class KNearest extends StatModel {
     // C++:  void setEmax(int val)
     private static native void setEmax_0(long nativeObj, int val);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // C++:  void setIsClassifier(bool val)
     private static native void setIsClassifier_0(long nativeObj, boolean val);
 
@@ -194,11 +200,6 @@ public class KNearest extends StatModel {
         setEmax_0(nativeObj, val);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

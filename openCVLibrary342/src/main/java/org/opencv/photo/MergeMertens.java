@@ -85,6 +85,12 @@ public class MergeMertens extends MergeExposures {
     // C++:  void setSaturationWeight(float saturation_weight)
     private static native void setSaturationWeight_0(long nativeObj, float saturation_weight);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // native support for java finalize()
     private static native void delete(long nativeObj);
 
@@ -150,11 +156,6 @@ public class MergeMertens extends MergeExposures {
         process_1(nativeObj, src_mat.nativeObj, dst.nativeObj);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

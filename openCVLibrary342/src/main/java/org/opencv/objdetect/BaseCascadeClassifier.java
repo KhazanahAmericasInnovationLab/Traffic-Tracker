@@ -19,12 +19,13 @@ public class BaseCascadeClassifier extends Algorithm {
         return new BaseCascadeClassifier(addr);
     }
 
-    // native support for java finalize()
-    private static native void delete(long nativeObj);
-
     @Override
     protected void finalize() throws Throwable {
         delete(nativeObj);
     }
+
+
+    // native support for java finalize()
+    private static native void delete(long nativeObj);
 
 }

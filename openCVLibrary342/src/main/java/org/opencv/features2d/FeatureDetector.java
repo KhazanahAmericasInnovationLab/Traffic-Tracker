@@ -14,6 +14,31 @@ import java.util.List;
 @Deprecated
 public class FeatureDetector {
 
+    private static final int
+            GRIDDETECTOR = 1000,
+            PYRAMIDDETECTOR = 2000,
+            DYNAMICDETECTOR = 3000;
+    protected final long nativeObj;
+
+    protected FeatureDetector(long addr) {
+        nativeObj = addr;
+    }
+
+    // internal usage only
+    public static FeatureDetector __fromPtr__(long addr) {
+        return new FeatureDetector(addr);
+    }
+
+    //javadoc: javaFeatureDetector::create(detectorType)
+    @Deprecated
+    public static FeatureDetector create(int detectorType) {
+
+        FeatureDetector retVal = FeatureDetector.__fromPtr__(create_0(detectorType));
+
+        return retVal;
+    }
+
+
     public static final int
             FAST = 1,
             STAR = 2,
@@ -63,29 +88,6 @@ public class FeatureDetector {
             DYNAMIC_DENSE = DYNAMICDETECTOR + DENSE,
             DYNAMIC_BRISK = DYNAMICDETECTOR + BRISK,
             DYNAMIC_AKAZE = DYNAMICDETECTOR + AKAZE;
-    private static final int
-            GRIDDETECTOR = 1000,
-            PYRAMIDDETECTOR = 2000,
-            DYNAMICDETECTOR = 3000;
-    protected final long nativeObj;
-
-    protected FeatureDetector(long addr) {
-        nativeObj = addr;
-    }
-
-    // internal usage only
-    public static FeatureDetector __fromPtr__(long addr) {
-        return new FeatureDetector(addr);
-    }
-
-    //javadoc: javaFeatureDetector::create(detectorType)
-    @Deprecated
-    public static FeatureDetector create(int detectorType) {
-
-        FeatureDetector retVal = FeatureDetector.__fromPtr__(create_0(detectorType));
-
-        return retVal;
-    }
 
 
     //
@@ -138,6 +140,12 @@ public class FeatureDetector {
 
     // C++:  void write(String fileName)
     private static native void write_0(long nativeObj, String fileName);
+
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
 
     // native support for java finalize()
     private static native void delete(long nativeObj);
@@ -205,11 +213,6 @@ public class FeatureDetector {
         write_0(nativeObj, fileName);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

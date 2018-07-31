@@ -43,6 +43,12 @@ public class Tonemap extends Algorithm {
     // C++:  void setGamma(float gamma)
     private static native void setGamma_0(long nativeObj, float gamma);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // native support for java finalize()
     private static native void delete(long nativeObj);
 
@@ -68,11 +74,6 @@ public class Tonemap extends Algorithm {
         process_0(nativeObj, src.nativeObj, dst.nativeObj);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

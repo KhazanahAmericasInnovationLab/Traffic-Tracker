@@ -15,9 +15,6 @@ import org.opencv.core.Size;
 
 public class HOGDescriptor {
 
-    public static final int
-            L2Hys = 0,
-            DEFAULT_NLEVELS = 64;
     protected final long nativeObj;
 
     protected HOGDescriptor(long addr) {
@@ -39,6 +36,10 @@ public class HOGDescriptor {
 
         return;
     }
+
+    public static final int
+            L2Hys = 0,
+            DEFAULT_NLEVELS = 64;
 
 
     //
@@ -300,6 +301,12 @@ public class HOGDescriptor {
     // C++: int HOGDescriptor::histogramNormType
     private static native int get_histogramNormType_0(long nativeObj);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // C++: double HOGDescriptor::L2HysThreshold
     private static native double get_L2HysThreshold_0(long nativeObj);
 
@@ -558,11 +565,6 @@ public class HOGDescriptor {
         boolean retVal = get_signedGradient_0(nativeObj);
 
         return retVal;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

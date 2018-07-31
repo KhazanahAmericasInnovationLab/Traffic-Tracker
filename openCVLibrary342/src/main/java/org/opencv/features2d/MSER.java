@@ -123,6 +123,12 @@ public class MSER extends Feature2D {
     // C++:  void setMaxArea(int maxArea)
     private static native void setMaxArea_0(long nativeObj, int maxArea);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // C++:  void setMinArea(int minArea)
     private static native void setMinArea_0(long nativeObj, int minArea);
 
@@ -212,11 +218,6 @@ public class MSER extends Feature2D {
         Converters.Mat_to_vector_vector_Point(msers_mat, msers);
         msers_mat.release();
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

@@ -61,22 +61,28 @@ public abstract class CameraGLRendererBase implements GLSurfaceView.Renderer, Su
             0, 1,
             1, 0,
             1, 1};
+
+    private int[] texCamera = {0}, texFBO = {0}, texDraw = {0};
+    private int[] FBO = {0};
+    private int progOES = -1, prog2D = -1;
+    private int vPosOES, vTCOES, vPos2D, vTC2D;
+
+    private FloatBuffer vert, texOES, tex2D;
+
     protected int mCameraWidth = -1, mCameraHeight = -1;
     protected int mFBOWidth = -1, mFBOHeight = -1;
     protected int mMaxCameraWidth = -1, mMaxCameraHeight = -1;
     protected int mCameraIndex = CameraBridgeViewBase.CAMERA_ID_ANY;
+
     protected SurfaceTexture mSTexture;
+
     protected boolean mHaveSurface = false;
     protected boolean mHaveFBO = false;
     protected boolean mUpdateST = false;
     protected boolean mEnabled = true;
     protected boolean mIsStarted = false;
+
     protected CameraGLSurfaceView mView;
-    private int[] texCamera = {0}, texFBO = {0}, texDraw = {0};
-    private int[] FBO = {0};
-    private int progOES = -1, prog2D = -1;
-    private int vPosOES, vTCOES, vPos2D, vTC2D;
-    private FloatBuffer vert, texOES, tex2D;
 
     public CameraGLRendererBase(CameraGLSurfaceView view) {
         mView = view;
@@ -149,15 +155,21 @@ public abstract class CameraGLRendererBase implements GLSurfaceView.Renderer, Su
 
     protected abstract void openCamera(int id);
 
-    protected abstract void closeCamera();
-
-    protected abstract void setCameraPreviewSize(int width, int height); // updates mCameraWidth & mCameraHeight
-
     @Override
     public synchronized void onFrameAvailable(SurfaceTexture surfaceTexture) {
         //Log.i(LOGTAG, "onFrameAvailable");
         mUpdateST = true;
         mView.requestRender();
+    }
+
+    protected abstract void closeCamera();
+
+    protected abstract void setCameraPreviewSize(int width, int height); // updates mCameraWidth & mCameraHeight
+
+    @Override
+    public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+        Log.i(LOGTAG, "onSurfaceCreated");
+        initShaders();
     }
 
     @Override
@@ -200,18 +212,20 @@ public abstract class CameraGLRendererBase implements GLSurfaceView.Renderer, Su
         }
     }
 
+    private void initSurfaceTexture() {
+        Log.d(LOGTAG, "initSurfaceTexture");
+        deleteSurfaceTexture();
+        initTexOES(texCamera);
+        mSTexture = new SurfaceTexture(texCamera[0]);
+        mSTexture.setOnFrameAvailableListener(this);
+    }
+
     @Override
     public void onSurfaceChanged(GL10 gl, int surfaceWidth, int surfaceHeight) {
         Log.i(LOGTAG, "onSurfaceChanged(" + surfaceWidth + "x" + surfaceHeight + ")");
         mHaveSurface = true;
         updateState();
         setPreviewSize(surfaceWidth, surfaceHeight);
-    }
-
-    @Override
-    public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        Log.i(LOGTAG, "onSurfaceCreated");
-        initShaders();
     }
 
     private void initShaders() {
@@ -232,14 +246,6 @@ public abstract class CameraGLRendererBase implements GLSurfaceView.Renderer, Su
         vTC2D = GLES20.glGetAttribLocation(prog2D, "vTexCoord");
         GLES20.glEnableVertexAttribArray(vPos2D);
         GLES20.glEnableVertexAttribArray(vTC2D);
-    }
-
-    private void initSurfaceTexture() {
-        Log.d(LOGTAG, "initSurfaceTexture");
-        deleteSurfaceTexture();
-        initTexOES(texCamera);
-        mSTexture = new SurfaceTexture(texCamera[0]);
-        mSTexture.setOnFrameAvailableListener(this);
     }
 
     private void deleteSurfaceTexture() {

@@ -31,13 +31,15 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
 
     private static final int MAGIC_TEXTURE_ID = 10;
     private static final String TAG = "JavaCameraView";
-    protected Camera mCamera;
-    protected JavaCameraFrame[] mCameraFrame;
+
     private byte mBuffer[];
     private Mat[] mFrameChain;
     private int mChainIdx = 0;
     private Thread mThread;
     private boolean mStopThread;
+
+    protected Camera mCamera;
+    protected JavaCameraFrame[] mCameraFrame;
     private SurfaceTexture mSurfaceTexture;
     private int mPreviewFormat = ImageFormat.NV21;
     private boolean mCameraFrameReady = false;
@@ -228,28 +230,6 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
     }
 
     @Override
-    protected boolean connectCamera(int width, int height) {
-
-        /* 1. We need to instantiate camera
-         * 2. We need to start thread which will be getting frames
-         */
-        /* First step - initialize camera connection */
-        Log.d(TAG, "Connecting to camera");
-        if (!initializeCamera(width, height))
-            return false;
-
-        mCameraFrameReady = false;
-
-        /* now we can start update thread */
-        Log.d(TAG, "Starting processing thread");
-        mStopThread = false;
-        mThread = new Thread(new CameraWorker());
-        mThread.start();
-
-        return true;
-    }
-
-    @Override
     protected void disconnectCamera() {
         /* 1. We need to stop thread which updating the frames
          * 2. Stop camera and release it
@@ -277,16 +257,25 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
     }
 
     @Override
-    public void onPreviewFrame(byte[] frame, Camera arg1) {
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "Preview Frame received. Frame size: " + frame.length);
-        synchronized (this) {
-            mFrameChain[mChainIdx].put(0, 0, frame);
-            mCameraFrameReady = true;
-            this.notify();
-        }
-        if (mCamera != null)
-            mCamera.addCallbackBuffer(mBuffer);
+    protected boolean connectCamera(int width, int height) {
+
+        /* 1. We need to instantiate camera
+         * 2. We need to start thread which will be getting frames
+         */
+        /* First step - initialize camera connection */
+        Log.d(TAG, "Connecting to camera");
+        if (!initializeCamera(width, height))
+            return false;
+
+        mCameraFrameReady = false;
+
+        /* now we can start update thread */
+        Log.d(TAG, "Starting processing thread");
+        mStopThread = false;
+        mThread = new Thread(new CameraWorker());
+        mThread.start();
+
+        return true;
     }
 
     public static class JavaCameraSizeAccessor implements ListItemAccessor {
@@ -304,20 +293,20 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
         }
     }
 
-    private class JavaCameraFrame implements CvCameraViewFrame {
-        private Mat mYuvFrameData;
-        private Mat mRgba;
-        private int mWidth;
-        private int mHeight;
-
-        public JavaCameraFrame(Mat Yuv420sp, int width, int height) {
-            super();
-            mWidth = width;
-            mHeight = height;
-            mYuvFrameData = Yuv420sp;
-            mRgba = new Mat();
+    @Override
+    public void onPreviewFrame(byte[] frame, Camera arg1) {
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "Preview Frame received. Frame size: " + frame.length);
+        synchronized (this) {
+            mFrameChain[mChainIdx].put(0, 0, frame);
+            mCameraFrameReady = true;
+            this.notify();
         }
+        if (mCamera != null)
+            mCamera.addCallbackBuffer(mBuffer);
+    }
 
+    private class JavaCameraFrame implements CvCameraViewFrame {
         @Override
         public Mat gray() {
             return mYuvFrameData.submat(0, mHeight, 0, mWidth);
@@ -335,10 +324,26 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
             return mRgba;
         }
 
+        private Mat mYuvFrameData;
+
         public void release() {
             mRgba.release();
         }
+
+        private Mat mRgba;
+        private int mWidth;
+        private int mHeight;
+
+        public JavaCameraFrame(Mat Yuv420sp, int width, int height) {
+            super();
+            mWidth = width;
+            mHeight = height;
+            mYuvFrameData = Yuv420sp;
+            mRgba = new Mat();
+        }
     }
+
+    ;
 
     private class CameraWorker implements Runnable {
 

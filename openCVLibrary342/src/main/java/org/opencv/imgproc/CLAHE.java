@@ -68,6 +68,12 @@ public class CLAHE extends Algorithm {
     // C++:  void setTilesGridSize(Size tileGridSize)
     private static native void setTilesGridSize_0(long nativeObj, double tileGridSize_width, double tileGridSize_height);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // native support for java finalize()
     private static native void delete(long nativeObj);
 
@@ -117,11 +123,6 @@ public class CLAHE extends Algorithm {
         collectGarbage_0(nativeObj);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

@@ -64,6 +64,12 @@ public class TonemapReinhard extends Tonemap {
     // C++:  void setLightAdaptation(float light_adapt)
     private static native void setLightAdaptation_0(long nativeObj, float light_adapt);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // native support for java finalize()
     private static native void delete(long nativeObj);
 
@@ -113,11 +119,6 @@ public class TonemapReinhard extends Tonemap {
         setLightAdaptation_0(nativeObj, light_adapt);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

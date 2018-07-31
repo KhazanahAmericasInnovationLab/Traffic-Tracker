@@ -15,21 +15,6 @@ import java.util.List;
 @Deprecated
 public class DescriptorExtractor {
 
-    public static final int
-            SIFT = 1,
-            SURF = 2,
-            ORB = 3,
-            BRIEF = 4,
-            BRISK = 5,
-            FREAK = 6,
-            AKAZE = 7,
-            OPPONENT_SIFT = OPPONENTEXTRACTOR + SIFT,
-            OPPONENT_SURF = OPPONENTEXTRACTOR + SURF,
-            OPPONENT_ORB = OPPONENTEXTRACTOR + ORB,
-            OPPONENT_BRIEF = OPPONENTEXTRACTOR + BRIEF,
-            OPPONENT_BRISK = OPPONENTEXTRACTOR + BRISK,
-            OPPONENT_FREAK = OPPONENTEXTRACTOR + FREAK,
-            OPPONENT_AKAZE = OPPONENTEXTRACTOR + AKAZE;
     private static final int
             OPPONENTEXTRACTOR = 1000;
     protected final long nativeObj;
@@ -50,6 +35,23 @@ public class DescriptorExtractor {
 
         return retVal;
     }
+
+
+    public static final int
+            SIFT = 1,
+            SURF = 2,
+            ORB = 3,
+            BRIEF = 4,
+            BRISK = 5,
+            FREAK = 6,
+            AKAZE = 7,
+            OPPONENT_SIFT = OPPONENTEXTRACTOR + SIFT,
+            OPPONENT_SURF = OPPONENTEXTRACTOR + SURF,
+            OPPONENT_ORB = OPPONENTEXTRACTOR + ORB,
+            OPPONENT_BRIEF = OPPONENTEXTRACTOR + BRIEF,
+            OPPONENT_BRISK = OPPONENTEXTRACTOR + BRISK,
+            OPPONENT_FREAK = OPPONENTEXTRACTOR + FREAK,
+            OPPONENT_AKAZE = OPPONENTEXTRACTOR + AKAZE;
 
 
     //
@@ -114,6 +116,12 @@ public class DescriptorExtractor {
 
     // C++:  void write(String fileName)
     private static native void write_0(long nativeObj, String fileName);
+
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
 
     // native support for java finalize()
     private static native void delete(long nativeObj);
@@ -182,11 +190,6 @@ public class DescriptorExtractor {
         write_0(nativeObj, fileName);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

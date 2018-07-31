@@ -272,32 +272,26 @@ public class Dnn {
 
     // C++:  Mat blobFromImage(Mat image, double scalefactor = 1.0, Size size = Size(), Scalar mean = Scalar(), bool swapRB = true, bool crop = true)
     private static native long blobFromImage_0(long image_nativeObj, double scalefactor, double size_width, double size_height, double mean_val0, double mean_val1, double mean_val2, double mean_val3, boolean swapRB, boolean crop);
-
     private static native long blobFromImage_1(long image_nativeObj);
 
     // C++:  Mat blobFromImages(vector_Mat images, double scalefactor = 1.0, Size size = Size(), Scalar mean = Scalar(), bool swapRB = true, bool crop = true)
     private static native long blobFromImages_0(long images_mat_nativeObj, double scalefactor, double size_width, double size_height, double mean_val0, double mean_val1, double mean_val2, double mean_val3, boolean swapRB, boolean crop);
-
     private static native long blobFromImages_1(long images_mat_nativeObj);
 
     // C++:  Mat readTorchBlob(String filename, bool isBinary = true)
     private static native long readTorchBlob_0(String filename, boolean isBinary);
-
     private static native long readTorchBlob_1(String filename);
 
     // C++:  Net readNet(String model, String config = "", String framework = "")
     private static native long readNet_0(String model, String config, String framework);
-
     private static native long readNet_1(String model);
 
     // C++:  Net readNetFromCaffe(String prototxt, String caffeModel = String())
     private static native long readNetFromCaffe_0(String prototxt, String caffeModel);
-
     private static native long readNetFromCaffe_1(String prototxt);
 
     // C++:  Net readNetFromDarknet(String cfgFile, String darknetModel = String())
     private static native long readNetFromDarknet_0(String cfgFile, String darknetModel);
-
     private static native long readNetFromDarknet_1(String cfgFile);
 
     // C++:  Net readNetFromModelOptimizer(String xml, String bin)
@@ -305,17 +299,14 @@ public class Dnn {
 
     // C++:  Net readNetFromTensorflow(String model, String config = String())
     private static native long readNetFromTensorflow_0(String model, String config);
-
     private static native long readNetFromTensorflow_1(String model);
 
     // C++:  Net readNetFromTorch(String model, bool isBinary = true)
     private static native long readNetFromTorch_0(String model, boolean isBinary);
-
     private static native long readNetFromTorch_1(String model);
 
     // C++:  void NMSBoxes(vector_Rect bboxes, vector_float scores, float score_threshold, float nms_threshold, vector_int& indices, float eta = 1.f, int top_k = 0)
     private static native void NMSBoxes_0(long bboxes_mat_nativeObj, long scores_mat_nativeObj, float score_threshold, float nms_threshold, long indices_mat_nativeObj, float eta, int top_k);
-
     private static native void NMSBoxes_1(long bboxes_mat_nativeObj, long scores_mat_nativeObj, float score_threshold, float nms_threshold, long indices_mat_nativeObj);
 
     // C++:  void imagesFromBlob(Mat blob_, vector_Mat& images_)
@@ -323,7 +314,6 @@ public class Dnn {
 
     // C++:  void shrinkCaffeModel(String src, String dst, vector_String layersTypes = std::vector<String>())
     private static native void shrinkCaffeModel_0(String src, String dst, List<String> layersTypes);
-
     private static native void shrinkCaffeModel_1(String src, String dst);
 
 }

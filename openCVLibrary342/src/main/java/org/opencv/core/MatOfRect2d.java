@@ -49,10 +49,10 @@ public class MatOfRect2d extends Mat {
         double buff[] = new double[num * _channels];
         for (int i = 0; i < num; i++) {
             Rect2d r = a[i];
-            buff[_channels * i + 0] = r.x;
-            buff[_channels * i + 1] = r.y;
-            buff[_channels * i + 2] = r.width;
-            buff[_channels * i + 3] = r.height;
+            buff[_channels * i + 0] = (double) r.x;
+            buff[_channels * i + 1] = (double) r.y;
+            buff[_channels * i + 2] = (double) r.width;
+            buff[_channels * i + 3] = (double) r.height;
         }
         put(0, 0, buff); //TODO: check ret val!
     }
@@ -69,7 +69,6 @@ public class MatOfRect2d extends Mat {
             a[i] = new Rect2d(buff[i * _channels], buff[i * _channels + 1], buff[i * _channels + 2], buff[i * _channels + 3]);
         return a;
     }
-
     public void fromList(List<Rect2d> lr) {
         Rect2d ap[] = lr.toArray(new Rect2d[0]);
         fromArray(ap);

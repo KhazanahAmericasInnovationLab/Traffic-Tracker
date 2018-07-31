@@ -8,14 +8,6 @@ package org.opencv.features2d;
 
 public class FastFeatureDetector extends Feature2D {
 
-    public static final int
-            TYPE_5_8 = 0,
-            TYPE_7_12 = 1,
-            TYPE_9_16 = 2,
-            THRESHOLD = 10000,
-            NONMAX_SUPPRESSION = 10001,
-            FAST_N = 10002;
-
     protected FastFeatureDetector(long addr) {
         super(addr);
     }
@@ -24,6 +16,14 @@ public class FastFeatureDetector extends Feature2D {
     public static FastFeatureDetector __fromPtr__(long addr) {
         return new FastFeatureDetector(addr);
     }
+
+    public static final int
+            TYPE_5_8 = 0,
+            TYPE_7_12 = 1,
+            TYPE_9_16 = 2,
+            THRESHOLD = 10000,
+            NONMAX_SUPPRESSION = 10001,
+            FAST_N = 10002;
 
 
     //
@@ -66,37 +66,75 @@ public class FastFeatureDetector extends Feature2D {
     // C++:  int getThreshold()
     //
 
-    // C++:  String getDefaultName()
-    private static native String getDefaultName_0(long nativeObj);
+    //javadoc: FastFeatureDetector::setNonmaxSuppression(f)
+    public void setNonmaxSuppression(boolean f) {
+
+        setNonmaxSuppression_0(nativeObj, f);
+
+        return;
+    }
 
 
     //
     // C++:  int getType()
     //
 
-    // C++:  bool getNonmaxSuppression()
-    private static native boolean getNonmaxSuppression_0(long nativeObj);
+    //javadoc: FastFeatureDetector::getThreshold()
+    public int getThreshold() {
+
+        int retVal = getThreshold_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  void setNonmaxSuppression(bool f)
     //
 
-    // C++:  int getThreshold()
-    private static native int getThreshold_0(long nativeObj);
+    //javadoc: FastFeatureDetector::setThreshold(threshold)
+    public void setThreshold(int threshold) {
+
+        setThreshold_0(nativeObj, threshold);
+
+        return;
+    }
 
 
     //
     // C++:  void setThreshold(int threshold)
     //
 
-    // C++:  int getType()
-    private static native int getType_0(long nativeObj);
+    //javadoc: FastFeatureDetector::getType()
+    public int getType() {
+
+        int retVal = getType_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  void setType(int type)
     //
+
+    // C++:  String getDefaultName()
+    private static native String getDefaultName_0(long nativeObj);
+
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
+    // C++:  bool getNonmaxSuppression()
+    private static native boolean getNonmaxSuppression_0(long nativeObj);
+
+    // C++:  int getThreshold()
+    private static native int getThreshold_0(long nativeObj);
+
+    // C++:  int getType()
+    private static native int getType_0(long nativeObj);
 
     // C++:  void setNonmaxSuppression(bool f)
     private static native void setNonmaxSuppression_0(long nativeObj, boolean f);
@@ -126,49 +164,12 @@ public class FastFeatureDetector extends Feature2D {
         return retVal;
     }
 
-    //javadoc: FastFeatureDetector::setNonmaxSuppression(f)
-    public void setNonmaxSuppression(boolean f) {
-
-        setNonmaxSuppression_0(nativeObj, f);
-
-        return;
-    }
-
-    //javadoc: FastFeatureDetector::getThreshold()
-    public int getThreshold() {
-
-        int retVal = getThreshold_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: FastFeatureDetector::setThreshold(threshold)
-    public void setThreshold(int threshold) {
-
-        setThreshold_0(nativeObj, threshold);
-
-        return;
-    }
-
-    //javadoc: FastFeatureDetector::getType()
-    public int getType() {
-
-        int retVal = getType_0(nativeObj);
-
-        return retVal;
-    }
-
     //javadoc: FastFeatureDetector::setType(type)
     public void setType(int type) {
 
         setType_0(nativeObj, type);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

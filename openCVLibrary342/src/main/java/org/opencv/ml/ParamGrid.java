@@ -89,6 +89,12 @@ public class ParamGrid {
     // C++: double ParamGrid::logStep
     private static native double get_logStep_0(long nativeObj);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // C++: void ParamGrid::logStep
     private static native void set_logStep_0(long nativeObj, double logStep);
 
@@ -145,11 +151,6 @@ public class ParamGrid {
         set_logStep_0(nativeObj, logStep);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

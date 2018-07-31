@@ -48,6 +48,12 @@ public class TonemapDrago extends Tonemap {
     // C++:  void setSaturation(float saturation)
     private static native void setSaturation_0(long nativeObj, float saturation);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // native support for java finalize()
     private static native void delete(long nativeObj);
 
@@ -81,11 +87,6 @@ public class TonemapDrago extends Tonemap {
         setSaturation_0(nativeObj, saturation);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

@@ -75,6 +75,12 @@ public class BOWTrainer {
     // native support for java finalize()
     private static native void delete(long nativeObj);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     public long getNativeObjAddr() {
         return nativeObj;
     }
@@ -125,11 +131,6 @@ public class BOWTrainer {
         clear_0(nativeObj);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

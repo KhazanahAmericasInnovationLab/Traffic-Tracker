@@ -11,10 +11,6 @@ import org.opencv.core.Mat;
 
 public class StereoMatcher extends Algorithm {
 
-    public static final int
-            DISP_SHIFT = 4,
-            DISP_SCALE = (1 << DISP_SHIFT);
-
     protected StereoMatcher(long addr) {
         super(addr);
     }
@@ -23,6 +19,10 @@ public class StereoMatcher extends Algorithm {
     public static StereoMatcher __fromPtr__(long addr) {
         return new StereoMatcher(addr);
     }
+
+    public static final int
+            DISP_SHIFT = 4,
+            DISP_SCALE = (1 << DISP_SHIFT);
 
 
     //
@@ -127,6 +127,12 @@ public class StereoMatcher extends Algorithm {
 
     // C++:  void setSpeckleWindowSize(int speckleWindowSize)
     private static native void setSpeckleWindowSize_0(long nativeObj, int speckleWindowSize);
+
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
 
     // native support for java finalize()
     private static native void delete(long nativeObj);
@@ -233,11 +239,6 @@ public class StereoMatcher extends Algorithm {
         compute_0(nativeObj, left.nativeObj, right.nativeObj, disparity.nativeObj);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

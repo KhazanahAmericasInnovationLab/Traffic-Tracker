@@ -8,12 +8,6 @@ package org.opencv.calib3d;
 
 public class StereoSGBM extends StereoMatcher {
 
-    public static final int
-            MODE_SGBM = 0,
-            MODE_HH = 1,
-            MODE_SGBM_3WAY = 2,
-            MODE_HH4 = 3;
-
     protected StereoSGBM(long addr) {
         super(addr);
     }
@@ -22,6 +16,12 @@ public class StereoSGBM extends StereoMatcher {
     public static StereoSGBM __fromPtr__(long addr) {
         return new StereoSGBM(addr);
     }
+
+    public static final int
+            MODE_SGBM = 0,
+            MODE_HH = 1,
+            MODE_SGBM_3WAY = 2,
+            MODE_HH4 = 3;
 
 
     //
@@ -57,68 +57,138 @@ public class StereoSGBM extends StereoMatcher {
     // C++:  int getP1()
     //
 
-    private static native long create_1();
+    //javadoc: StereoSGBM::setMode(mode)
+    public void setMode(int mode) {
+
+        setMode_0(nativeObj, mode);
+
+        return;
+    }
 
 
     //
     // C++:  int getP2()
     //
 
-    // C++:  int getMode()
-    private static native int getMode_0(long nativeObj);
+    //javadoc: StereoSGBM::getP1()
+    public int getP1() {
+
+        int retVal = getP1_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  int getPreFilterCap()
     //
 
-    // C++:  int getP1()
-    private static native int getP1_0(long nativeObj);
+    //javadoc: StereoSGBM::setP1(P1)
+    public void setP1(int P1) {
+
+        setP1_0(nativeObj, P1);
+
+        return;
+    }
 
 
     //
     // C++:  int getUniquenessRatio()
     //
 
-    // C++:  int getP2()
-    private static native int getP2_0(long nativeObj);
+    //javadoc: StereoSGBM::getP2()
+    public int getP2() {
+
+        int retVal = getP2_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  void setMode(int mode)
     //
 
-    // C++:  int getPreFilterCap()
-    private static native int getPreFilterCap_0(long nativeObj);
+    //javadoc: StereoSGBM::setP2(P2)
+    public void setP2(int P2) {
+
+        setP2_0(nativeObj, P2);
+
+        return;
+    }
 
 
     //
     // C++:  void setP1(int P1)
     //
 
-    // C++:  int getUniquenessRatio()
-    private static native int getUniquenessRatio_0(long nativeObj);
+    //javadoc: StereoSGBM::getPreFilterCap()
+    public int getPreFilterCap() {
+
+        int retVal = getPreFilterCap_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  void setP2(int P2)
     //
 
-    // C++:  void setMode(int mode)
-    private static native void setMode_0(long nativeObj, int mode);
+    //javadoc: StereoSGBM::setPreFilterCap(preFilterCap)
+    public void setPreFilterCap(int preFilterCap) {
+
+        setPreFilterCap_0(nativeObj, preFilterCap);
+
+        return;
+    }
 
 
     //
     // C++:  void setPreFilterCap(int preFilterCap)
     //
 
-    // C++:  void setP1(int P1)
-    private static native void setP1_0(long nativeObj, int P1);
+    //javadoc: StereoSGBM::getUniquenessRatio()
+    public int getUniquenessRatio() {
+
+        int retVal = getUniquenessRatio_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  void setUniquenessRatio(int uniquenessRatio)
     //
+
+    private static native long create_1();
+
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
+    // C++:  int getMode()
+    private static native int getMode_0(long nativeObj);
+
+    // C++:  int getP1()
+    private static native int getP1_0(long nativeObj);
+
+    // C++:  int getP2()
+    private static native int getP2_0(long nativeObj);
+
+    // C++:  int getPreFilterCap()
+    private static native int getPreFilterCap_0(long nativeObj);
+
+    // C++:  int getUniquenessRatio()
+    private static native int getUniquenessRatio_0(long nativeObj);
+
+    // C++:  void setMode(int mode)
+    private static native void setMode_0(long nativeObj, int mode);
+
+    // C++:  void setP1(int P1)
+    private static native void setP1_0(long nativeObj, int P1);
 
     // C++:  void setP2(int P2)
     private static native void setP2_0(long nativeObj, int P2);
@@ -140,81 +210,12 @@ public class StereoSGBM extends StereoMatcher {
         return retVal;
     }
 
-    //javadoc: StereoSGBM::setMode(mode)
-    public void setMode(int mode) {
-
-        setMode_0(nativeObj, mode);
-
-        return;
-    }
-
-    //javadoc: StereoSGBM::getP1()
-    public int getP1() {
-
-        int retVal = getP1_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: StereoSGBM::setP1(P1)
-    public void setP1(int P1) {
-
-        setP1_0(nativeObj, P1);
-
-        return;
-    }
-
-    //javadoc: StereoSGBM::getP2()
-    public int getP2() {
-
-        int retVal = getP2_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: StereoSGBM::setP2(P2)
-    public void setP2(int P2) {
-
-        setP2_0(nativeObj, P2);
-
-        return;
-    }
-
-    //javadoc: StereoSGBM::getPreFilterCap()
-    public int getPreFilterCap() {
-
-        int retVal = getPreFilterCap_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: StereoSGBM::setPreFilterCap(preFilterCap)
-    public void setPreFilterCap(int preFilterCap) {
-
-        setPreFilterCap_0(nativeObj, preFilterCap);
-
-        return;
-    }
-
-    //javadoc: StereoSGBM::getUniquenessRatio()
-    public int getUniquenessRatio() {
-
-        int retVal = getUniquenessRatio_0(nativeObj);
-
-        return retVal;
-    }
-
     //javadoc: StereoSGBM::setUniquenessRatio(uniquenessRatio)
     public void setUniquenessRatio(int uniquenessRatio) {
 
         setUniquenessRatio_0(nativeObj, uniquenessRatio);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

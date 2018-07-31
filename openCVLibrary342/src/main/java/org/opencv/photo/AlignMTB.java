@@ -110,6 +110,12 @@ public class AlignMTB extends AlignExposures {
     // C++:  void shiftMat(Mat src, Mat& dst, Point shift)
     private static native void shiftMat_0(long nativeObj, long src_nativeObj, long dst_nativeObj, double shift_x, double shift_y);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // native support for java finalize()
     private static native void delete(long nativeObj);
 
@@ -201,11 +207,6 @@ public class AlignMTB extends AlignExposures {
         shiftMat_0(nativeObj, src.nativeObj, dst.nativeObj, shift.x, shift.y);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

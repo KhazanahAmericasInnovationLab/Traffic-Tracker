@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.WindowManager;
+
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.LoaderCallbackInterface;
@@ -24,6 +25,7 @@ import org.opencv.imgproc.Imgproc;
 import java.util.List;
 
 public class CameraActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
+    public static final int CAMERA_PERMISSION_REQUEST = 1;
     private static final String TAG = CameraActivity.class.getSimpleName();
 
     static {
@@ -35,8 +37,6 @@ public class CameraActivity extends AppCompatActivity implements CameraBridgeVie
 //            System.loadLibrary("my_jni_lib2");
         }
     }
-
-    public static final int CAMERA_PERMISSION_REQUEST = 1;
 
     private CameraBridgeViewBase mOpenCvCameraView;
     private Mat mRgba;
@@ -66,6 +66,8 @@ public class CameraActivity extends AppCompatActivity implements CameraBridgeVie
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         //TODO read orientation from settings
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -111,6 +113,7 @@ public class CameraActivity extends AppCompatActivity implements CameraBridgeVie
         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
         mOpenCvCameraView.setCvCameraViewListener(this);
         mOpenCvCameraView.enableView();
+        mOpenCvCameraView.setMaxFrameSize(360, 240);
     }
 
 
@@ -119,7 +122,8 @@ public class CameraActivity extends AppCompatActivity implements CameraBridgeVie
         Log.d(TAG, "onResume");
         super.onResume();
         if (!OpenCVLoader.initDebug()) {
-            Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
+            Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for " +
+                    "initialization");
             OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION, this, mLoaderCallback);
         } else {
             Log.d(TAG, "OpenCV library found inside package. Using it!");

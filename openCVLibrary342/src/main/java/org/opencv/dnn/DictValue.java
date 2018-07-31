@@ -115,6 +115,12 @@ public class DictValue {
 
     private static native double getRealValue_1(long nativeObj);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // C++:  int getIntValue(int idx = -1)
     private static native int getIntValue_0(long nativeObj, int idx);
 
@@ -197,11 +203,6 @@ public class DictValue {
         int retVal = getIntValue_1(nativeObj);
 
         return retVal;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

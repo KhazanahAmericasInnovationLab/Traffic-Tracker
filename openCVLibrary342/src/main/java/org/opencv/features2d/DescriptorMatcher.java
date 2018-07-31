@@ -16,14 +16,6 @@ import java.util.List;
 
 public class DescriptorMatcher extends Algorithm {
 
-    public static final int
-            FLANNBASED = 1,
-            BRUTEFORCE = 2,
-            BRUTEFORCE_L1 = 3,
-            BRUTEFORCE_HAMMING = 4,
-            BRUTEFORCE_HAMMINGLUT = 5,
-            BRUTEFORCE_SL2 = 6;
-
     protected DescriptorMatcher(long addr) {
         super(addr);
     }
@@ -32,6 +24,14 @@ public class DescriptorMatcher extends Algorithm {
     public static DescriptorMatcher __fromPtr__(long addr) {
         return new DescriptorMatcher(addr);
     }
+
+    public static final int
+            FLANNBASED = 1,
+            BRUTEFORCE = 2,
+            BRUTEFORCE_L1 = 3,
+            BRUTEFORCE_HAMMING = 4,
+            BRUTEFORCE_HAMMINGLUT = 5,
+            BRUTEFORCE_SL2 = 6;
 
 
     //
@@ -206,6 +206,12 @@ public class DescriptorMatcher extends Algorithm {
 
     // C++:  void read(String fileName)
     private static native void read_0(long nativeObj, String fileName);
+
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
 
     // C++:  void train()
     private static native void train_0(long nativeObj);
@@ -401,11 +407,6 @@ public class DescriptorMatcher extends Algorithm {
         write_0(nativeObj, fileName);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

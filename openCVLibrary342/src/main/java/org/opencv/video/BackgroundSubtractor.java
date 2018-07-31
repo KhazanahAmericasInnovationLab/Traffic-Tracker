@@ -37,6 +37,12 @@ public class BackgroundSubtractor extends Algorithm {
     // C++:  void getBackgroundImage(Mat& backgroundImage)
     private static native void getBackgroundImage_0(long nativeObj, long backgroundImage_nativeObj);
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
     // native support for java finalize()
     private static native void delete(long nativeObj);
 
@@ -62,11 +68,6 @@ public class BackgroundSubtractor extends Algorithm {
         getBackgroundImage_0(nativeObj, backgroundImage.nativeObj);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

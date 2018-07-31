@@ -19,20 +19,6 @@ import java.util.List;
 
 public class Subdiv2D {
 
-    public static final int
-            PTLOC_ERROR = -2,
-            PTLOC_OUTSIDE_RECT = -1,
-            PTLOC_INSIDE = 0,
-            PTLOC_VERTEX = 1,
-            PTLOC_ON_EDGE = 2,
-            NEXT_AROUND_ORG = 0x00,
-            NEXT_AROUND_DST = 0x22,
-            PREV_AROUND_ORG = 0x11,
-            PREV_AROUND_DST = 0x33,
-            NEXT_AROUND_LEFT = 0x13,
-            NEXT_AROUND_RIGHT = 0x31,
-            PREV_AROUND_LEFT = 0x20,
-            PREV_AROUND_RIGHT = 0x02;
     protected final long nativeObj;
 
     protected Subdiv2D(long addr) {
@@ -54,6 +40,21 @@ public class Subdiv2D {
 
         return;
     }
+
+    public static final int
+            PTLOC_ERROR = -2,
+            PTLOC_OUTSIDE_RECT = -1,
+            PTLOC_INSIDE = 0,
+            PTLOC_VERTEX = 1,
+            PTLOC_ON_EDGE = 2,
+            NEXT_AROUND_ORG = 0x00,
+            NEXT_AROUND_DST = 0x22,
+            PREV_AROUND_ORG = 0x11,
+            PREV_AROUND_DST = 0x33,
+            NEXT_AROUND_LEFT = 0x13,
+            NEXT_AROUND_RIGHT = 0x31,
+            PREV_AROUND_LEFT = 0x20,
+            PREV_AROUND_RIGHT = 0x02;
 
 
     //
@@ -208,6 +209,12 @@ public class Subdiv2D {
 
     // C++:  void initDelaunay(Rect rect)
     private static native void initDelaunay_0(long nativeObj, int rect_x, int rect_y, int rect_width, int rect_height);
+
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
 
     // C++:  void insert(vector_Point2f ptvec)
     private static native void insert_1(long nativeObj, long ptvec_mat_nativeObj);
@@ -391,11 +398,6 @@ public class Subdiv2D {
         insert_1(nativeObj, ptvec_mat.nativeObj);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

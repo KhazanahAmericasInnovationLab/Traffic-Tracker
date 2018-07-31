@@ -20,6 +20,11 @@ import java.util.List;
 
 public class Video {
 
+    private static final int
+            CV_LKFLOW_INITIAL_GUESSES = 4,
+            CV_LKFLOW_GET_MIN_EIGENVALS = 8;
+
+
     public static final int
             OPTFLOW_USE_INITIAL_FLOW = 4,
             OPTFLOW_LK_GET_MIN_EIGENVALS = 8,
@@ -28,9 +33,6 @@ public class Video {
             MOTION_EUCLIDEAN = 1,
             MOTION_AFFINE = 2,
             MOTION_HOMOGRAPHY = 3;
-    private static final int
-            CV_LKFLOW_INITIAL_GUESSES = 4,
-            CV_LKFLOW_GET_MIN_EIGENVALS = 8;
 
 
     //
@@ -261,12 +263,10 @@ public class Video {
 
     // C++:  Ptr_BackgroundSubtractorKNN createBackgroundSubtractorKNN(int history = 500, double dist2Threshold = 400.0, bool detectShadows = true)
     private static native long createBackgroundSubtractorKNN_0(int history, double dist2Threshold, boolean detectShadows);
-
     private static native long createBackgroundSubtractorKNN_1();
 
     // C++:  Ptr_BackgroundSubtractorMOG2 createBackgroundSubtractorMOG2(int history = 500, double varThreshold = 16, bool detectShadows = true)
     private static native long createBackgroundSubtractorMOG2_0(int history, double varThreshold, boolean detectShadows);
-
     private static native long createBackgroundSubtractorMOG2_1();
 
     // C++:  Ptr_DualTVL1OpticalFlow createOptFlow_DualTVL1()
@@ -277,14 +277,11 @@ public class Video {
 
     // C++:  double findTransformECC(Mat templateImage, Mat inputImage, Mat& warpMatrix, int motionType = MOTION_AFFINE, TermCriteria criteria = TermCriteria(TermCriteria::COUNT+TermCriteria::EPS, 50, 0.001), Mat inputMask = Mat())
     private static native double findTransformECC_0(long templateImage_nativeObj, long inputImage_nativeObj, long warpMatrix_nativeObj, int motionType, int criteria_type, int criteria_maxCount, double criteria_epsilon, long inputMask_nativeObj);
-
     private static native double findTransformECC_1(long templateImage_nativeObj, long inputImage_nativeObj, long warpMatrix_nativeObj, int motionType);
-
     private static native double findTransformECC_2(long templateImage_nativeObj, long inputImage_nativeObj, long warpMatrix_nativeObj);
 
     // C++:  int buildOpticalFlowPyramid(Mat img, vector_Mat& pyramid, Size winSize, int maxLevel, bool withDerivatives = true, int pyrBorder = BORDER_REFLECT_101, int derivBorder = BORDER_CONSTANT, bool tryReuseInputImage = true)
     private static native int buildOpticalFlowPyramid_0(long img_nativeObj, long pyramid_mat_nativeObj, double winSize_width, double winSize_height, int maxLevel, boolean withDerivatives, int pyrBorder, int derivBorder, boolean tryReuseInputImage);
-
     private static native int buildOpticalFlowPyramid_1(long img_nativeObj, long pyramid_mat_nativeObj, double winSize_width, double winSize_height, int maxLevel);
 
     // C++:  int meanShift(Mat probImage, Rect& window, TermCriteria criteria)
@@ -295,9 +292,7 @@ public class Video {
 
     // C++:  void calcOpticalFlowPyrLK(Mat prevImg, Mat nextImg, vector_Point2f prevPts, vector_Point2f& nextPts, vector_uchar& status, vector_float& err, Size winSize = Size(21,21), int maxLevel = 3, TermCriteria criteria = TermCriteria(TermCriteria::COUNT+TermCriteria::EPS, 30, 0.01), int flags = 0, double minEigThreshold = 1e-4)
     private static native void calcOpticalFlowPyrLK_0(long prevImg_nativeObj, long nextImg_nativeObj, long prevPts_mat_nativeObj, long nextPts_mat_nativeObj, long status_mat_nativeObj, long err_mat_nativeObj, double winSize_width, double winSize_height, int maxLevel, int criteria_type, int criteria_maxCount, double criteria_epsilon, int flags, double minEigThreshold);
-
     private static native void calcOpticalFlowPyrLK_1(long prevImg_nativeObj, long nextImg_nativeObj, long prevPts_mat_nativeObj, long nextPts_mat_nativeObj, long status_mat_nativeObj, long err_mat_nativeObj, double winSize_width, double winSize_height, int maxLevel);
-
     private static native void calcOpticalFlowPyrLK_2(long prevImg_nativeObj, long nextImg_nativeObj, long prevPts_mat_nativeObj, long nextPts_mat_nativeObj, long status_mat_nativeObj, long err_mat_nativeObj);
 
 }

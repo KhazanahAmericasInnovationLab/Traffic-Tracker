@@ -15,6 +15,11 @@ import java.util.List;
 
 public class Photo {
 
+    private static final int
+            CV_INPAINT_NS = 0,
+            CV_INPAINT_TELEA = 1;
+
+
     public static final int
             INPAINT_NS = 0,
             INPAINT_TELEA = 1,
@@ -24,9 +29,6 @@ public class Photo {
             RECURS_FILTER = 1,
             NORMCONV_FILTER = 2,
             LDR_SIZE = 256;
-    private static final int
-            CV_INPAINT_NS = 0,
-            CV_INPAINT_TELEA = 1;
 
 
     //
@@ -581,17 +583,14 @@ public class Photo {
 
     // C++:  Ptr_AlignMTB createAlignMTB(int max_bits = 6, int exclude_range = 4, bool cut = true)
     private static native long createAlignMTB_0(int max_bits, int exclude_range, boolean cut);
-
     private static native long createAlignMTB_1();
 
     // C++:  Ptr_CalibrateDebevec createCalibrateDebevec(int samples = 70, float lambda = 10.0f, bool random = false)
     private static native long createCalibrateDebevec_0(int samples, float lambda, boolean random);
-
     private static native long createCalibrateDebevec_1();
 
     // C++:  Ptr_CalibrateRobertson createCalibrateRobertson(int max_iter = 30, float threshold = 0.01f)
     private static native long createCalibrateRobertson_0(int max_iter, float threshold);
-
     private static native long createCalibrateRobertson_1();
 
     // C++:  Ptr_MergeDebevec createMergeDebevec()
@@ -599,7 +598,6 @@ public class Photo {
 
     // C++:  Ptr_MergeMertens createMergeMertens(float contrast_weight = 1.0f, float saturation_weight = 1.0f, float exposure_weight = 0.0f)
     private static native long createMergeMertens_0(float contrast_weight, float saturation_weight, float exposure_weight);
-
     private static native long createMergeMertens_1();
 
     // C++:  Ptr_MergeRobertson createMergeRobertson()
@@ -607,32 +605,26 @@ public class Photo {
 
     // C++:  Ptr_Tonemap createTonemap(float gamma = 1.0f)
     private static native long createTonemap_0(float gamma);
-
     private static native long createTonemap_1();
 
     // C++:  Ptr_TonemapDrago createTonemapDrago(float gamma = 1.0f, float saturation = 1.0f, float bias = 0.85f)
     private static native long createTonemapDrago_0(float gamma, float saturation, float bias);
-
     private static native long createTonemapDrago_1();
 
     // C++:  Ptr_TonemapDurand createTonemapDurand(float gamma = 1.0f, float contrast = 4.0f, float saturation = 1.0f, float sigma_space = 2.0f, float sigma_color = 2.0f)
     private static native long createTonemapDurand_0(float gamma, float contrast, float saturation, float sigma_space, float sigma_color);
-
     private static native long createTonemapDurand_1();
 
     // C++:  Ptr_TonemapMantiuk createTonemapMantiuk(float gamma = 1.0f, float scale = 0.7f, float saturation = 1.0f)
     private static native long createTonemapMantiuk_0(float gamma, float scale, float saturation);
-
     private static native long createTonemapMantiuk_1();
 
     // C++:  Ptr_TonemapReinhard createTonemapReinhard(float gamma = 1.0f, float intensity = 0.0f, float light_adapt = 1.0f, float color_adapt = 0.0f)
     private static native long createTonemapReinhard_0(float gamma, float intensity, float light_adapt, float color_adapt);
-
     private static native long createTonemapReinhard_1();
 
     // C++:  void colorChange(Mat src, Mat mask, Mat& dst, float red_mul = 1.0f, float green_mul = 1.0f, float blue_mul = 1.0f)
     private static native void colorChange_0(long src_nativeObj, long mask_nativeObj, long dst_nativeObj, float red_mul, float green_mul, float blue_mul);
-
     private static native void colorChange_1(long src_nativeObj, long mask_nativeObj, long dst_nativeObj);
 
     // C++:  void decolor(Mat src, Mat& grayscale, Mat& color_boost)
@@ -640,52 +632,42 @@ public class Photo {
 
     // C++:  void denoise_TVL1(vector_Mat observations, Mat result, double lambda = 1.0, int niters = 30)
     private static native void denoise_TVL1_0(long observations_mat_nativeObj, long result_nativeObj, double lambda, int niters);
-
     private static native void denoise_TVL1_1(long observations_mat_nativeObj, long result_nativeObj);
 
     // C++:  void detailEnhance(Mat src, Mat& dst, float sigma_s = 10, float sigma_r = 0.15f)
     private static native void detailEnhance_0(long src_nativeObj, long dst_nativeObj, float sigma_s, float sigma_r);
-
     private static native void detailEnhance_1(long src_nativeObj, long dst_nativeObj);
 
     // C++:  void edgePreservingFilter(Mat src, Mat& dst, int flags = 1, float sigma_s = 60, float sigma_r = 0.4f)
     private static native void edgePreservingFilter_0(long src_nativeObj, long dst_nativeObj, int flags, float sigma_s, float sigma_r);
-
     private static native void edgePreservingFilter_1(long src_nativeObj, long dst_nativeObj);
 
     // C++:  void fastNlMeansDenoising(Mat src, Mat& dst, float h = 3, int templateWindowSize = 7, int searchWindowSize = 21)
     private static native void fastNlMeansDenoising_0(long src_nativeObj, long dst_nativeObj, float h, int templateWindowSize, int searchWindowSize);
-
     private static native void fastNlMeansDenoising_1(long src_nativeObj, long dst_nativeObj);
 
     // C++:  void fastNlMeansDenoising(Mat src, Mat& dst, vector_float h, int templateWindowSize = 7, int searchWindowSize = 21, int normType = NORM_L2)
     private static native void fastNlMeansDenoising_2(long src_nativeObj, long dst_nativeObj, long h_mat_nativeObj, int templateWindowSize, int searchWindowSize, int normType);
-
     private static native void fastNlMeansDenoising_3(long src_nativeObj, long dst_nativeObj, long h_mat_nativeObj);
 
     // C++:  void fastNlMeansDenoisingColored(Mat src, Mat& dst, float h = 3, float hColor = 3, int templateWindowSize = 7, int searchWindowSize = 21)
     private static native void fastNlMeansDenoisingColored_0(long src_nativeObj, long dst_nativeObj, float h, float hColor, int templateWindowSize, int searchWindowSize);
-
     private static native void fastNlMeansDenoisingColored_1(long src_nativeObj, long dst_nativeObj);
 
     // C++:  void fastNlMeansDenoisingColoredMulti(vector_Mat srcImgs, Mat& dst, int imgToDenoiseIndex, int temporalWindowSize, float h = 3, float hColor = 3, int templateWindowSize = 7, int searchWindowSize = 21)
     private static native void fastNlMeansDenoisingColoredMulti_0(long srcImgs_mat_nativeObj, long dst_nativeObj, int imgToDenoiseIndex, int temporalWindowSize, float h, float hColor, int templateWindowSize, int searchWindowSize);
-
     private static native void fastNlMeansDenoisingColoredMulti_1(long srcImgs_mat_nativeObj, long dst_nativeObj, int imgToDenoiseIndex, int temporalWindowSize);
 
     // C++:  void fastNlMeansDenoisingMulti(vector_Mat srcImgs, Mat& dst, int imgToDenoiseIndex, int temporalWindowSize, float h = 3, int templateWindowSize = 7, int searchWindowSize = 21)
     private static native void fastNlMeansDenoisingMulti_0(long srcImgs_mat_nativeObj, long dst_nativeObj, int imgToDenoiseIndex, int temporalWindowSize, float h, int templateWindowSize, int searchWindowSize);
-
     private static native void fastNlMeansDenoisingMulti_1(long srcImgs_mat_nativeObj, long dst_nativeObj, int imgToDenoiseIndex, int temporalWindowSize);
 
     // C++:  void fastNlMeansDenoisingMulti(vector_Mat srcImgs, Mat& dst, int imgToDenoiseIndex, int temporalWindowSize, vector_float h, int templateWindowSize = 7, int searchWindowSize = 21, int normType = NORM_L2)
     private static native void fastNlMeansDenoisingMulti_2(long srcImgs_mat_nativeObj, long dst_nativeObj, int imgToDenoiseIndex, int temporalWindowSize, long h_mat_nativeObj, int templateWindowSize, int searchWindowSize, int normType);
-
     private static native void fastNlMeansDenoisingMulti_3(long srcImgs_mat_nativeObj, long dst_nativeObj, int imgToDenoiseIndex, int temporalWindowSize, long h_mat_nativeObj);
 
     // C++:  void illuminationChange(Mat src, Mat mask, Mat& dst, float alpha = 0.2f, float beta = 0.4f)
     private static native void illuminationChange_0(long src_nativeObj, long mask_nativeObj, long dst_nativeObj, float alpha, float beta);
-
     private static native void illuminationChange_1(long src_nativeObj, long mask_nativeObj, long dst_nativeObj);
 
     // C++:  void inpaint(Mat src, Mat inpaintMask, Mat& dst, double inpaintRadius, int flags)
@@ -693,7 +675,6 @@ public class Photo {
 
     // C++:  void pencilSketch(Mat src, Mat& dst1, Mat& dst2, float sigma_s = 60, float sigma_r = 0.07f, float shade_factor = 0.02f)
     private static native void pencilSketch_0(long src_nativeObj, long dst1_nativeObj, long dst2_nativeObj, float sigma_s, float sigma_r, float shade_factor);
-
     private static native void pencilSketch_1(long src_nativeObj, long dst1_nativeObj, long dst2_nativeObj);
 
     // C++:  void seamlessClone(Mat src, Mat dst, Mat mask, Point p, Mat& blend, int flags)
@@ -701,12 +682,10 @@ public class Photo {
 
     // C++:  void stylization(Mat src, Mat& dst, float sigma_s = 60, float sigma_r = 0.45f)
     private static native void stylization_0(long src_nativeObj, long dst_nativeObj, float sigma_s, float sigma_r);
-
     private static native void stylization_1(long src_nativeObj, long dst_nativeObj);
 
     // C++:  void textureFlattening(Mat src, Mat mask, Mat& dst, float low_threshold = 30, float high_threshold = 45, int kernel_size = 3)
     private static native void textureFlattening_0(long src_nativeObj, long mask_nativeObj, long dst_nativeObj, float low_threshold, float high_threshold, int kernel_size);
-
     private static native void textureFlattening_1(long src_nativeObj, long mask_nativeObj, long dst_nativeObj);
 
 }

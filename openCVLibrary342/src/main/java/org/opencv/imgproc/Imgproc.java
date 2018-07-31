@@ -25,6 +25,44 @@ import java.util.List;
 
 public class Imgproc {
 
+    private static final int
+            IPL_BORDER_CONSTANT = 0,
+            IPL_BORDER_REPLICATE = 1,
+            IPL_BORDER_REFLECT = 2,
+            IPL_BORDER_WRAP = 3,
+            IPL_BORDER_REFLECT_101 = 4,
+            IPL_BORDER_TRANSPARENT = 5,
+            CV_INTER_NN = 0,
+            CV_INTER_LINEAR = 1,
+            CV_INTER_CUBIC = 2,
+            CV_INTER_AREA = 3,
+            CV_INTER_LANCZOS4 = 4,
+            CV_MOP_ERODE = 0,
+            CV_MOP_DILATE = 1,
+            CV_MOP_OPEN = 2,
+            CV_MOP_CLOSE = 3,
+            CV_MOP_GRADIENT = 4,
+            CV_MOP_TOPHAT = 5,
+            CV_MOP_BLACKHAT = 6,
+            CV_RETR_EXTERNAL = 0,
+            CV_RETR_LIST = 1,
+            CV_RETR_CCOMP = 2,
+            CV_RETR_TREE = 3,
+            CV_RETR_FLOODFILL = 4,
+            CV_CHAIN_APPROX_NONE = 1,
+            CV_CHAIN_APPROX_SIMPLE = 2,
+            CV_CHAIN_APPROX_TC89_L1 = 3,
+            CV_CHAIN_APPROX_TC89_KCOS = 4,
+            CV_THRESH_BINARY = 0,
+            CV_THRESH_BINARY_INV = 1,
+            CV_THRESH_TRUNC = 2,
+            CV_THRESH_TOZERO = 3,
+            CV_THRESH_TOZERO_INV = 4,
+            CV_THRESH_MASK = 7,
+            CV_THRESH_OTSU = 8,
+            CV_THRESH_TRIANGLE = 16;
+
+
     public static final int
             LINE_AA = 16,
             LINE_8 = 8,
@@ -409,42 +447,6 @@ public class Imgproc {
             MARKER_SQUARE = 4,
             MARKER_TRIANGLE_UP = 5,
             MARKER_TRIANGLE_DOWN = 6;
-    private static final int
-            IPL_BORDER_CONSTANT = 0,
-            IPL_BORDER_REPLICATE = 1,
-            IPL_BORDER_REFLECT = 2,
-            IPL_BORDER_WRAP = 3,
-            IPL_BORDER_REFLECT_101 = 4,
-            IPL_BORDER_TRANSPARENT = 5,
-            CV_INTER_NN = 0,
-            CV_INTER_LINEAR = 1,
-            CV_INTER_CUBIC = 2,
-            CV_INTER_AREA = 3,
-            CV_INTER_LANCZOS4 = 4,
-            CV_MOP_ERODE = 0,
-            CV_MOP_DILATE = 1,
-            CV_MOP_OPEN = 2,
-            CV_MOP_CLOSE = 3,
-            CV_MOP_GRADIENT = 4,
-            CV_MOP_TOPHAT = 5,
-            CV_MOP_BLACKHAT = 6,
-            CV_RETR_EXTERNAL = 0,
-            CV_RETR_LIST = 1,
-            CV_RETR_CCOMP = 2,
-            CV_RETR_TREE = 3,
-            CV_RETR_FLOODFILL = 4,
-            CV_CHAIN_APPROX_NONE = 1,
-            CV_CHAIN_APPROX_SIMPLE = 2,
-            CV_CHAIN_APPROX_TC89_L1 = 3,
-            CV_CHAIN_APPROX_TC89_KCOS = 4,
-            CV_THRESH_BINARY = 0,
-            CV_THRESH_BINARY_INV = 1,
-            CV_THRESH_TRUNC = 2,
-            CV_THRESH_TOZERO = 3,
-            CV_THRESH_TOZERO_INV = 4,
-            CV_THRESH_MASK = 7,
-            CV_THRESH_OTSU = 8,
-            CV_THRESH_TRIANGLE = 16;
 
 
     //
@@ -600,7 +602,7 @@ public class Imgproc {
     public static Point phaseCorrelate(Mat src1, Mat src2, Mat window, double[] response) {
         double[] response_out = new double[1];
         Point retVal = new Point(phaseCorrelate_0(src1.nativeObj, src2.nativeObj, window.nativeObj, response_out));
-        if (response != null) response[0] = response_out[0];
+        if (response != null) response[0] = (double) response_out[0];
         return retVal;
     }
 
@@ -2975,17 +2977,14 @@ public class Imgproc {
 
     // C++:  Mat getDefaultNewCameraMatrix(Mat cameraMatrix, Size imgsize = Size(), bool centerPrincipalPoint = false)
     private static native long getDefaultNewCameraMatrix_0(long cameraMatrix_nativeObj, double imgsize_width, double imgsize_height, boolean centerPrincipalPoint);
-
     private static native long getDefaultNewCameraMatrix_1(long cameraMatrix_nativeObj);
 
     // C++:  Mat getGaborKernel(Size ksize, double sigma, double theta, double lambd, double gamma, double psi = CV_PI*0.5, int ktype = CV_64F)
     private static native long getGaborKernel_0(double ksize_width, double ksize_height, double sigma, double theta, double lambd, double gamma, double psi, int ktype);
-
     private static native long getGaborKernel_1(double ksize_width, double ksize_height, double sigma, double theta, double lambd, double gamma);
 
     // C++:  Mat getGaussianKernel(int ksize, double sigma, int ktype = CV_64F)
     private static native long getGaussianKernel_0(int ksize, double sigma, int ktype);
-
     private static native long getGaussianKernel_1(int ksize, double sigma);
 
     // C++:  Mat getPerspectiveTransform(Mat src, Mat dst)
@@ -2996,27 +2995,22 @@ public class Imgproc {
 
     // C++:  Mat getStructuringElement(int shape, Size ksize, Point anchor = Point(-1,-1))
     private static native long getStructuringElement_0(int shape, double ksize_width, double ksize_height, double anchor_x, double anchor_y);
-
     private static native long getStructuringElement_1(int shape, double ksize_width, double ksize_height);
 
     // C++:  Moments moments(Mat array, bool binaryImage = false)
     private static native double[] moments_0(long array_nativeObj, boolean binaryImage);
-
     private static native double[] moments_1(long array_nativeObj);
 
     // C++:  Point2d phaseCorrelate(Mat src1, Mat src2, Mat window = Mat(), double* response = 0)
     private static native double[] phaseCorrelate_0(long src1_nativeObj, long src2_nativeObj, long window_nativeObj, double[] response_out);
-
     private static native double[] phaseCorrelate_1(long src1_nativeObj, long src2_nativeObj);
 
     // C++:  Ptr_CLAHE createCLAHE(double clipLimit = 40.0, Size tileGridSize = Size(8, 8))
     private static native long createCLAHE_0(double clipLimit, double tileGridSize_width, double tileGridSize_height);
-
     private static native long createCLAHE_1();
 
     // C++:  Ptr_LineSegmentDetector createLineSegmentDetector(int _refine = LSD_REFINE_STD, double _scale = 0.8, double _sigma_scale = 0.6, double _quant = 2.0, double _ang_th = 22.5, double _log_eps = 0, double _density_th = 0.7, int _n_bins = 1024)
     private static native long createLineSegmentDetector_0(int _refine, double _scale, double _sigma_scale, double _quant, double _ang_th, double _log_eps, double _density_th, int _n_bins);
-
     private static native long createLineSegmentDetector_1();
 
     // C++:  Rect boundingRect(vector_Point points)
@@ -3048,12 +3042,10 @@ public class Imgproc {
 
     // C++:  double contourArea(Mat contour, bool oriented = false)
     private static native double contourArea_0(long contour_nativeObj, boolean oriented);
-
     private static native double contourArea_1(long contour_nativeObj);
 
     // C++:  double getFontScaleFromHeight(int fontFace, int pixelHeight, int thickness = 1)
     private static native double getFontScaleFromHeight_0(int fontFace, int pixelHeight, int thickness);
-
     private static native double getFontScaleFromHeight_1(int fontFace, int pixelHeight);
 
     // C++:  double matchShapes(Mat contour1, Mat contour2, int method, double parameter)
@@ -3070,17 +3062,14 @@ public class Imgproc {
 
     // C++:  float initWideAngleProjMap(Mat cameraMatrix, Mat distCoeffs, Size imageSize, int destImageWidth, int m1type, Mat& map1, Mat& map2, int projType = PROJ_SPHERICAL_EQRECT, double alpha = 0)
     private static native float initWideAngleProjMap_0(long cameraMatrix_nativeObj, long distCoeffs_nativeObj, double imageSize_width, double imageSize_height, int destImageWidth, int m1type, long map1_nativeObj, long map2_nativeObj, int projType, double alpha);
-
     private static native float initWideAngleProjMap_1(long cameraMatrix_nativeObj, long distCoeffs_nativeObj, double imageSize_width, double imageSize_height, int destImageWidth, int m1type, long map1_nativeObj, long map2_nativeObj);
 
     // C++:  float intersectConvexConvex(Mat _p1, Mat _p2, Mat& _p12, bool handleNested = true)
     private static native float intersectConvexConvex_0(long _p1_nativeObj, long _p2_nativeObj, long _p12_nativeObj, boolean handleNested);
-
     private static native float intersectConvexConvex_1(long _p1_nativeObj, long _p2_nativeObj, long _p12_nativeObj);
 
     // C++:  float wrapperEMD(Mat signature1, Mat signature2, int distType, Mat cost = Mat(), Ptr_float& lowerBound = Ptr<float>(), Mat& flow = Mat())
     private static native float EMD_0(long signature1_nativeObj, long signature2_nativeObj, int distType, long cost_nativeObj, long flow_nativeObj);
-
     private static native float EMD_1(long signature1_nativeObj, long signature2_nativeObj, int distType);
 
     // C++:  int connectedComponents(Mat image, Mat& labels, int connectivity, int ltype, int ccltype)
@@ -3088,7 +3077,6 @@ public class Imgproc {
 
     // C++:  int connectedComponents(Mat image, Mat& labels, int connectivity = 8, int ltype = CV_32S)
     private static native int connectedComponents_0(long image_nativeObj, long labels_nativeObj, int connectivity, int ltype);
-
     private static native int connectedComponents_1(long image_nativeObj, long labels_nativeObj);
 
     // C++:  int connectedComponentsWithStats(Mat image, Mat& labels, Mat& stats, Mat& centroids, int connectivity, int ltype, int ccltype)
@@ -3096,12 +3084,10 @@ public class Imgproc {
 
     // C++:  int connectedComponentsWithStats(Mat image, Mat& labels, Mat& stats, Mat& centroids, int connectivity = 8, int ltype = CV_32S)
     private static native int connectedComponentsWithStats_0(long image_nativeObj, long labels_nativeObj, long stats_nativeObj, long centroids_nativeObj, int connectivity, int ltype);
-
     private static native int connectedComponentsWithStats_1(long image_nativeObj, long labels_nativeObj, long stats_nativeObj, long centroids_nativeObj);
 
     // C++:  int floodFill(Mat& image, Mat& mask, Point seedPoint, Scalar newVal, Rect* rect = 0, Scalar loDiff = Scalar(), Scalar upDiff = Scalar(), int flags = 4)
     private static native int floodFill_0(long image_nativeObj, long mask_nativeObj, double seedPoint_x, double seedPoint_y, double newVal_val0, double newVal_val1, double newVal_val2, double newVal_val3, double[] rect_out, double loDiff_val0, double loDiff_val1, double loDiff_val2, double loDiff_val3, double upDiff_val0, double upDiff_val1, double upDiff_val2, double upDiff_val3, int flags);
-
     private static native int floodFill_1(long image_nativeObj, long mask_nativeObj, double seedPoint_x, double seedPoint_y, double newVal_val0, double newVal_val1, double newVal_val2, double newVal_val3);
 
     // C++:  int rotatedRectangleIntersection(RotatedRect rect1, RotatedRect rect2, Mat& intersectingRegion)
@@ -3109,34 +3095,27 @@ public class Imgproc {
 
     // C++:  void Canny(Mat dx, Mat dy, Mat& edges, double threshold1, double threshold2, bool L2gradient = false)
     private static native void Canny_0(long dx_nativeObj, long dy_nativeObj, long edges_nativeObj, double threshold1, double threshold2, boolean L2gradient);
-
     private static native void Canny_1(long dx_nativeObj, long dy_nativeObj, long edges_nativeObj, double threshold1, double threshold2);
 
     // C++:  void Canny(Mat image, Mat& edges, double threshold1, double threshold2, int apertureSize = 3, bool L2gradient = false)
     private static native void Canny_2(long image_nativeObj, long edges_nativeObj, double threshold1, double threshold2, int apertureSize, boolean L2gradient);
-
     private static native void Canny_3(long image_nativeObj, long edges_nativeObj, double threshold1, double threshold2);
 
     // C++:  void GaussianBlur(Mat src, Mat& dst, Size ksize, double sigmaX, double sigmaY = 0, int borderType = BORDER_DEFAULT)
     private static native void GaussianBlur_0(long src_nativeObj, long dst_nativeObj, double ksize_width, double ksize_height, double sigmaX, double sigmaY, int borderType);
-
     private static native void GaussianBlur_1(long src_nativeObj, long dst_nativeObj, double ksize_width, double ksize_height, double sigmaX, double sigmaY);
-
     private static native void GaussianBlur_2(long src_nativeObj, long dst_nativeObj, double ksize_width, double ksize_height, double sigmaX);
 
     // C++:  void HoughCircles(Mat image, Mat& circles, int method, double dp, double minDist, double param1 = 100, double param2 = 100, int minRadius = 0, int maxRadius = 0)
     private static native void HoughCircles_0(long image_nativeObj, long circles_nativeObj, int method, double dp, double minDist, double param1, double param2, int minRadius, int maxRadius);
-
     private static native void HoughCircles_1(long image_nativeObj, long circles_nativeObj, int method, double dp, double minDist);
 
     // C++:  void HoughLines(Mat image, Mat& lines, double rho, double theta, int threshold, double srn = 0, double stn = 0, double min_theta = 0, double max_theta = CV_PI)
     private static native void HoughLines_0(long image_nativeObj, long lines_nativeObj, double rho, double theta, int threshold, double srn, double stn, double min_theta, double max_theta);
-
     private static native void HoughLines_1(long image_nativeObj, long lines_nativeObj, double rho, double theta, int threshold);
 
     // C++:  void HoughLinesP(Mat image, Mat& lines, double rho, double theta, int threshold, double minLineLength = 0, double maxLineGap = 0)
     private static native void HoughLinesP_0(long image_nativeObj, long lines_nativeObj, double rho, double theta, int threshold, double minLineLength, double maxLineGap);
-
     private static native void HoughLinesP_1(long image_nativeObj, long lines_nativeObj, double rho, double theta, int threshold);
 
     // C++:  void HoughLinesPointSet(Mat _point, Mat& _lines, int lines_max, int threshold, double min_rho, double max_rho, double rho_step, double min_theta, double max_theta, double theta_step)
@@ -3147,43 +3126,33 @@ public class Imgproc {
 
     // C++:  void Laplacian(Mat src, Mat& dst, int ddepth, int ksize = 1, double scale = 1, double delta = 0, int borderType = BORDER_DEFAULT)
     private static native void Laplacian_0(long src_nativeObj, long dst_nativeObj, int ddepth, int ksize, double scale, double delta, int borderType);
-
     private static native void Laplacian_1(long src_nativeObj, long dst_nativeObj, int ddepth, int ksize, double scale, double delta);
-
     private static native void Laplacian_2(long src_nativeObj, long dst_nativeObj, int ddepth);
 
     // C++:  void Scharr(Mat src, Mat& dst, int ddepth, int dx, int dy, double scale = 1, double delta = 0, int borderType = BORDER_DEFAULT)
     private static native void Scharr_0(long src_nativeObj, long dst_nativeObj, int ddepth, int dx, int dy, double scale, double delta, int borderType);
-
     private static native void Scharr_1(long src_nativeObj, long dst_nativeObj, int ddepth, int dx, int dy, double scale, double delta);
-
     private static native void Scharr_2(long src_nativeObj, long dst_nativeObj, int ddepth, int dx, int dy);
 
     // C++:  void Sobel(Mat src, Mat& dst, int ddepth, int dx, int dy, int ksize = 3, double scale = 1, double delta = 0, int borderType = BORDER_DEFAULT)
     private static native void Sobel_0(long src_nativeObj, long dst_nativeObj, int ddepth, int dx, int dy, int ksize, double scale, double delta, int borderType);
-
     private static native void Sobel_1(long src_nativeObj, long dst_nativeObj, int ddepth, int dx, int dy, int ksize, double scale, double delta);
-
     private static native void Sobel_2(long src_nativeObj, long dst_nativeObj, int ddepth, int dx, int dy);
 
     // C++:  void accumulate(Mat src, Mat& dst, Mat mask = Mat())
     private static native void accumulate_0(long src_nativeObj, long dst_nativeObj, long mask_nativeObj);
-
     private static native void accumulate_1(long src_nativeObj, long dst_nativeObj);
 
     // C++:  void accumulateProduct(Mat src1, Mat src2, Mat& dst, Mat mask = Mat())
     private static native void accumulateProduct_0(long src1_nativeObj, long src2_nativeObj, long dst_nativeObj, long mask_nativeObj);
-
     private static native void accumulateProduct_1(long src1_nativeObj, long src2_nativeObj, long dst_nativeObj);
 
     // C++:  void accumulateSquare(Mat src, Mat& dst, Mat mask = Mat())
     private static native void accumulateSquare_0(long src_nativeObj, long dst_nativeObj, long mask_nativeObj);
-
     private static native void accumulateSquare_1(long src_nativeObj, long dst_nativeObj);
 
     // C++:  void accumulateWeighted(Mat src, Mat& dst, double alpha, Mat mask = Mat())
     private static native void accumulateWeighted_0(long src_nativeObj, long dst_nativeObj, double alpha, long mask_nativeObj);
-
     private static native void accumulateWeighted_1(long src_nativeObj, long dst_nativeObj, double alpha);
 
     // C++:  void adaptiveThreshold(Mat src, Mat& dst, double maxValue, int adaptiveMethod, int thresholdType, int blockSize, double C)
@@ -3200,26 +3169,20 @@ public class Imgproc {
 
     // C++:  void arrowedLine(Mat& img, Point pt1, Point pt2, Scalar color, int thickness = 1, int line_type = 8, int shift = 0, double tipLength = 0.1)
     private static native void arrowedLine_0(long img_nativeObj, double pt1_x, double pt1_y, double pt2_x, double pt2_y, double color_val0, double color_val1, double color_val2, double color_val3, int thickness, int line_type, int shift, double tipLength);
-
     private static native void arrowedLine_1(long img_nativeObj, double pt1_x, double pt1_y, double pt2_x, double pt2_y, double color_val0, double color_val1, double color_val2, double color_val3);
 
     // C++:  void bilateralFilter(Mat src, Mat& dst, int d, double sigmaColor, double sigmaSpace, int borderType = BORDER_DEFAULT)
     private static native void bilateralFilter_0(long src_nativeObj, long dst_nativeObj, int d, double sigmaColor, double sigmaSpace, int borderType);
-
     private static native void bilateralFilter_1(long src_nativeObj, long dst_nativeObj, int d, double sigmaColor, double sigmaSpace);
 
     // C++:  void blur(Mat src, Mat& dst, Size ksize, Point anchor = Point(-1,-1), int borderType = BORDER_DEFAULT)
     private static native void blur_0(long src_nativeObj, long dst_nativeObj, double ksize_width, double ksize_height, double anchor_x, double anchor_y, int borderType);
-
     private static native void blur_1(long src_nativeObj, long dst_nativeObj, double ksize_width, double ksize_height, double anchor_x, double anchor_y);
-
     private static native void blur_2(long src_nativeObj, long dst_nativeObj, double ksize_width, double ksize_height);
 
     // C++:  void boxFilter(Mat src, Mat& dst, int ddepth, Size ksize, Point anchor = Point(-1,-1), bool normalize = true, int borderType = BORDER_DEFAULT)
     private static native void boxFilter_0(long src_nativeObj, long dst_nativeObj, int ddepth, double ksize_width, double ksize_height, double anchor_x, double anchor_y, boolean normalize, int borderType);
-
     private static native void boxFilter_1(long src_nativeObj, long dst_nativeObj, int ddepth, double ksize_width, double ksize_height, double anchor_x, double anchor_y, boolean normalize);
-
     private static native void boxFilter_2(long src_nativeObj, long dst_nativeObj, int ddepth, double ksize_width, double ksize_height);
 
     // C++:  void boxPoints(RotatedRect box, Mat& points)
@@ -3230,24 +3193,19 @@ public class Imgproc {
 
     // C++:  void calcHist(vector_Mat images, vector_int channels, Mat mask, Mat& hist, vector_int histSize, vector_float ranges, bool accumulate = false)
     private static native void calcHist_0(long images_mat_nativeObj, long channels_mat_nativeObj, long mask_nativeObj, long hist_nativeObj, long histSize_mat_nativeObj, long ranges_mat_nativeObj, boolean accumulate);
-
     private static native void calcHist_1(long images_mat_nativeObj, long channels_mat_nativeObj, long mask_nativeObj, long hist_nativeObj, long histSize_mat_nativeObj, long ranges_mat_nativeObj);
 
     // C++:  void circle(Mat& img, Point center, int radius, Scalar color, int thickness = 1, int lineType = LINE_8, int shift = 0)
     private static native void circle_0(long img_nativeObj, double center_x, double center_y, int radius, double color_val0, double color_val1, double color_val2, double color_val3, int thickness, int lineType, int shift);
-
     private static native void circle_1(long img_nativeObj, double center_x, double center_y, int radius, double color_val0, double color_val1, double color_val2, double color_val3, int thickness);
-
     private static native void circle_2(long img_nativeObj, double center_x, double center_y, int radius, double color_val0, double color_val1, double color_val2, double color_val3);
 
     // C++:  void convertMaps(Mat map1, Mat map2, Mat& dstmap1, Mat& dstmap2, int dstmap1type, bool nninterpolation = false)
     private static native void convertMaps_0(long map1_nativeObj, long map2_nativeObj, long dstmap1_nativeObj, long dstmap2_nativeObj, int dstmap1type, boolean nninterpolation);
-
     private static native void convertMaps_1(long map1_nativeObj, long map2_nativeObj, long dstmap1_nativeObj, long dstmap2_nativeObj, int dstmap1type);
 
     // C++:  void convexHull(vector_Point points, vector_int& hull, bool clockwise = false,  _hidden_  returnPoints = true)
     private static native void convexHull_0(long points_mat_nativeObj, long hull_mat_nativeObj, boolean clockwise);
-
     private static native void convexHull_1(long points_mat_nativeObj, long hull_mat_nativeObj);
 
     // C++:  void convexityDefects(vector_Point contour, vector_int convexhull, vector_Vec4i& convexityDefects)
@@ -3255,19 +3213,15 @@ public class Imgproc {
 
     // C++:  void cornerEigenValsAndVecs(Mat src, Mat& dst, int blockSize, int ksize, int borderType = BORDER_DEFAULT)
     private static native void cornerEigenValsAndVecs_0(long src_nativeObj, long dst_nativeObj, int blockSize, int ksize, int borderType);
-
     private static native void cornerEigenValsAndVecs_1(long src_nativeObj, long dst_nativeObj, int blockSize, int ksize);
 
     // C++:  void cornerHarris(Mat src, Mat& dst, int blockSize, int ksize, double k, int borderType = BORDER_DEFAULT)
     private static native void cornerHarris_0(long src_nativeObj, long dst_nativeObj, int blockSize, int ksize, double k, int borderType);
-
     private static native void cornerHarris_1(long src_nativeObj, long dst_nativeObj, int blockSize, int ksize, double k);
 
     // C++:  void cornerMinEigenVal(Mat src, Mat& dst, int blockSize, int ksize = 3, int borderType = BORDER_DEFAULT)
     private static native void cornerMinEigenVal_0(long src_nativeObj, long dst_nativeObj, int blockSize, int ksize, int borderType);
-
     private static native void cornerMinEigenVal_1(long src_nativeObj, long dst_nativeObj, int blockSize, int ksize);
-
     private static native void cornerMinEigenVal_2(long src_nativeObj, long dst_nativeObj, int blockSize);
 
     // C++:  void cornerSubPix(Mat image, Mat& corners, Size winSize, Size zeroZone, TermCriteria criteria)
@@ -3278,7 +3232,6 @@ public class Imgproc {
 
     // C++:  void cvtColor(Mat src, Mat& dst, int code, int dstCn = 0)
     private static native void cvtColor_0(long src_nativeObj, long dst_nativeObj, int code, int dstCn);
-
     private static native void cvtColor_1(long src_nativeObj, long dst_nativeObj, int code);
 
     // C++:  void cvtColorTwoPlane(Mat src1, Mat src2, Mat& dst, int code)
@@ -3286,50 +3239,38 @@ public class Imgproc {
 
     // C++:  void demosaicing(Mat _src, Mat& _dst, int code, int dcn = 0)
     private static native void demosaicing_0(long _src_nativeObj, long _dst_nativeObj, int code, int dcn);
-
     private static native void demosaicing_1(long _src_nativeObj, long _dst_nativeObj, int code);
 
     // C++:  void dilate(Mat src, Mat& dst, Mat kernel, Point anchor = Point(-1,-1), int iterations = 1, int borderType = BORDER_CONSTANT, Scalar borderValue = morphologyDefaultBorderValue())
     private static native void dilate_0(long src_nativeObj, long dst_nativeObj, long kernel_nativeObj, double anchor_x, double anchor_y, int iterations, int borderType, double borderValue_val0, double borderValue_val1, double borderValue_val2, double borderValue_val3);
-
     private static native void dilate_1(long src_nativeObj, long dst_nativeObj, long kernel_nativeObj, double anchor_x, double anchor_y, int iterations);
-
     private static native void dilate_2(long src_nativeObj, long dst_nativeObj, long kernel_nativeObj);
 
     // C++:  void distanceTransform(Mat src, Mat& dst, Mat& labels, int distanceType, int maskSize, int labelType = DIST_LABEL_CCOMP)
     private static native void distanceTransformWithLabels_0(long src_nativeObj, long dst_nativeObj, long labels_nativeObj, int distanceType, int maskSize, int labelType);
-
     private static native void distanceTransformWithLabels_1(long src_nativeObj, long dst_nativeObj, long labels_nativeObj, int distanceType, int maskSize);
 
     // C++:  void distanceTransform(Mat src, Mat& dst, int distanceType, int maskSize, int dstType = CV_32F)
     private static native void distanceTransform_0(long src_nativeObj, long dst_nativeObj, int distanceType, int maskSize, int dstType);
-
     private static native void distanceTransform_1(long src_nativeObj, long dst_nativeObj, int distanceType, int maskSize);
 
     // C++:  void drawContours(Mat& image, vector_vector_Point contours, int contourIdx, Scalar color, int thickness = 1, int lineType = LINE_8, Mat hierarchy = Mat(), int maxLevel = INT_MAX, Point offset = Point())
     private static native void drawContours_0(long image_nativeObj, long contours_mat_nativeObj, int contourIdx, double color_val0, double color_val1, double color_val2, double color_val3, int thickness, int lineType, long hierarchy_nativeObj, int maxLevel, double offset_x, double offset_y);
-
     private static native void drawContours_1(long image_nativeObj, long contours_mat_nativeObj, int contourIdx, double color_val0, double color_val1, double color_val2, double color_val3, int thickness);
-
     private static native void drawContours_2(long image_nativeObj, long contours_mat_nativeObj, int contourIdx, double color_val0, double color_val1, double color_val2, double color_val3);
 
     // C++:  void drawMarker(Mat& img, Point position, Scalar color, int markerType = MARKER_CROSS, int markerSize = 20, int thickness = 1, int line_type = 8)
     private static native void drawMarker_0(long img_nativeObj, double position_x, double position_y, double color_val0, double color_val1, double color_val2, double color_val3, int markerType, int markerSize, int thickness, int line_type);
-
     private static native void drawMarker_1(long img_nativeObj, double position_x, double position_y, double color_val0, double color_val1, double color_val2, double color_val3);
 
     // C++:  void ellipse(Mat& img, Point center, Size axes, double angle, double startAngle, double endAngle, Scalar color, int thickness = 1, int lineType = LINE_8, int shift = 0)
     private static native void ellipse_0(long img_nativeObj, double center_x, double center_y, double axes_width, double axes_height, double angle, double startAngle, double endAngle, double color_val0, double color_val1, double color_val2, double color_val3, int thickness, int lineType, int shift);
-
     private static native void ellipse_1(long img_nativeObj, double center_x, double center_y, double axes_width, double axes_height, double angle, double startAngle, double endAngle, double color_val0, double color_val1, double color_val2, double color_val3, int thickness);
-
     private static native void ellipse_2(long img_nativeObj, double center_x, double center_y, double axes_width, double axes_height, double angle, double startAngle, double endAngle, double color_val0, double color_val1, double color_val2, double color_val3);
 
     // C++:  void ellipse(Mat& img, RotatedRect box, Scalar color, int thickness = 1, int lineType = LINE_8)
     private static native void ellipse_3(long img_nativeObj, double box_center_x, double box_center_y, double box_size_width, double box_size_height, double box_angle, double color_val0, double color_val1, double color_val2, double color_val3, int thickness, int lineType);
-
     private static native void ellipse_4(long img_nativeObj, double box_center_x, double box_center_y, double box_size_width, double box_size_height, double box_angle, double color_val0, double color_val1, double color_val2, double color_val3, int thickness);
-
     private static native void ellipse_5(long img_nativeObj, double box_center_x, double box_center_y, double box_size_width, double box_size_height, double box_angle, double color_val0, double color_val1, double color_val2, double color_val3);
 
     // C++:  void ellipse2Poly(Point center, Size axes, int angle, int arcStart, int arcEnd, int delta, vector_Point& pts)
@@ -3340,31 +3281,24 @@ public class Imgproc {
 
     // C++:  void erode(Mat src, Mat& dst, Mat kernel, Point anchor = Point(-1,-1), int iterations = 1, int borderType = BORDER_CONSTANT, Scalar borderValue = morphologyDefaultBorderValue())
     private static native void erode_0(long src_nativeObj, long dst_nativeObj, long kernel_nativeObj, double anchor_x, double anchor_y, int iterations, int borderType, double borderValue_val0, double borderValue_val1, double borderValue_val2, double borderValue_val3);
-
     private static native void erode_1(long src_nativeObj, long dst_nativeObj, long kernel_nativeObj, double anchor_x, double anchor_y, int iterations);
-
     private static native void erode_2(long src_nativeObj, long dst_nativeObj, long kernel_nativeObj);
 
     // C++:  void fillConvexPoly(Mat& img, vector_Point points, Scalar color, int lineType = LINE_8, int shift = 0)
     private static native void fillConvexPoly_0(long img_nativeObj, long points_mat_nativeObj, double color_val0, double color_val1, double color_val2, double color_val3, int lineType, int shift);
-
     private static native void fillConvexPoly_1(long img_nativeObj, long points_mat_nativeObj, double color_val0, double color_val1, double color_val2, double color_val3);
 
     // C++:  void fillPoly(Mat& img, vector_vector_Point pts, Scalar color, int lineType = LINE_8, int shift = 0, Point offset = Point())
     private static native void fillPoly_0(long img_nativeObj, long pts_mat_nativeObj, double color_val0, double color_val1, double color_val2, double color_val3, int lineType, int shift, double offset_x, double offset_y);
-
     private static native void fillPoly_1(long img_nativeObj, long pts_mat_nativeObj, double color_val0, double color_val1, double color_val2, double color_val3);
 
     // C++:  void filter2D(Mat src, Mat& dst, int ddepth, Mat kernel, Point anchor = Point(-1,-1), double delta = 0, int borderType = BORDER_DEFAULT)
     private static native void filter2D_0(long src_nativeObj, long dst_nativeObj, int ddepth, long kernel_nativeObj, double anchor_x, double anchor_y, double delta, int borderType);
-
     private static native void filter2D_1(long src_nativeObj, long dst_nativeObj, int ddepth, long kernel_nativeObj, double anchor_x, double anchor_y, double delta);
-
     private static native void filter2D_2(long src_nativeObj, long dst_nativeObj, int ddepth, long kernel_nativeObj);
 
     // C++:  void findContours(Mat& image, vector_vector_Point& contours, Mat& hierarchy, int mode, int method, Point offset = Point())
     private static native void findContours_0(long image_nativeObj, long contours_mat_nativeObj, long hierarchy_nativeObj, int mode, int method, double offset_x, double offset_y);
-
     private static native void findContours_1(long image_nativeObj, long contours_mat_nativeObj, long hierarchy_nativeObj, int mode, int method);
 
     // C++:  void fitLine(Mat points, Mat& line, int distType, double param, double reps, double aeps)
@@ -3372,27 +3306,22 @@ public class Imgproc {
 
     // C++:  void getDerivKernels(Mat& kx, Mat& ky, int dx, int dy, int ksize, bool normalize = false, int ktype = CV_32F)
     private static native void getDerivKernels_0(long kx_nativeObj, long ky_nativeObj, int dx, int dy, int ksize, boolean normalize, int ktype);
-
     private static native void getDerivKernels_1(long kx_nativeObj, long ky_nativeObj, int dx, int dy, int ksize);
 
     // C++:  void getRectSubPix(Mat image, Size patchSize, Point2f center, Mat& patch, int patchType = -1)
     private static native void getRectSubPix_0(long image_nativeObj, double patchSize_width, double patchSize_height, double center_x, double center_y, long patch_nativeObj, int patchType);
-
     private static native void getRectSubPix_1(long image_nativeObj, double patchSize_width, double patchSize_height, double center_x, double center_y, long patch_nativeObj);
 
     // C++:  void goodFeaturesToTrack(Mat image, vector_Point& corners, int maxCorners, double qualityLevel, double minDistance, Mat mask, int blockSize, int gradientSize, bool useHarrisDetector = false, double k = 0.04)
     private static native void goodFeaturesToTrack_0(long image_nativeObj, long corners_mat_nativeObj, int maxCorners, double qualityLevel, double minDistance, long mask_nativeObj, int blockSize, int gradientSize, boolean useHarrisDetector, double k);
-
     private static native void goodFeaturesToTrack_1(long image_nativeObj, long corners_mat_nativeObj, int maxCorners, double qualityLevel, double minDistance, long mask_nativeObj, int blockSize, int gradientSize);
 
     // C++:  void goodFeaturesToTrack(Mat image, vector_Point& corners, int maxCorners, double qualityLevel, double minDistance, Mat mask = Mat(), int blockSize = 3, bool useHarrisDetector = false, double k = 0.04)
     private static native void goodFeaturesToTrack_2(long image_nativeObj, long corners_mat_nativeObj, int maxCorners, double qualityLevel, double minDistance, long mask_nativeObj, int blockSize, boolean useHarrisDetector, double k);
-
     private static native void goodFeaturesToTrack_3(long image_nativeObj, long corners_mat_nativeObj, int maxCorners, double qualityLevel, double minDistance);
 
     // C++:  void grabCut(Mat img, Mat& mask, Rect rect, Mat& bgdModel, Mat& fgdModel, int iterCount, int mode = GC_EVAL)
     private static native void grabCut_0(long img_nativeObj, long mask_nativeObj, int rect_x, int rect_y, int rect_width, int rect_height, long bgdModel_nativeObj, long fgdModel_nativeObj, int iterCount, int mode);
-
     private static native void grabCut_1(long img_nativeObj, long mask_nativeObj, int rect_x, int rect_y, int rect_width, int rect_height, long bgdModel_nativeObj, long fgdModel_nativeObj, int iterCount);
 
     // C++:  void initUndistortRectifyMap(Mat cameraMatrix, Mat distCoeffs, Mat R, Mat newCameraMatrix, Size size, int m1type, Mat& map1, Mat& map2)
@@ -3400,17 +3329,14 @@ public class Imgproc {
 
     // C++:  void integral(Mat src, Mat& sum, Mat& sqsum, Mat& tilted, int sdepth = -1, int sqdepth = -1)
     private static native void integral3_0(long src_nativeObj, long sum_nativeObj, long sqsum_nativeObj, long tilted_nativeObj, int sdepth, int sqdepth);
-
     private static native void integral3_1(long src_nativeObj, long sum_nativeObj, long sqsum_nativeObj, long tilted_nativeObj);
 
     // C++:  void integral(Mat src, Mat& sum, Mat& sqsum, int sdepth = -1, int sqdepth = -1)
     private static native void integral2_0(long src_nativeObj, long sum_nativeObj, long sqsum_nativeObj, int sdepth, int sqdepth);
-
     private static native void integral2_1(long src_nativeObj, long sum_nativeObj, long sqsum_nativeObj);
 
     // C++:  void integral(Mat src, Mat& sum, int sdepth = -1)
     private static native void integral_0(long src_nativeObj, long sum_nativeObj, int sdepth);
-
     private static native void integral_1(long src_nativeObj, long sum_nativeObj);
 
     // C++:  void invertAffineTransform(Mat M, Mat& iM)
@@ -3418,9 +3344,7 @@ public class Imgproc {
 
     // C++:  void line(Mat& img, Point pt1, Point pt2, Scalar color, int thickness = 1, int lineType = LINE_8, int shift = 0)
     private static native void line_0(long img_nativeObj, double pt1_x, double pt1_y, double pt2_x, double pt2_y, double color_val0, double color_val1, double color_val2, double color_val3, int thickness, int lineType, int shift);
-
     private static native void line_1(long img_nativeObj, double pt1_x, double pt1_y, double pt2_x, double pt2_y, double color_val0, double color_val1, double color_val2, double color_val3, int thickness);
-
     private static native void line_2(long img_nativeObj, double pt1_x, double pt1_y, double pt2_x, double pt2_y, double color_val0, double color_val1, double color_val2, double color_val3);
 
     // C++:  void linearPolar(Mat src, Mat& dst, Point2f center, double maxRadius, int flags)
@@ -3431,7 +3355,6 @@ public class Imgproc {
 
     // C++:  void matchTemplate(Mat image, Mat templ, Mat& result, int method, Mat mask = Mat())
     private static native void matchTemplate_0(long image_nativeObj, long templ_nativeObj, long result_nativeObj, int method, long mask_nativeObj);
-
     private static native void matchTemplate_1(long image_nativeObj, long templ_nativeObj, long result_nativeObj, int method);
 
     // C++:  void medianBlur(Mat src, Mat& dst, int ksize)
@@ -3442,90 +3365,67 @@ public class Imgproc {
 
     // C++:  void morphologyEx(Mat src, Mat& dst, int op, Mat kernel, Point anchor = Point(-1,-1), int iterations = 1, int borderType = BORDER_CONSTANT, Scalar borderValue = morphologyDefaultBorderValue())
     private static native void morphologyEx_0(long src_nativeObj, long dst_nativeObj, int op, long kernel_nativeObj, double anchor_x, double anchor_y, int iterations, int borderType, double borderValue_val0, double borderValue_val1, double borderValue_val2, double borderValue_val3);
-
     private static native void morphologyEx_1(long src_nativeObj, long dst_nativeObj, int op, long kernel_nativeObj, double anchor_x, double anchor_y, int iterations);
-
     private static native void morphologyEx_2(long src_nativeObj, long dst_nativeObj, int op, long kernel_nativeObj);
 
     // C++:  void polylines(Mat& img, vector_vector_Point pts, bool isClosed, Scalar color, int thickness = 1, int lineType = LINE_8, int shift = 0)
     private static native void polylines_0(long img_nativeObj, long pts_mat_nativeObj, boolean isClosed, double color_val0, double color_val1, double color_val2, double color_val3, int thickness, int lineType, int shift);
-
     private static native void polylines_1(long img_nativeObj, long pts_mat_nativeObj, boolean isClosed, double color_val0, double color_val1, double color_val2, double color_val3, int thickness);
-
     private static native void polylines_2(long img_nativeObj, long pts_mat_nativeObj, boolean isClosed, double color_val0, double color_val1, double color_val2, double color_val3);
 
     // C++:  void preCornerDetect(Mat src, Mat& dst, int ksize, int borderType = BORDER_DEFAULT)
     private static native void preCornerDetect_0(long src_nativeObj, long dst_nativeObj, int ksize, int borderType);
-
     private static native void preCornerDetect_1(long src_nativeObj, long dst_nativeObj, int ksize);
 
     // C++:  void putText(Mat& img, String text, Point org, int fontFace, double fontScale, Scalar color, int thickness = 1, int lineType = LINE_8, bool bottomLeftOrigin = false)
     private static native void putText_0(long img_nativeObj, String text, double org_x, double org_y, int fontFace, double fontScale, double color_val0, double color_val1, double color_val2, double color_val3, int thickness, int lineType, boolean bottomLeftOrigin);
-
     private static native void putText_1(long img_nativeObj, String text, double org_x, double org_y, int fontFace, double fontScale, double color_val0, double color_val1, double color_val2, double color_val3, int thickness);
-
     private static native void putText_2(long img_nativeObj, String text, double org_x, double org_y, int fontFace, double fontScale, double color_val0, double color_val1, double color_val2, double color_val3);
 
     // C++:  void pyrDown(Mat src, Mat& dst, Size dstsize = Size(), int borderType = BORDER_DEFAULT)
     private static native void pyrDown_0(long src_nativeObj, long dst_nativeObj, double dstsize_width, double dstsize_height, int borderType);
-
     private static native void pyrDown_1(long src_nativeObj, long dst_nativeObj, double dstsize_width, double dstsize_height);
-
     private static native void pyrDown_2(long src_nativeObj, long dst_nativeObj);
 
     // C++:  void pyrMeanShiftFiltering(Mat src, Mat& dst, double sp, double sr, int maxLevel = 1, TermCriteria termcrit = TermCriteria(TermCriteria::MAX_ITER+TermCriteria::EPS,5,1))
     private static native void pyrMeanShiftFiltering_0(long src_nativeObj, long dst_nativeObj, double sp, double sr, int maxLevel, int termcrit_type, int termcrit_maxCount, double termcrit_epsilon);
-
     private static native void pyrMeanShiftFiltering_1(long src_nativeObj, long dst_nativeObj, double sp, double sr);
 
     // C++:  void pyrUp(Mat src, Mat& dst, Size dstsize = Size(), int borderType = BORDER_DEFAULT)
     private static native void pyrUp_0(long src_nativeObj, long dst_nativeObj, double dstsize_width, double dstsize_height, int borderType);
-
     private static native void pyrUp_1(long src_nativeObj, long dst_nativeObj, double dstsize_width, double dstsize_height);
-
     private static native void pyrUp_2(long src_nativeObj, long dst_nativeObj);
 
     // C++:  void rectangle(Mat& img, Point pt1, Point pt2, Scalar color, int thickness = 1, int lineType = LINE_8, int shift = 0)
     private static native void rectangle_0(long img_nativeObj, double pt1_x, double pt1_y, double pt2_x, double pt2_y, double color_val0, double color_val1, double color_val2, double color_val3, int thickness, int lineType, int shift);
-
     private static native void rectangle_1(long img_nativeObj, double pt1_x, double pt1_y, double pt2_x, double pt2_y, double color_val0, double color_val1, double color_val2, double color_val3, int thickness);
-
     private static native void rectangle_2(long img_nativeObj, double pt1_x, double pt1_y, double pt2_x, double pt2_y, double color_val0, double color_val1, double color_val2, double color_val3);
 
     // C++:  void remap(Mat src, Mat& dst, Mat map1, Mat map2, int interpolation, int borderMode = BORDER_CONSTANT, Scalar borderValue = Scalar())
     private static native void remap_0(long src_nativeObj, long dst_nativeObj, long map1_nativeObj, long map2_nativeObj, int interpolation, int borderMode, double borderValue_val0, double borderValue_val1, double borderValue_val2, double borderValue_val3);
-
     private static native void remap_1(long src_nativeObj, long dst_nativeObj, long map1_nativeObj, long map2_nativeObj, int interpolation);
 
     // C++:  void resize(Mat src, Mat& dst, Size dsize, double fx = 0, double fy = 0, int interpolation = INTER_LINEAR)
     private static native void resize_0(long src_nativeObj, long dst_nativeObj, double dsize_width, double dsize_height, double fx, double fy, int interpolation);
-
     private static native void resize_1(long src_nativeObj, long dst_nativeObj, double dsize_width, double dsize_height);
 
     // C++:  void sepFilter2D(Mat src, Mat& dst, int ddepth, Mat kernelX, Mat kernelY, Point anchor = Point(-1,-1), double delta = 0, int borderType = BORDER_DEFAULT)
     private static native void sepFilter2D_0(long src_nativeObj, long dst_nativeObj, int ddepth, long kernelX_nativeObj, long kernelY_nativeObj, double anchor_x, double anchor_y, double delta, int borderType);
-
     private static native void sepFilter2D_1(long src_nativeObj, long dst_nativeObj, int ddepth, long kernelX_nativeObj, long kernelY_nativeObj, double anchor_x, double anchor_y, double delta);
-
     private static native void sepFilter2D_2(long src_nativeObj, long dst_nativeObj, int ddepth, long kernelX_nativeObj, long kernelY_nativeObj);
 
     // C++:  void spatialGradient(Mat src, Mat& dx, Mat& dy, int ksize = 3, int borderType = BORDER_DEFAULT)
     private static native void spatialGradient_0(long src_nativeObj, long dx_nativeObj, long dy_nativeObj, int ksize, int borderType);
-
     private static native void spatialGradient_1(long src_nativeObj, long dx_nativeObj, long dy_nativeObj, int ksize);
-
     private static native void spatialGradient_2(long src_nativeObj, long dx_nativeObj, long dy_nativeObj);
 
     // C++:  void sqrBoxFilter(Mat _src, Mat& _dst, int ddepth, Size ksize, Point anchor = Point(-1, -1), bool normalize = true, int borderType = BORDER_DEFAULT)
     private static native void sqrBoxFilter_0(long _src_nativeObj, long _dst_nativeObj, int ddepth, double ksize_width, double ksize_height, double anchor_x, double anchor_y, boolean normalize, int borderType);
-
     private static native void sqrBoxFilter_1(long _src_nativeObj, long _dst_nativeObj, int ddepth, double ksize_width, double ksize_height, double anchor_x, double anchor_y, boolean normalize);
-
     private static native void sqrBoxFilter_2(long _src_nativeObj, long _dst_nativeObj, int ddepth, double ksize_width, double ksize_height);
 
     // C++:  void undistort(Mat src, Mat& dst, Mat cameraMatrix, Mat distCoeffs, Mat newCameraMatrix = Mat())
     private static native void undistort_0(long src_nativeObj, long dst_nativeObj, long cameraMatrix_nativeObj, long distCoeffs_nativeObj, long newCameraMatrix_nativeObj);
-
     private static native void undistort_1(long src_nativeObj, long dst_nativeObj, long cameraMatrix_nativeObj, long distCoeffs_nativeObj);
 
     // C++:  void undistortPoints(Mat src, Mat& dst, Mat cameraMatrix, Mat distCoeffs, Mat R, Mat P, TermCriteria criteria)
@@ -3533,21 +3433,16 @@ public class Imgproc {
 
     // C++:  void undistortPoints(Mat src, Mat& dst, Mat cameraMatrix, Mat distCoeffs, Mat R = Mat(), Mat P = Mat())
     private static native void undistortPoints_0(long src_nativeObj, long dst_nativeObj, long cameraMatrix_nativeObj, long distCoeffs_nativeObj, long R_nativeObj, long P_nativeObj);
-
     private static native void undistortPoints_1(long src_nativeObj, long dst_nativeObj, long cameraMatrix_nativeObj, long distCoeffs_nativeObj);
 
     // C++:  void warpAffine(Mat src, Mat& dst, Mat M, Size dsize, int flags = INTER_LINEAR, int borderMode = BORDER_CONSTANT, Scalar borderValue = Scalar())
     private static native void warpAffine_0(long src_nativeObj, long dst_nativeObj, long M_nativeObj, double dsize_width, double dsize_height, int flags, int borderMode, double borderValue_val0, double borderValue_val1, double borderValue_val2, double borderValue_val3);
-
     private static native void warpAffine_1(long src_nativeObj, long dst_nativeObj, long M_nativeObj, double dsize_width, double dsize_height, int flags);
-
     private static native void warpAffine_2(long src_nativeObj, long dst_nativeObj, long M_nativeObj, double dsize_width, double dsize_height);
 
     // C++:  void warpPerspective(Mat src, Mat& dst, Mat M, Size dsize, int flags = INTER_LINEAR, int borderMode = BORDER_CONSTANT, Scalar borderValue = Scalar())
     private static native void warpPerspective_0(long src_nativeObj, long dst_nativeObj, long M_nativeObj, double dsize_width, double dsize_height, int flags, int borderMode, double borderValue_val0, double borderValue_val1, double borderValue_val2, double borderValue_val3);
-
     private static native void warpPerspective_1(long src_nativeObj, long dst_nativeObj, long M_nativeObj, double dsize_width, double dsize_height, int flags);
-
     private static native void warpPerspective_2(long src_nativeObj, long dst_nativeObj, long M_nativeObj, double dsize_width, double dsize_height);
 
     // C++:  void warpPolar(Mat src, Mat& dst, Size dsize, Point2f center, double maxRadius, int flags)

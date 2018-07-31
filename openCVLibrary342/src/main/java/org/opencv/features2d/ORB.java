@@ -8,11 +8,6 @@ package org.opencv.features2d;
 
 public class ORB extends Feature2D {
 
-    public static final int
-            kBytes = 32,
-            HARRIS_SCORE = 0,
-            FAST_SCORE = 1;
-
     protected ORB(long addr) {
         super(addr);
     }
@@ -21,6 +16,11 @@ public class ORB extends Feature2D {
     public static ORB __fromPtr__(long addr) {
         return new ORB(addr);
     }
+
+    public static final int
+            kBytes = 32,
+            HARRIS_SCORE = 0,
+            FAST_SCORE = 1;
 
 
     //
@@ -63,133 +63,267 @@ public class ORB extends Feature2D {
     // C++:  int getEdgeThreshold()
     //
 
-    // C++:  String getDefaultName()
-    private static native String getDefaultName_0(long nativeObj);
+    //javadoc: ORB::setScaleFactor(scaleFactor)
+    public void setScaleFactor(double scaleFactor) {
+
+        setScaleFactor_0(nativeObj, scaleFactor);
+
+        return;
+    }
 
 
     //
     // C++:  int getFastThreshold()
     //
 
-    // C++:  double getScaleFactor()
-    private static native double getScaleFactor_0(long nativeObj);
+    //javadoc: ORB::getEdgeThreshold()
+    public int getEdgeThreshold() {
+
+        int retVal = getEdgeThreshold_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  int getFirstLevel()
     //
 
-    // C++:  int getEdgeThreshold()
-    private static native int getEdgeThreshold_0(long nativeObj);
+    //javadoc: ORB::setEdgeThreshold(edgeThreshold)
+    public void setEdgeThreshold(int edgeThreshold) {
+
+        setEdgeThreshold_0(nativeObj, edgeThreshold);
+
+        return;
+    }
 
 
     //
     // C++:  int getMaxFeatures()
     //
 
-    // C++:  int getFastThreshold()
-    private static native int getFastThreshold_0(long nativeObj);
+    //javadoc: ORB::getFastThreshold()
+    public int getFastThreshold() {
+
+        int retVal = getFastThreshold_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  int getNLevels()
     //
 
-    // C++:  int getFirstLevel()
-    private static native int getFirstLevel_0(long nativeObj);
+    //javadoc: ORB::setFastThreshold(fastThreshold)
+    public void setFastThreshold(int fastThreshold) {
+
+        setFastThreshold_0(nativeObj, fastThreshold);
+
+        return;
+    }
 
 
     //
     // C++:  int getPatchSize()
     //
 
-    // C++:  int getMaxFeatures()
-    private static native int getMaxFeatures_0(long nativeObj);
+    //javadoc: ORB::getFirstLevel()
+    public int getFirstLevel() {
+
+        int retVal = getFirstLevel_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  int getScoreType()
     //
 
-    // C++:  int getNLevels()
-    private static native int getNLevels_0(long nativeObj);
+    //javadoc: ORB::setFirstLevel(firstLevel)
+    public void setFirstLevel(int firstLevel) {
+
+        setFirstLevel_0(nativeObj, firstLevel);
+
+        return;
+    }
 
 
     //
     // C++:  int getWTA_K()
     //
 
-    // C++:  int getPatchSize()
-    private static native int getPatchSize_0(long nativeObj);
+    //javadoc: ORB::getMaxFeatures()
+    public int getMaxFeatures() {
+
+        int retVal = getMaxFeatures_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  void setEdgeThreshold(int edgeThreshold)
     //
 
-    // C++:  int getScoreType()
-    private static native int getScoreType_0(long nativeObj);
+    //javadoc: ORB::setMaxFeatures(maxFeatures)
+    public void setMaxFeatures(int maxFeatures) {
+
+        setMaxFeatures_0(nativeObj, maxFeatures);
+
+        return;
+    }
 
 
     //
     // C++:  void setFastThreshold(int fastThreshold)
     //
 
-    // C++:  int getWTA_K()
-    private static native int getWTA_K_0(long nativeObj);
+    //javadoc: ORB::getNLevels()
+    public int getNLevels() {
+
+        int retVal = getNLevels_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  void setFirstLevel(int firstLevel)
     //
 
-    // C++:  void setEdgeThreshold(int edgeThreshold)
-    private static native void setEdgeThreshold_0(long nativeObj, int edgeThreshold);
+    //javadoc: ORB::setNLevels(nlevels)
+    public void setNLevels(int nlevels) {
+
+        setNLevels_0(nativeObj, nlevels);
+
+        return;
+    }
 
 
     //
     // C++:  void setMaxFeatures(int maxFeatures)
     //
 
-    // C++:  void setFastThreshold(int fastThreshold)
-    private static native void setFastThreshold_0(long nativeObj, int fastThreshold);
+    //javadoc: ORB::getPatchSize()
+    public int getPatchSize() {
+
+        int retVal = getPatchSize_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  void setNLevels(int nlevels)
     //
 
-    // C++:  void setFirstLevel(int firstLevel)
-    private static native void setFirstLevel_0(long nativeObj, int firstLevel);
+    //javadoc: ORB::setPatchSize(patchSize)
+    public void setPatchSize(int patchSize) {
+
+        setPatchSize_0(nativeObj, patchSize);
+
+        return;
+    }
 
 
     //
     // C++:  void setPatchSize(int patchSize)
     //
 
-    // C++:  void setMaxFeatures(int maxFeatures)
-    private static native void setMaxFeatures_0(long nativeObj, int maxFeatures);
+    //javadoc: ORB::getScoreType()
+    public int getScoreType() {
+
+        int retVal = getScoreType_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  void setScaleFactor(double scaleFactor)
     //
 
-    // C++:  void setNLevels(int nlevels)
-    private static native void setNLevels_0(long nativeObj, int nlevels);
+    //javadoc: ORB::setScoreType(scoreType)
+    public void setScoreType(int scoreType) {
+
+        setScoreType_0(nativeObj, scoreType);
+
+        return;
+    }
 
 
     //
     // C++:  void setScoreType(int scoreType)
     //
 
-    // C++:  void setPatchSize(int patchSize)
-    private static native void setPatchSize_0(long nativeObj, int patchSize);
+    //javadoc: ORB::getWTA_K()
+    public int getWTA_K() {
+
+        int retVal = getWTA_K_0(nativeObj);
+
+        return retVal;
+    }
 
 
     //
     // C++:  void setWTA_K(int wta_k)
     //
+
+    // C++:  String getDefaultName()
+    private static native String getDefaultName_0(long nativeObj);
+
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
+    // C++:  double getScaleFactor()
+    private static native double getScaleFactor_0(long nativeObj);
+
+    // C++:  int getEdgeThreshold()
+    private static native int getEdgeThreshold_0(long nativeObj);
+
+    // C++:  int getFastThreshold()
+    private static native int getFastThreshold_0(long nativeObj);
+
+    // C++:  int getFirstLevel()
+    private static native int getFirstLevel_0(long nativeObj);
+
+    // C++:  int getMaxFeatures()
+    private static native int getMaxFeatures_0(long nativeObj);
+
+    // C++:  int getNLevels()
+    private static native int getNLevels_0(long nativeObj);
+
+    // C++:  int getPatchSize()
+    private static native int getPatchSize_0(long nativeObj);
+
+    // C++:  int getScoreType()
+    private static native int getScoreType_0(long nativeObj);
+
+    // C++:  int getWTA_K()
+    private static native int getWTA_K_0(long nativeObj);
+
+    // C++:  void setEdgeThreshold(int edgeThreshold)
+    private static native void setEdgeThreshold_0(long nativeObj, int edgeThreshold);
+
+    // C++:  void setFastThreshold(int fastThreshold)
+    private static native void setFastThreshold_0(long nativeObj, int fastThreshold);
+
+    // C++:  void setFirstLevel(int firstLevel)
+    private static native void setFirstLevel_0(long nativeObj, int firstLevel);
+
+    // C++:  void setMaxFeatures(int maxFeatures)
+    private static native void setMaxFeatures_0(long nativeObj, int maxFeatures);
+
+    // C++:  void setNLevels(int nlevels)
+    private static native void setNLevels_0(long nativeObj, int nlevels);
+
+    // C++:  void setPatchSize(int patchSize)
+    private static native void setPatchSize_0(long nativeObj, int patchSize);
 
     // C++:  void setScaleFactor(double scaleFactor)
     private static native void setScaleFactor_0(long nativeObj, double scaleFactor);
@@ -219,145 +353,12 @@ public class ORB extends Feature2D {
         return retVal;
     }
 
-    //javadoc: ORB::setScaleFactor(scaleFactor)
-    public void setScaleFactor(double scaleFactor) {
-
-        setScaleFactor_0(nativeObj, scaleFactor);
-
-        return;
-    }
-
-    //javadoc: ORB::getEdgeThreshold()
-    public int getEdgeThreshold() {
-
-        int retVal = getEdgeThreshold_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: ORB::setEdgeThreshold(edgeThreshold)
-    public void setEdgeThreshold(int edgeThreshold) {
-
-        setEdgeThreshold_0(nativeObj, edgeThreshold);
-
-        return;
-    }
-
-    //javadoc: ORB::getFastThreshold()
-    public int getFastThreshold() {
-
-        int retVal = getFastThreshold_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: ORB::setFastThreshold(fastThreshold)
-    public void setFastThreshold(int fastThreshold) {
-
-        setFastThreshold_0(nativeObj, fastThreshold);
-
-        return;
-    }
-
-    //javadoc: ORB::getFirstLevel()
-    public int getFirstLevel() {
-
-        int retVal = getFirstLevel_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: ORB::setFirstLevel(firstLevel)
-    public void setFirstLevel(int firstLevel) {
-
-        setFirstLevel_0(nativeObj, firstLevel);
-
-        return;
-    }
-
-    //javadoc: ORB::getMaxFeatures()
-    public int getMaxFeatures() {
-
-        int retVal = getMaxFeatures_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: ORB::setMaxFeatures(maxFeatures)
-    public void setMaxFeatures(int maxFeatures) {
-
-        setMaxFeatures_0(nativeObj, maxFeatures);
-
-        return;
-    }
-
-    //javadoc: ORB::getNLevels()
-    public int getNLevels() {
-
-        int retVal = getNLevels_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: ORB::setNLevels(nlevels)
-    public void setNLevels(int nlevels) {
-
-        setNLevels_0(nativeObj, nlevels);
-
-        return;
-    }
-
-    //javadoc: ORB::getPatchSize()
-    public int getPatchSize() {
-
-        int retVal = getPatchSize_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: ORB::setPatchSize(patchSize)
-    public void setPatchSize(int patchSize) {
-
-        setPatchSize_0(nativeObj, patchSize);
-
-        return;
-    }
-
-    //javadoc: ORB::getScoreType()
-    public int getScoreType() {
-
-        int retVal = getScoreType_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: ORB::setScoreType(scoreType)
-    public void setScoreType(int scoreType) {
-
-        setScoreType_0(nativeObj, scoreType);
-
-        return;
-    }
-
-    //javadoc: ORB::getWTA_K()
-    public int getWTA_K() {
-
-        int retVal = getWTA_K_0(nativeObj);
-
-        return retVal;
-    }
-
     //javadoc: ORB::setWTA_K(wta_k)
     public void setWTA_K(int wta_k) {
 
         setWTA_K_0(nativeObj, wta_k);
 
         return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
     }
 
 }

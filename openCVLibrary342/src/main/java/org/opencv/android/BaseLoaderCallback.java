@@ -12,12 +12,12 @@ import android.util.Log;
  */
 public abstract class BaseLoaderCallback implements LoaderCallbackInterface {
 
-    private final static String TAG = "OpenCVLoader/BaseLoaderCallback";
-    protected Context mAppContext;
-
     public BaseLoaderCallback(Context AppContext) {
         mAppContext = AppContext;
     }
+
+    private final static String TAG = "OpenCVLoader/BaseLoaderCallback";
+    protected Context mAppContext;
 
     public void onManagerConnected(int status) {
         switch (status) {
