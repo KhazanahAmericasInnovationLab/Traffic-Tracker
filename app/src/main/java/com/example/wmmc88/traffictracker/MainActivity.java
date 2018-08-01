@@ -2,9 +2,9 @@ package com.example.wmmc88.traffictracker;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,11 +17,10 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private TextView mCurrentSettingsTextView;
-
-    private int mLaunchMode;
     private static final int VIDEO_LAUNCH = 0;
     private static final int CAMERA_LAUNCH = 1;
+    private TextView mCurrentSettingsTextView;
+    private int mLaunchMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

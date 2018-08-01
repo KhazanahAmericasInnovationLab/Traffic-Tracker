@@ -8,9 +8,9 @@
     tools:context=".CameraActivity">
 
     <!--TODO remove title bar-->
-    <!--TODO Camera Selection-->
+    <!--TODO Camera id Selection-->
     <!--TODO Performance of javacameraview vs javacameraview2-->
-    <org.opencv.android.JavaCameraView
+    <com.example.wmmc88.traffictracker.CustomCameraView
         android:id="@+id/cbvb_camera"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

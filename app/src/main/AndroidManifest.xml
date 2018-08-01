@@ -5,11 +5,12 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <supports-screens android:resizeable="true"
-                      android:smallScreens="true"
-                      android:normalScreens="true"
-                      android:largeScreens="true"
-                      android:anyDensity="true"/>
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true" />
 
     <application
         android:allowBackup="true"
@@ -18,6 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop">
@@ -30,31 +33,28 @@
 
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/settings_activity_label" >
-        </activity>
+            android:label="@string/settings_activity_label"></activity>
 
         <activity
             android:name=".CameraActivity"
             android:label="@string/camera_activity_label"
-            android:parentActivityName=".MainActivity"
-            >
+            android:parentActivityName=".MainActivity">
             <!--TODO fullscreen + actionbar?-->
             <!--android:theme="@android:style/Theme.NoTitleBar.Fullscreen"-->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+                android:value=".MainActivity" />
         </activity>
 
         <activity
             android:name=".VideoActivity"
             android:label="@string/video_activity_label"
-            android:parentActivityName=".MainActivity"
-            >
+            android:parentActivityName=".MainActivity">
             <!--TODO fullscreen + actionbar?-->
             <!--android:theme="@android:style/Theme.NoTitleBar.Fullscreen"-->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+                android:value=".MainActivity" />
         </activity>
 
     </application>

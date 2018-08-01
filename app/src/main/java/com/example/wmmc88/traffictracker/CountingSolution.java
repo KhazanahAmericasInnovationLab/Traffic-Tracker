@@ -1,7 +1,9 @@
 package com.example.wmmc88.traffictracker;
 
 
-import org.opencv.core.*;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.video.BackgroundSubtractorMOG2;
 import org.opencv.video.Video;
@@ -11,7 +13,7 @@ import java.util.List;
 
 class CountingSolution {
     //TODO Switch to using preferences
-    private final int mMaskThreshold;
+    protected final int mMaskThreshold;
     private final int mBoxThreshold;
 
     private int mZone1Count = 0;
@@ -26,10 +28,10 @@ class CountingSolution {
         this.mBackgroundSubtractor = Video.createBackgroundSubtractorMOG2(builder.mHistory, builder.mVarThreshold, builder.mDetectShadows);
     }
 
-    protected List<Rect> findBoundingBoxes(Mat image) {
-        List<MatOfPoint> contours = findContours(image);
+    protected List<Rect> findBoundingBoxes(List<MatOfPoint> contours) {
         List<Rect> boundingBoxes = new ArrayList<>();
         for (MatOfPoint contour : contours) {
+            //TODO try cv Min area reactangle
             Rect boundingBox = Imgproc.boundingRect(contour);
             if (boundingBox.area() >= mBoxThreshold) {
                 boundingBoxes.add(boundingBox);
@@ -38,23 +40,22 @@ class CountingSolution {
         return boundingBoxes;
     }
 
-    private List<MatOfPoint> findContours(Mat image) {
-        findMask(image);
+    protected List<MatOfPoint> findContours(Mat image) {
         List<MatOfPoint> contours = new ArrayList<>();
         Imgproc.findContours(image, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
         return contours;
     }
 
-    private Mat findMask(Mat image) {
+    protected Mat findMask(Mat image) {
         this.mBackgroundSubtractor.apply(image, image);
-        Imgproc.blur(image, image, new Size(5, 5));
-        //TODO verify Change in Thresh_Binary_INV to Thresh_Binary and removal of binary_not
-        //TODO replace with Adaptive Threshold
-        Imgproc.threshold(image, image, mMaskThreshold, 255, Imgproc.THRESH_BINARY);
-        //TODO erodeKernelSetting
-        Mat erodeKernel = Mat.ones(new Size(3, 3), CvType.CV_8U);
-        Imgproc.erode(image, image, erodeKernel, new Point(-1, -1), 3);
-        Imgproc.medianBlur(image, image, 7);
+//        Imgproc.blur(image, image, new Size(5, 5));
+//        //TODO verify Change in Thresh_Binary_INV to Thresh_Binary and removal of binary_not
+//        //TODO replace with Adaptive Threshold
+//        Imgproc.threshold(image, image, mMaskThreshold, 255, Imgproc.THRESH_BINARY);
+//        //TODO erodeKernelSetting
+//        Mat erodeKernel = Mat.ones(new Size(3, 3), CvType.CV_8U);
+//        Imgproc.erode(image, image, erodeKernel, new Point(-1, -1), 3);
+//        Imgproc.medianBlur(image, image, 7);
         return image;
     }
 
@@ -71,6 +72,7 @@ class CountingSolution {
         //mMaskThreshold was 180
         private int mMaskThreshold = 75;
         private int mBoxThreshold = 6000;
+        //6000 mboxthreshold
 
         private int mHistory = 500;
         private int mVarThreshold = 16;
