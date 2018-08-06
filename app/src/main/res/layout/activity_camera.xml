@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".CameraActivity">
 
-    <!--TODO remove title bar-->
     <!--TODO Camera id Selection-->
     <!--TODO Performance of javacameraview vs javacameraview2-->
     <com.example.wmmc88.traffictracker.CustomCameraView

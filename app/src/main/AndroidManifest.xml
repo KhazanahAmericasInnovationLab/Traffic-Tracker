@@ -3,7 +3,10 @@
     package="com.example.wmmc88.traffictracker">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <uses-permission android:name="android.permission.INTERNET" />
+
 
     <supports-screens
         android:anyDensity="true"
@@ -20,7 +23,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop">
@@ -33,7 +35,8 @@
 
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/settings_activity_label"></activity>
+            android:label="@string/settings_activity_label"
+            android:theme="@style/SettingsTheme"></activity>
 
         <activity
             android:name=".CameraActivity"

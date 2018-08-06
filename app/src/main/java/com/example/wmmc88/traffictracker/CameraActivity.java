@@ -19,14 +19,7 @@ import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.Point;
-import org.opencv.core.Rect;
-import org.opencv.core.Scalar;
 import org.opencv.core.Size;
-import org.opencv.imgproc.Imgproc;
-
-import java.util.List;
 
 import static java.lang.Math.round;
 
@@ -53,7 +46,6 @@ public class CameraActivity extends AppCompatActivity implements CustomCameraVie
 
 
     private CountingSolution mCountingSolution;
-    //TODO add when implementing opencvManager
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
         @Override
         public void onManagerConnected(int status) {
@@ -87,7 +79,7 @@ public class CameraActivity extends AppCompatActivity implements CustomCameraVie
     }
 
     private boolean permissionsGranted() {
-        Log.d(TAG, "checkpermissionsGranted");
+        Log.d(TAG, "checkPermissionsGranted");
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST);
@@ -104,7 +96,7 @@ public class CameraActivity extends AppCompatActivity implements CustomCameraVie
         switch (requestCode) {
             case CAMERA_PERMISSION_REQUEST: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i(TAG, "Permissions Granted!");
+                    Log.i(TAG, "Camera Permissions Granted!");
                     loadOpenCVView();
                 } else {
                     Log.w(TAG, "Permissions Denied!");
@@ -124,7 +116,7 @@ public class CameraActivity extends AppCompatActivity implements CustomCameraVie
         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
         mOpenCvCameraView.setCvCameraViewListener(this);
         //TODO lower resolution
-        mOpenCvCameraView.setMaxFrameSize(320, 240);
+        mOpenCvCameraView.setMaxFrameSize(640, 480);
         mOpenCvCameraView.enableView();
     }
 
@@ -153,6 +145,7 @@ public class CameraActivity extends AppCompatActivity implements CustomCameraVie
             mOpenCvCameraView.disableView();
     }
 
+    @Override
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
 
@@ -166,7 +159,7 @@ public class CameraActivity extends AppCompatActivity implements CustomCameraVie
 
         Toast.makeText(this, width + "x" + height, Toast.LENGTH_LONG).show();
 
-        mCountingSolution = new CountingSolution.Builder().build();
+        mCountingSolution = new CountingSolution();
 
 //        android.graphics.Point size = new android.graphics.Point();
 //        getWindowManager().getDefaultDisplay().getSize(size);
@@ -194,52 +187,7 @@ public class CameraActivity extends AppCompatActivity implements CustomCameraVie
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         Log.v(TAG, "onCameraFrame");
 
-        Mat tempMat = new Mat();
-        Mat resizedTempMat = new Mat();
-
-        Imgproc.resize(inputFrame.rgba(), resizedTempMat, new Size(mPreviewFrameWidth, mPreviewFrameHeight));
-        resizedTempMat.copyTo(mRgba.submat(0 * mPreviewFrameHeight, 1 * mPreviewFrameHeight, 0 * mPreviewFrameWidth, 1 * mPreviewFrameWidth));
-
-        tempMat = mCountingSolution.findMask(inputFrame.rgba());
-        Imgproc.resize(tempMat, resizedTempMat, new Size(mPreviewFrameWidth, mPreviewFrameHeight));
-        Imgproc.cvtColor(resizedTempMat, resizedTempMat, Imgproc.COLOR_GRAY2BGRA, 4);
-        resizedTempMat.copyTo(mRgba.submat(0 * mPreviewFrameHeight, 1 * mPreviewFrameHeight, 1 * mPreviewFrameWidth, 2 * mPreviewFrameWidth));
-
-        Imgproc.blur(tempMat, tempMat, new Size(5, 5));
-        Imgproc.resize(tempMat, resizedTempMat, new Size(mPreviewFrameWidth, mPreviewFrameHeight));
-        Imgproc.cvtColor(resizedTempMat, resizedTempMat, Imgproc.COLOR_GRAY2BGRA, 4);
-        resizedTempMat.copyTo(mRgba.submat(0 * mPreviewFrameHeight, 1 * mPreviewFrameHeight, 2 * mPreviewFrameWidth, 3 * mPreviewFrameWidth));
-
-        Imgproc.threshold(tempMat, tempMat, mCountingSolution.mMaskThreshold, 255, Imgproc.THRESH_BINARY);
-        Imgproc.resize(tempMat, resizedTempMat, new Size(mPreviewFrameWidth, mPreviewFrameHeight));
-        Imgproc.cvtColor(resizedTempMat, resizedTempMat, Imgproc.COLOR_GRAY2BGRA, 4);
-        resizedTempMat.copyTo(mRgba.submat(0 * mPreviewFrameHeight, 1 * mPreviewFrameHeight, 3 * mPreviewFrameWidth, 4 * mPreviewFrameWidth));
-
-        Mat erodeKernel = Mat.ones(new Size(3, 3), CvType.CV_8U);
-        Imgproc.erode(tempMat, tempMat, erodeKernel, new Point(-1, -1), 3);
-        Imgproc.resize(tempMat, resizedTempMat, new Size(mPreviewFrameWidth, mPreviewFrameHeight));
-        Imgproc.cvtColor(resizedTempMat, resizedTempMat, Imgproc.COLOR_GRAY2BGRA, 4);
-        resizedTempMat.copyTo(mRgba.submat(1 * mPreviewFrameHeight, 2 * mPreviewFrameHeight, 0 * mPreviewFrameWidth, 1 * mPreviewFrameWidth));
-
-        Imgproc.medianBlur(tempMat, tempMat, 7);
-        Imgproc.resize(tempMat, resizedTempMat, new Size(mPreviewFrameWidth, mPreviewFrameHeight));
-        Imgproc.cvtColor(resizedTempMat, resizedTempMat, Imgproc.COLOR_GRAY2BGRA, 4);
-        resizedTempMat.copyTo(mRgba.submat(1 * mPreviewFrameHeight, 2 * mPreviewFrameHeight, 1 * mPreviewFrameWidth, 2 * mPreviewFrameWidth));
-
-        List<MatOfPoint> contours = mCountingSolution.findContours(tempMat);
-        Imgproc.cvtColor(tempMat, tempMat, Imgproc.COLOR_GRAY2BGRA, 4);
-        Imgproc.drawContours(tempMat, contours, -1, new Scalar(0, 0, 255));
-        Imgproc.resize(tempMat, resizedTempMat, new Size(mPreviewFrameWidth, mPreviewFrameHeight));
-        resizedTempMat.copyTo(mRgba.submat(1 * mPreviewFrameHeight, 2 * mPreviewFrameHeight, 2 * mPreviewFrameWidth, 3 * mPreviewFrameWidth));
-
-        tempMat = inputFrame.rgba();
-        List<Rect> boundingBoxes = mCountingSolution.findBoundingBoxes(contours);
-        for (Rect boundingBox : boundingBoxes) {
-            Imgproc.rectangle(tempMat, boundingBox.tl(), boundingBox.br(), new Scalar(0, 255, 0));
-        }
-        Imgproc.resize(tempMat, resizedTempMat, new Size(mPreviewFrameWidth, mPreviewFrameHeight));
-        resizedTempMat.copyTo(mRgba.submat(1 * mPreviewFrameHeight, 2 * mPreviewFrameHeight, 3 * mPreviewFrameWidth, 4 * mPreviewFrameWidth));
-
+        mCountingSolution.findObjects(inputFrame.rgba().clone(), mRgba, new Size(mPreviewFrameWidth, mPreviewFrameHeight));
 
         return mRgba;
     }
