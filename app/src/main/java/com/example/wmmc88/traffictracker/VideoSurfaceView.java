@@ -13,7 +13,7 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     private Bitmap mLastBitmap = null;
     private volatile Bitmap mNextBitmap = null;
     private volatile int mReceivedFrameCount = 0;
-    private int mDisplayedFrameCount = 0;
+    int mDisplayedFrameCount = 0;
 
     private Thread mSurfaceThread;
     private boolean mSurfaceThreadRunning = false;
@@ -62,7 +62,7 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                     canvas = getHolder().lockCanvas();
 
                     if (canvas != null) {
-
+//                        Double fps = fps
                         synchronized (getHolder()) {
                             canvas.drawBitmap(mLastBitmap, 0, 0, null);
                             Log.v(TAG, "new frame displayed");
@@ -75,14 +75,6 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                         getHolder().unlockCanvasAndPost(canvas);
                     }
                 }
-
-//TODO framerate
-//                long frameTime = System.currentTimeMillis() - startTime;
-//                if (frameTime < 1000 / 30)
-//                    try {
-//                        Thread.sleep(1000 / 30 - frameTime);
-//                    } catch (InterruptedException e) {
-//                    }
             }
         }
     }

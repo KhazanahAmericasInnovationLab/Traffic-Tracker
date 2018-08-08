@@ -38,7 +38,7 @@ public class CameraActivity extends AppCompatActivity implements CustomCameraVie
     }
 
     private CameraBridgeViewBase mOpenCvCameraView;
-    private Mat mRgba;
+    private Mat mRgb;
     private int mScreenWidth;
     private int mScreenHeight;
     private int mPreviewFrameWidth;
@@ -173,23 +173,23 @@ public class CameraActivity extends AppCompatActivity implements CustomCameraVie
         mPreviewFrameWidth = (int) round(mScreenWidth / 4.0);
         mPreviewFrameHeight = (int) round(mScreenHeight / 2.0);
 
-        mRgba = Mat.zeros(mScreenHeight, mScreenWidth, CvType.CV_8UC4);
+        mRgb = Mat.zeros(mScreenHeight, mScreenWidth, CvType.CV_8UC3);
 
     }
 
     public void onCameraViewStopped() {
         Log.d(TAG, "onCameraViewStopped");
 
-        mRgba.release();
+        mRgb.release();
     }
 
     //    TODO Rotate Properly
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         Log.v(TAG, "onCameraFrame");
 
-        mCountingSolution.findObjects(inputFrame.rgba().clone(), mRgba, new Size(mPreviewFrameWidth, mPreviewFrameHeight));
+        mCountingSolution.findObjects(inputFrame.rgba().clone(), mRgb, new Size(mPreviewFrameWidth, mPreviewFrameHeight));
 
-        return mRgba;
+        return mRgb;
     }
 
 }

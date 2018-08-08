@@ -30,8 +30,8 @@ public class VideoActivity extends AppCompatActivity implements Runnable {
     public static final int EXTERNAL_STORAGE_PERMISSION_REQUEST = 2;
     private static final String TAG = VideoActivity.class.getSimpleName();
 
-    private Thread mProcessingThread;
-    private boolean mProcessingThreadRunning = false;
+    private Thread mProcessingThread = null;
+    private volatile boolean mProcessingThreadRunning = false;
 
     private VideoSurfaceView mVideoSurfaceView;
 
@@ -47,9 +47,11 @@ public class VideoActivity extends AppCompatActivity implements Runnable {
                 case LoaderCallbackInterface.SUCCESS: {
                     Log.i(TAG, "OpenCV loaded successfully");
                     if (permissionsGranted()) {
-                        mProcessingThreadRunning = true;
-                        mProcessingThread = new Thread(VideoActivity.this, "Processing Thread");
-                        mProcessingThread.start();
+                        if (mProcessingThreadRunning == false && mProcessingThread == null) {
+                            mProcessingThreadRunning = true;
+                            mProcessingThread = new Thread(VideoActivity.this, "Processing Thread");
+                            mProcessingThread.start();
+                        }
                     }
                 }
                 break;
@@ -127,44 +129,44 @@ public class VideoActivity extends AppCompatActivity implements Runnable {
     @Override
     public void onPause() {
         Log.d(TAG, "onPause");
+        destroyProcessingThread();
         super.onPause();
     }
 
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
-        destroyProcessingThread();
         super.onDestroy();
     }
 
     @Override
-    //TODO multiple threads rnning possiblhy
+    //TODO multiple threads rnning
     public void run() {
+        Log.i(TAG, "Processing Thread Started");
         loadVideo();
-        //TODO if not rgba, auto convert to rgba
-
         mCountingSolution = new CountingSolution();
 
-        //TODO get actual screen resolution
-//        android.graphics.Point size = new android.graphics.Point();
-//        getWindowManager().getDefaultDisplay().getSize(size);
-        int screenWidth = 2960;
-        int screenHeight = 1440;
+        android.graphics.Point size = new android.graphics.Point();
+        getWindowManager().getDefaultDisplay().getSize(size);
+        int screenWidth = size.x;
+        int screenHeight = size.y;
+
+//        int screenWidth = 2960;
+//        int screenHeight = 1440;
         int previewFrameWidth = (int) round(screenWidth / 4.0);
         int previewFrameHeight = (int) round(screenHeight / 2.0);
         Size previewFrameSize = new Size(previewFrameWidth, previewFrameHeight);
 
         Mat inputFrame = new Mat();
-        Mat rgba = new Mat(screenHeight, screenWidth, CvType.CV_8UC4);
+        Mat rgb = Mat.zeros(screenHeight, screenWidth, CvType.CV_8UC3);
         Canvas canvas = new Canvas();
 
-        while (mProcessingThreadRunning && mVC.grab()) {
+        while (mProcessingThreadRunning && mVC.grab() && mVC.retrieve(inputFrame)) {//TODO change retrieve to if statement
             Log.v(TAG, "new frame grabbed");
-            mVC.retrieve(inputFrame);
 
-            mCountingSolution.findObjects(inputFrame.clone(), rgba, previewFrameSize);
+            mCountingSolution.findObjects(inputFrame.clone(), rgb = Mat.zeros(rgb.size(), rgb.type()), previewFrameSize);
 
-            Bitmap bm = Bitmap.createBitmap(rgba.cols(), rgba.rows(), Bitmap.Config.ARGB_8888);
-            Utils.matToBitmap(rgba, bm);
+            Bitmap bm = Bitmap.createBitmap(rgb.cols(), rgb.rows(), Bitmap.Config.ARGB_8888);
+            Utils.matToBitmap(rgb, bm);
 
             Log.v(TAG, "frameSent to SurfaceView Thread");
             mVideoSurfaceView.setNextBitmap(bm);
@@ -178,7 +180,9 @@ public class VideoActivity extends AppCompatActivity implements Runnable {
         Log.d(TAG, "loadVideo");
         //TODO use decoder that converts to mjpg in avi container (only acceptable videotype in opencv 3.4.2)
         //TODO select video file using built in android app
-        final String filePath = "/storage/0000-0000/TrafficTracker/output.avi";
+
+        String filePath = "/storage/emulated/0/TrafficTracker/output.avi";
+//        String filePath = "/storage/0000-0000/TrafficTracker/output.avi";
         mVC = new VideoCapture(filePath);
         if (mVC.isOpened()) {
             Log.i(TAG, "Video Opened!!");
@@ -187,7 +191,7 @@ public class VideoActivity extends AppCompatActivity implements Runnable {
 
             VideoActivity.this.runOnUiThread(new Runnable() {
                 public void run() {
-                    Toast.makeText(VideoActivity.this, "Video at could not be opened!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(VideoActivity.this, "Video could not be opened!", Toast.LENGTH_LONG).show();
                 }
             });
             finish();
