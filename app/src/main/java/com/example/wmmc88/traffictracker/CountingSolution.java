@@ -27,7 +27,7 @@ class CountingSolution {
 
 
     protected CountingSolution() {
-        this.mBackgroundSubtractor = Video.createBackgroundSubtractorMOG2(1000, 16, true);
+        this.mBackgroundSubtractor = Video.createBackgroundSubtractorMOG2(500, 16, true);
     }
 
     protected List<RotatedRect> findRotatedBoundingBoxes(List<MatOfPoint> contours) {

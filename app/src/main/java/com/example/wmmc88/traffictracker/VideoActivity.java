@@ -170,7 +170,6 @@ public class VideoActivity extends AppCompatActivity implements Runnable {
 
             Log.v(TAG, "frameSent to SurfaceView Thread");
             mVideoSurfaceView.setNextBitmap(bm);
-            mVideoSurfaceView.incrementFrameCount();
         }
         //TODO use handler finish activity from other thread
         finish();
@@ -198,6 +197,7 @@ public class VideoActivity extends AppCompatActivity implements Runnable {
         }
     }
 
+    //call in on pause not on destroy
     private void destroyProcessingThread() {
         mProcessingThreadRunning = false;
 

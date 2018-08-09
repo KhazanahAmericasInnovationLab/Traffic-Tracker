@@ -3,26 +3,41 @@ package com.example.wmmc88.traffictracker;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.text.DecimalFormat;
+import java.util.LinkedList;
+
 public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
     private static final String TAG = VideoSurfaceView.class.getSimpleName();
+    private static final DecimalFormat FPS_FORMAT = new DecimalFormat("0.00");
+    private final int FPS_SAMPLE_SIZE = 50;
+    LinkedList<Long> mFrameTimes = new LinkedList<Long>() {
+        {
+            this.add(System.nanoTime());
+        }
+    };
+
     private Bitmap mLastBitmap = null;
     private volatile Bitmap mNextBitmap = null;
-    private volatile int mReceivedFrameCount = 0;
-    int mDisplayedFrameCount = 0;
-
     private Thread mSurfaceThread;
     private boolean mSurfaceThreadRunning = false;
+    private Paint mFPSPaint = new Paint() {
+        {
+            this.setColor(Color.BLUE);
+            this.setTextSize(40);
+        }
+    };
 
     public VideoSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         getHolder().addCallback(this);
     }
-
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
@@ -37,6 +52,8 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         Log.d(TAG, "surfaceChanged");
 
     }
+
+    //Todo Implement pause and resume for thread
 
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
@@ -55,19 +72,18 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
             if (this.mNextBitmap != this.mLastBitmap) {
                 this.mLastBitmap = this.mNextBitmap;
 
-                long startTime = System.currentTimeMillis();
-
                 try {
                     //todo hardware lock canvas
                     canvas = getHolder().lockCanvas();
 
                     if (canvas != null) {
-//                        Double fps = fps
+                        //TODO Currently it is the frames processed and displayed per second. doesnt actually correspond to the fps of the video
+                        String fps = FPS_FORMAT.format(getFps()) + " FPS";
+
                         synchronized (getHolder()) {
                             canvas.drawBitmap(mLastBitmap, 0, 0, null);
+                            canvas.drawText(fps, 50, 50, mFPSPaint);
                             Log.v(TAG, "new frame displayed");
-                            mDisplayedFrameCount++;
-                            Log.e(TAG, "Received: " + mReceivedFrameCount + "\tDisplayed: " + mDisplayedFrameCount + "\tFrames Dropped: " + (mReceivedFrameCount - mDisplayedFrameCount));
                         }
                     }
                 } finally {
@@ -97,16 +113,29 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         }
     }
 
-    //Todo Implement pause and resume for thread
-
-
     public void setNextBitmap(Bitmap nextBitmap) {
         Log.v(TAG, "New Bitmap Received for Rendering");
 
         this.mNextBitmap = nextBitmap;
     }
 
-    public void incrementFrameCount() {
-        this.mReceivedFrameCount++;
+    private double getFps() {
+        long currentTime = System.nanoTime();
+        double timeElapsed = currentTime - mFrameTimes.getFirst();
+
+        if (timeElapsed == 0) {
+            Log.e(TAG, "Two frames displayed in same nanoscond??");
+            return -1;
+        }
+
+        mFrameTimes.addLast(currentTime);
+        double fps = mFrameTimes.size() / timeElapsed * 1000000000;
+
+        if (mFrameTimes.size() > FPS_SAMPLE_SIZE) {
+            mFrameTimes.removeFirst();
+        }
+
+        return fps;
     }
+
 }
