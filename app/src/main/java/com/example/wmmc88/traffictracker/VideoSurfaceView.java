@@ -33,7 +33,7 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
             this.setTextSize(40);
         }
     };
-
+    z
     public VideoSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         getHolder().addCallback(this);
