@@ -58,7 +58,7 @@ class CountingSolution {
 
     protected List<MatOfPoint> findContours(Mat image) {
         List<MatOfPoint> contours = new ArrayList<>();
-        Imgproc.findContours(image, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
+        Imgproc.findContours(image, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
         return contours;
     }
 
@@ -100,14 +100,23 @@ class CountingSolution {
         Mat fgMaskNoShadows;
         Imgproc.threshold(fgMask, fgMaskNoShadows = intermediateMats[0][2] = new Mat(inputImg.size(), inputImg.type()), 128, 255, Imgproc.THRESH_BINARY);
 
+
+        //Close (remove holes in mask)
+//        Mat openedMask;
+//        Imgproc.morphologyEx(fgMaskNoShadows, openedMask = intermediateMats[0][3] = new Mat(inputImg.size(), inputImg.type()), Imgproc.MORPH_CLOSE,Mat.ones(new Size(15, 15),CvType.CV_8UC1), new Point(-1,-1), 1);
+
         ///Median Blur
         Mat medianFgMask;
         Imgproc.medianBlur(fgMaskNoShadows, medianFgMask = intermediateMats[0][3] = new Mat(inputImg.size(), inputImg.type()), 75);
 
+        //Dilate
+        Mat dilatedMat;
+        Imgproc.dilate(medianFgMask, dilatedMat = intermediateMats[1][0] = new Mat(inputImg.size(), inputImg.type()), Mat.ones(10, 10, CvType.CV_8UC1), new Point(-1, -1), 3);
+
         //Draw Contours
-        List<MatOfPoint> contours = this.findContours(medianFgMask);
+        List<MatOfPoint> contours = this.findContours(dilatedMat);
         Mat contourMat;
-        Imgproc.drawContours(contourMat = intermediateMats[1][0] = Mat.zeros(inputImg.size(), CvType.CV_8UC3), contours, -1, new Scalar(255, 255, 255));
+        Imgproc.drawContours(contourMat = intermediateMats[1][1] = Mat.zeros(inputImg.size(), CvType.CV_8UC3), contours, -1, new Scalar(255, 255, 255));
 
         //Draw Bounding Boxes on Contours Image
         List<Rect> boundingBoxes = this.findBoundingBoxes(contours);
@@ -125,20 +134,21 @@ class CountingSolution {
         }
         Imgproc.drawContours(contourMat, rotatedBoundingBoxesVertices, -1, new Scalar(0, 255, 255));
 
-        //Final Image
-        Mat finalMat = intermediateMats[1][1] = inputImg.clone();
-
-        //Draw Bounding Boxes on Input Image
-        for (Rect boundingBox : boundingBoxes) {
-            Imgproc.rectangle(finalMat, boundingBox.tl(), boundingBox.br(), new Scalar(0, 255, 0));
-        }
-
         //Draw Rotated(min Area) Bounding Boxes on Input Image
+        Mat finalMat = intermediateMats[1][2] = inputImg.clone();
         for (RotatedRect rotatedBoundingBox : rotatedBoundingBoxes) {
             rotatedBoundingBox.points(vertices);
             rotatedBoundingBoxesVertices.add(new MatOfPoint(vertices));
         }
         Imgproc.drawContours(finalMat, rotatedBoundingBoxesVertices, -1, new Scalar(0, 255, 255));
+
+
+        //Draw Bounding Boxes on Input Image
+        Mat finalMat2 = intermediateMats[1][3] = inputImg.clone();
+        for (Rect boundingBox : boundingBoxes) {
+            Imgproc.rectangle(finalMat2, boundingBox.tl(), boundingBox.br(), new Scalar(0, 255, 0));
+        }
+
 
         //Move Mats to final Mat
         for (int row = 0; row < displayRow; row++) {

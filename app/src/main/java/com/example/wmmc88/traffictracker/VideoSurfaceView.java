@@ -18,6 +18,7 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     private static final String TAG = VideoSurfaceView.class.getSimpleName();
     private static final DecimalFormat FPS_FORMAT = new DecimalFormat("0.00");
     private static final int FPS_SAMPLE_SIZE = 50;
+    private static final double VIDEO_SPEED_FACTOR = 2;
     final ArrayBlockingQueue<Bitmap> FRAME_BUFFER = new ArrayBlockingQueue<Bitmap>(100);//TODO reduce queue size
     LinkedList<Long> mFrameTimes = new LinkedList<Long>() {
         {
@@ -95,9 +96,9 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                     }
                 }
 
-                if (System.currentTimeMillis() - startTime < 1000 / 10) { //limits to ~10 fps
+                if (System.currentTimeMillis() - startTime < 1000 / (10 * VIDEO_SPEED_FACTOR)) { //limits to ~10 fps
                     try {
-                        Thread.sleep(1000 / 10 - (System.currentTimeMillis() - startTime));
+                        Thread.sleep((long) (1000 / (10 * VIDEO_SPEED_FACTOR) - (System.currentTimeMillis() - startTime)));
                     } catch (InterruptedException e) {
                         Log.e(TAG, "Interrupted Exception when trying to sleep to limit fps");
                         Log.e(TAG, e.getStackTrace().toString());
@@ -124,6 +125,7 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         boolean retry = true;
         while (retry) {
             try {
+                mSurfaceThread.interrupt();
                 mSurfaceThread.join();
                 retry = false;
             } catch (InterruptedException e) {
