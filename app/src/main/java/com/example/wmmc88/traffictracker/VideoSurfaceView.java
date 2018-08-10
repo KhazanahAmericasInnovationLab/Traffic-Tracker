@@ -12,19 +12,19 @@ import android.view.SurfaceView;
 
 import java.text.DecimalFormat;
 import java.util.LinkedList;
+import java.util.concurrent.ArrayBlockingQueue;
 
 public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
     private static final String TAG = VideoSurfaceView.class.getSimpleName();
     private static final DecimalFormat FPS_FORMAT = new DecimalFormat("0.00");
-    private final int FPS_SAMPLE_SIZE = 50;
+    private static final int FPS_SAMPLE_SIZE = 50;
+    final ArrayBlockingQueue<Bitmap> FRAME_BUFFER = new ArrayBlockingQueue<Bitmap>(100);//TODO reduce queue size
     LinkedList<Long> mFrameTimes = new LinkedList<Long>() {
         {
             this.add(System.nanoTime());
         }
     };
-
-    private Bitmap mLastBitmap = null;
-    private volatile Bitmap mNextBitmap = null;
+    int mDisplayedFrameCount = 0;
     private Thread mSurfaceThread;
     private boolean mSurfaceThreadRunning = false;
     private Paint mFPSPaint = new Paint() {
@@ -33,11 +33,14 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
             this.setTextSize(40);
         }
     };
-    z
+    private volatile int mReceivedFrameCount = 0;
+
     public VideoSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         getHolder().addCallback(this);
     }
+
+    //Todo Implement pause and resume for thread
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
@@ -53,8 +56,6 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
     }
 
-    //Todo Implement pause and resume for thread
-
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         Log.d(TAG, "surfaceDestroyed");
@@ -69,21 +70,23 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         Canvas canvas = null;
 
         while (mSurfaceThreadRunning) {
-            if (this.mNextBitmap != this.mLastBitmap) {
-                this.mLastBitmap = this.mNextBitmap;
+            Long startTime = System.currentTimeMillis();
+            try {
+                Bitmap nextFrame = this.FRAME_BUFFER.take();
 
                 try {
-                    //todo hardware lock canvas
+                    //todo hardware lock canvas performance test
                     canvas = getHolder().lockCanvas();
 
                     if (canvas != null) {
-                        //TODO Currently it is the frames processed and displayed per second. doesnt actually correspond to the fps of the video
                         String fps = FPS_FORMAT.format(getFps()) + " FPS";
 
                         synchronized (getHolder()) {
-                            canvas.drawBitmap(mLastBitmap, 0, 0, null);
+                            canvas.drawBitmap(nextFrame, 0, 0, null);
                             canvas.drawText(fps, 50, 50, mFPSPaint);
                             Log.v(TAG, "new frame displayed");
+                            mDisplayedFrameCount++;
+                            Log.d(TAG, "Received: " + mReceivedFrameCount + "\tDisplayed: " + mDisplayedFrameCount + "\tFrames Waiting to be Displayed: " + FRAME_BUFFER.size());
                         }
                     }
                 } finally {
@@ -91,8 +94,25 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                         getHolder().unlockCanvasAndPost(canvas);
                     }
                 }
+
+                if (System.currentTimeMillis() - startTime < 1000 / 10) { //limits to ~10 fps
+                    try {
+                        Thread.sleep(1000 / 10 - (System.currentTimeMillis() - startTime));
+                    } catch (InterruptedException e) {
+                        Log.e(TAG, "Interrupted Exception when trying to sleep to limit fps");
+                        Log.e(TAG, e.getStackTrace().toString());
+                    }
+                }
+
+            } catch (InterruptedException e) {
+                Log.e(TAG, "Interrupted Exception when trying to retrieve frame from buffer");
+                Log.e(TAG, e.getStackTrace().toString());
             }
         }
+    }
+
+    public void incrementFrameCount() {
+        this.mReceivedFrameCount++;
     }
 
     private void destroySurfaceThread() {
@@ -108,15 +128,9 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                 retry = false;
             } catch (InterruptedException e) {
                 Log.e(TAG, "Interrupted Exception when waiting for surface thread to die");
-                Log.e(TAG, e.toString());
+                Log.e(TAG, e.getStackTrace().toString());
             }
         }
-    }
-
-    public void setNextBitmap(Bitmap nextBitmap) {
-        Log.v(TAG, "New Bitmap Received for Rendering");
-
-        this.mNextBitmap = nextBitmap;
     }
 
     private double getFps() {
@@ -124,7 +138,7 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         double timeElapsed = currentTime - mFrameTimes.getFirst();
 
         if (timeElapsed == 0) {
-            Log.e(TAG, "Two frames displayed in same nanoscond??");
+            Log.e(TAG, "Two frames displayed in same nanosecond??");
             return -1;
         }
 

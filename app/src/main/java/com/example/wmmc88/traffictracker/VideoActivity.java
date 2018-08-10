@@ -160,7 +160,7 @@ public class VideoActivity extends AppCompatActivity implements Runnable {
         Mat rgb = Mat.zeros(screenHeight, screenWidth, CvType.CV_8UC3);
         Canvas canvas = new Canvas();
 
-        while (mProcessingThreadRunning && mVC.grab() && mVC.retrieve(inputFrame)) {//TODO change retrieve to if statement
+        while (mProcessingThreadRunning && mVC.grab() && mVC.retrieve(inputFrame)) {
             Log.v(TAG, "new frame grabbed");
 
             mCountingSolution.findObjects(inputFrame.clone(), rgb = Mat.zeros(rgb.size(), rgb.type()), previewFrameSize);
@@ -168,8 +168,14 @@ public class VideoActivity extends AppCompatActivity implements Runnable {
             Bitmap bm = Bitmap.createBitmap(rgb.cols(), rgb.rows(), Bitmap.Config.ARGB_8888);
             Utils.matToBitmap(rgb, bm);
 
-            Log.v(TAG, "frameSent to SurfaceView Thread");
-            mVideoSurfaceView.setNextBitmap(bm);
+            Log.v(TAG, "frameSent added to FRAME_BUFFER in SurfaceView Thread");
+            try {
+                mVideoSurfaceView.FRAME_BUFFER.put(bm);
+            } catch (InterruptedException e) {
+                Log.e(TAG, "Interrupted while trying to add frame to buffer!");
+                Log.e(TAG, e.getStackTrace().toString());
+            }
+            mVideoSurfaceView.incrementFrameCount();
         }
         //TODO use handler finish activity from other thread
         finish();
@@ -177,8 +183,8 @@ public class VideoActivity extends AppCompatActivity implements Runnable {
 
     private void loadVideo() {
         Log.d(TAG, "loadVideo");
+        //TODO select video file location using built in android app
         //TODO use decoder that converts to mjpg in avi container (only acceptable videotype in opencv 3.4.2)
-        //TODO select video file using built in android app
 
         String filePath = "/storage/emulated/0/TrafficTracker/output.avi";
 //        String filePath = "/storage/0000-0000/TrafficTracker/output.avi";
@@ -208,8 +214,8 @@ public class VideoActivity extends AppCompatActivity implements Runnable {
                 mProcessingThread.join();
                 retry = false;
             } catch (InterruptedException e) {
-                Log.e(TAG, "Interrupted Exception when waiting for surface thread to die");
-                Log.e(TAG, e.toString());
+                Log.e(TAG, "Interrupted Exception when waiting for processing thread to die");
+                Log.e(TAG, e.getStackTrace().toString());
             }
         }
     }
