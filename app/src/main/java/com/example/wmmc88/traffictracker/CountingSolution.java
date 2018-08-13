@@ -134,13 +134,13 @@ class CountingSolution {
         }
         Imgproc.drawContours(contourMat, rotatedBoundingBoxesVertices, -1, new Scalar(0, 255, 255));
 
-        //Draw Rotated(min Area) Bounding Boxes on Input Image
-        Mat finalMat = intermediateMats[1][2] = inputImg.clone();
-        for (RotatedRect rotatedBoundingBox : rotatedBoundingBoxes) {
-            rotatedBoundingBox.points(vertices);
-            rotatedBoundingBoxesVertices.add(new MatOfPoint(vertices));
-        }
-        Imgproc.drawContours(finalMat, rotatedBoundingBoxesVertices, -1, new Scalar(0, 255, 255));
+//        //Draw Rotated(min Area) Bounding Boxes on Input Image
+//        Mat finalMat = intermediateMats[1][2] = inputImg.clone();
+//        for (RotatedRect rotatedBoundingBox : rotatedBoundingBoxes) {
+//            rotatedBoundingBox.points(vertices);
+//            rotatedBoundingBoxesVertices.add(new MatOfPoint(vertices));
+//        }
+//        Imgproc.drawContours(finalMat, rotatedBoundingBoxesVertices, -1, new Scalar(0, 255, 255));
 
 
         //Draw Bounding Boxes on Input Image

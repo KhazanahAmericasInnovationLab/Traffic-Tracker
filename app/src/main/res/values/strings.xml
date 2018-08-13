@@ -21,7 +21,7 @@
     <string name="pref_title_zone1_name">Zone 1 Name</string>
     <string name="pref_default_zone2_name">Zone 2</string>
     <string name="pref_key_zone2_label" translatable="false">zone2_label</string>
-    <string name="pref_title_zone2_name">Zone 2</string>
+    <string name="pref_title_zone2_name">Zone 2 Name</string>
     <string name="pref_default_camera_selection">0</string>
 
     <string name="arrays_cameras_video_mode">Video Mode</string>
