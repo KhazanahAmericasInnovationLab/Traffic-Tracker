@@ -125,14 +125,14 @@ class CountingSolution {
         }
 
         //Draw Rotated(min Area) Bounding Boxes on Contours Image
-        List<RotatedRect> rotatedBoundingBoxes = findRotatedBoundingBoxes(contours);
-        List<MatOfPoint> rotatedBoundingBoxesVertices = new ArrayList<>();
-        Point[] vertices = new Point[4];
-        for (RotatedRect rotatedBoundingBox : rotatedBoundingBoxes) {
-            rotatedBoundingBox.points(vertices);
-            rotatedBoundingBoxesVertices.add(new MatOfPoint(vertices));
-        }
-        Imgproc.drawContours(contourMat, rotatedBoundingBoxesVertices, -1, new Scalar(0, 255, 255));
+//        List<RotatedRect> rotatedBoundingBoxes = findRotatedBoundingBoxes(contours);
+//        List<MatOfPoint> rotatedBoundingBoxesVertices = new ArrayList<>();
+//        Point[] vertices = new Point[4];
+//        for (RotatedRect rotatedBoundingBox : rotatedBoundingBoxes) {
+//            rotatedBoundingBox.points(vertices);
+//            rotatedBoundingBoxesVertices.add(new MatOfPoint(vertices));
+//        }
+//        Imgproc.drawContours(contourMat, rotatedBoundingBoxesVertices, -1, new Scalar(0, 255, 255));
 
 //        //Draw Rotated(min Area) Bounding Boxes on Input Image
 //        Mat finalMat = intermediateMats[1][2] = inputImg.clone();
@@ -160,6 +160,9 @@ class CountingSolution {
                         Imgproc.cvtColor(intermediateMats[row][col], intermediateMats[row][col], Imgproc.COLOR_GRAY2BGR, 3);
                     }
 
+                    intermediateMats[row][col].copyTo(outputImg.submat(row * (int) previewFrameSize.height, (row + 1) * (int) previewFrameSize.height, col * (int) previewFrameSize.width, (col + 1) * (int) previewFrameSize.width));
+                } else {
+                    intermediateMats[row][col] = new Mat(previewFrameSize, CvType.CV_8UC3, new Scalar(255, 255, 255));
                     intermediateMats[row][col].copyTo(outputImg.submat(row * (int) previewFrameSize.height, (row + 1) * (int) previewFrameSize.height, col * (int) previewFrameSize.width, (col + 1) * (int) previewFrameSize.width));
                 }
             }
