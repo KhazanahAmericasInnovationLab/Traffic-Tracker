@@ -13,13 +13,10 @@ import android.view.SurfaceView;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
-import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.core.Size;
 
 import static java.lang.Math.round;
 
@@ -29,9 +26,10 @@ public class CameraActivity extends AppCompatActivity implements CustomCameraVie
 
     static {
         if (!OpenCVLoader.initDebug()) {
-            Log.w(TAG, "Could Not Load Local OpenCV Library. Will try opencvmanager.");
-            // Handle initialization error
+            Log.e(TAG, "ERROR. COULD NOT LOAD STATIC OPENCV LIBRARIES!!!");
+            //TODO Handler to finish activty
         } else {
+//            Other OpenCV JNI libs should be here:
 //            System.loadLibrary("my_jni_lib1");
 //            System.loadLibrary("my_jni_lib2");
         }
@@ -46,25 +44,25 @@ public class CameraActivity extends AppCompatActivity implements CustomCameraVie
 
 
     private CountingSolution mCountingSolution;
-    private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
-        @Override
-        public void onManagerConnected(int status) {
-            Log.d(TAG, "onManagerConnected");
-            switch (status) {
-                case LoaderCallbackInterface.SUCCESS: {
-                    Log.i(TAG, "OpenCV loaded successfully");
-                    if (permissionsGranted()) {
-                        loadOpenCVView();
-                    }
-                }
-                break;
-                default: {
-                    super.onManagerConnected(status);
-                }
-                break;
-            }
-        }
-    };
+//    private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
+//        @Override
+//        public void onManagerConnected(int status) {
+//            Log.d(TAG, "onManagerConnected");
+//            switch (status) {
+//                case LoaderCallbackInterface.SUCCESS: {
+//                    Log.i(TAG, "OpenCV loaded successfully");
+//                    if (permissionsGranted()) {
+//                        loadOpenCVView();
+//                    }
+//                }
+//                break;
+//                default: {
+//                    super.onManagerConnected(status);
+//                }
+//                break;
+//            }
+//        }
+//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,14 +123,15 @@ public class CameraActivity extends AppCompatActivity implements CustomCameraVie
     public void onResume() {
         Log.d(TAG, "onResume");
         super.onResume();
-        if (!OpenCVLoader.initDebug()) {
-            Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for " +
-                    "initialization");
-            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION, this, mLoaderCallback);
-        } else {
-            Log.d(TAG, "OpenCV library found inside package. Using it!");
-            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
-        }
+//        if (!OpenCVLoader.initDebug()) {
+//            Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for " +
+//                    "initialization");
+//            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION, this, mLoaderCallback);
+//        } else {
+//            Log.d(TAG, "OpenCV library found inside package. Using it!");
+//            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+//        }
+        //TODO add loading back. permissions?
     }
 
 
@@ -159,7 +158,7 @@ public class CameraActivity extends AppCompatActivity implements CustomCameraVie
 
         Toast.makeText(this, width + "x" + height, Toast.LENGTH_LONG).show();
 
-        mCountingSolution = new CountingSolution();
+//        mCountingSolution = new CountingSolution();
 
 //        android.graphics.Point size = new android.graphics.Point();
 //        getWindowManager().getDefaultDisplay().getSize(size);
@@ -187,7 +186,7 @@ public class CameraActivity extends AppCompatActivity implements CustomCameraVie
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         Log.v(TAG, "onCameraFrame");
 
-        mCountingSolution.findObjects(inputFrame.rgba().clone(), mRgb, new Size(mPreviewFrameWidth, mPreviewFrameHeight));
+//        mCountingSolution.findObjects(inputFrame.rgba().clone(), mRgb, new Size(mPreviewFrameWidth, mPreviewFrameHeight));
 
         return mRgb;
     }

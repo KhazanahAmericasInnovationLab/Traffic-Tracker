@@ -13,28 +13,32 @@ import android.view.SurfaceView;
 import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
     private static final String TAG = VideoSurfaceView.class.getSimpleName();
     private static final DecimalFormat FPS_FORMAT = new DecimalFormat("0.00");
-    private static final int FPS_SAMPLE_SIZE = 50;
+    private static final int FPS_SAMPLE_SIZE = 5;
     private static final double VIDEO_SPEED_MULTIPLE = 1;
-    final ArrayBlockingQueue<Bitmap> FRAME_BUFFER = new ArrayBlockingQueue<Bitmap>(100);//TODO reduce queue size
-    LinkedList<Long> mFrameTimes = new LinkedList<Long>() {
+    final ArrayBlockingQueue<Bitmap> FRAME_BUFFER = new ArrayBlockingQueue<Bitmap>(20);
+    protected AtomicInteger mReceivedFrameCount = new AtomicInteger(0);
+    protected AtomicInteger mZone1Count = new AtomicInteger(0);
+    protected AtomicInteger mZone2Count = new AtomicInteger(0);
+    private LinkedList<Long> mFrameTimes = new LinkedList<Long>() {
         {
             this.add(System.nanoTime());
         }
     };
-    int mDisplayedFrameCount = 0;
+    private AtomicInteger mDisplayedFrameCount = new AtomicInteger(0);
+
     private Thread mSurfaceThread;
     private boolean mSurfaceThreadRunning = false;
-    private Paint mFPSPaint = new Paint() {
+    private Paint mTextPaint = new Paint() {
         {
             this.setColor(Color.BLUE);
             this.setTextSize(40);
         }
     };
-    private volatile int mReceivedFrameCount = 0;
 
     public VideoSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -84,10 +88,12 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
                         synchronized (getHolder()) {
                             canvas.drawBitmap(nextFrame, 0, 0, null);
-                            canvas.drawText(fps, 50, 50, mFPSPaint);
+                            canvas.drawText(fps, 30, 50, mTextPaint);
+                            canvas.drawText("Zone 1: " + mZone1Count + "\tZone 2: " + mZone2Count, 30, nextFrame.getHeight(), mTextPaint);
+
                             Log.v(TAG, "new frame displayed");
-                            mDisplayedFrameCount++;
-                            Log.d(TAG, "Received: " + mReceivedFrameCount + "\tDisplayed: " + mDisplayedFrameCount + "\tFrames Waiting to be Displayed: " + FRAME_BUFFER.size());
+                            mDisplayedFrameCount.incrementAndGet();
+                            Log.d(TAG, "Received: " + mReceivedFrameCount.get() + "\tDisplayed: " + mDisplayedFrameCount.get() + "\tFrames Waiting to be Displayed: " + FRAME_BUFFER.size());
                         }
                     }
                 } finally {
@@ -110,10 +116,6 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                 Log.e(TAG, e.getStackTrace().toString());
             }
         }
-    }
-
-    public void incrementFrameCount() {
-        this.mReceivedFrameCount++;
     }
 
     private void destroySurfaceThread() {

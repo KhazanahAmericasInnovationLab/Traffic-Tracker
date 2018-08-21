@@ -1,13 +1,12 @@
+/*This class handles the object detection. It should be extended to implement a specific Tracking solution (ex. KCF)*/
 package com.example.wmmc88.traffictracker;
 
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
-import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
-import org.opencv.core.RotatedRect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
@@ -15,37 +14,65 @@ import org.opencv.video.BackgroundSubtractorMOG2;
 import org.opencv.video.Video;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 class CountingSolution {
+    protected final Size SCREEN_SIZE;
     //TODO Switch to using preferences
-    private final int mBoxThreshold = 3000;
-    //6000
-    BackgroundSubtractorMOG2 mBackgroundSubtractor;
-    private int mZone1Count = 0;
-    private int mZone2Count = 0;
+    private final int mBoxThreshold = 8000;
+    protected BackgroundSubtractorMOG2 mBackgroundSubtractor;
+    protected volatile int mZone1Count = 0;
+    protected volatile int mZone2Count = 0;
+    protected volatile Mat inputImage = null;
+    protected volatile Mat rawForegroundMask = null;
+    protected volatile Mat cleanedForegroundMask = null;
+    protected volatile List<MatOfPoint> rawContours = null;
+    protected volatile List<Rect> filteredBoundingBoxes = null;
 
 
-    protected CountingSolution() {
-        this.mBackgroundSubtractor = Video.createBackgroundSubtractorMOG2(500, 16, true);
+    protected CountingSolution(Size screenSize) {
+        this.mBackgroundSubtractor = Video.createBackgroundSubtractorMOG2(500, 16, true);//change shadow thresh
+        this.SCREEN_SIZE = screenSize;
     }
 
-    protected List<RotatedRect> findRotatedBoundingBoxes(List<MatOfPoint> contours) {
-        MatOfPoint2f convertedContour = new MatOfPoint2f();
-
-        List<RotatedRect> rotatedBoundingBoxes = new ArrayList<>();
-
-        for (MatOfPoint contour : contours) {
-            contour.convertTo(convertedContour, CvType.CV_32F);
-            RotatedRect rotatedBoundingBox = Imgproc.minAreaRect(convertedContour);
-            if (rotatedBoundingBox.size.height * rotatedBoundingBox.size.width >= mBoxThreshold) {
-                rotatedBoundingBoxes.add(rotatedBoundingBox);
-            }
+    private Mat convertMat(Mat img) {
+        Mat returnImg = img.clone();
+        if (returnImg.channels() == 4) {
+            Imgproc.cvtColor(returnImg, returnImg, Imgproc.COLOR_BGRA2BGR);
+        } else if (returnImg.channels() == 3) {
+            //already proper colour-space config
+        } else if (returnImg.channels() == 1) {
+            Imgproc.cvtColor(returnImg, returnImg, Imgproc.COLOR_GRAY2BGR);
+        } else {
+            //TODO output error Invalid image
         }
-        return rotatedBoundingBoxes;
+        return returnImg;
     }
 
-    protected List<Rect> findBoundingBoxes(List<MatOfPoint> contours) {
+    private Mat findMask(Mat img) {
+        img = img.clone();
+        this.mBackgroundSubtractor.apply(img, img);
+        return img;
+    }
+
+    private Mat cleanMask(Mat img) {
+        img = img.clone();
+        Imgproc.medianBlur(img, img, 11);
+        Imgproc.threshold(img, img, 128, 255, Imgproc.THRESH_BINARY);
+
+//        Imgproc.dilate(img, img, Mat.ones(3, 3, CvType.CV_8UC1), new Point(-1, -1), 1);
+        return img;
+    }
+
+    private List<MatOfPoint> findContours(Mat image) {
+        List<MatOfPoint> contours = new ArrayList<>();
+        Imgproc.findContours(image, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+        return contours;
+    }
+
+    private List<Rect> findFilteredBoundingBoxes(List<MatOfPoint> contours) {
         List<Rect> boundingBoxes = new ArrayList<>();
         for (MatOfPoint contour : contours) {
             Rect boundingBox = Imgproc.boundingRect(contour);
@@ -56,125 +83,72 @@ class CountingSolution {
         return boundingBoxes;
     }
 
-    protected List<MatOfPoint> findContours(Mat image) {
-        List<MatOfPoint> contours = new ArrayList<>();
-        Imgproc.findContours(image, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-        return contours;
+    protected void process(Mat img) {
+        this.inputImage = convertMat(img);
+        this.rawForegroundMask = findMask(this.inputImage);
+        this.cleanedForegroundMask = cleanMask(this.rawForegroundMask);
+        this.rawContours = findContours(this.cleanedForegroundMask);
+        this.filteredBoundingBoxes = findFilteredBoundingBoxes(this.rawContours);
     }
 
-    protected Mat findMask(Mat inputImage) {
-        Mat fgMask = new Mat();
-        this.mBackgroundSubtractor.apply(inputImage, fgMask);
-//        Imgproc.blur(image, image, new Size(5, 5));
-//        //TODO replace with Adaptive Threshold
-//        Imgproc.threshold(image, image, mMaskThreshold, 255, Imgproc.THRESH_BINARY);
-//        //TODO erodeKernelSetting
-//        Mat erodeKernel = Mat.ones(new Size(3, 3), CvType.CV_8U);
-//        Imgproc.erode(image, image, erodeKernel, new Point(-1, -1), 3);
-//        Imgproc.medianBlur(image, image, 7);
-        return fgMask;
+    protected Mat getPreviewMat(boolean showGrid) {
+        Mat contoursWithBoundingBoxesMat = Mat.zeros(inputImage.size(), CvType.CV_8UC3);
+        Imgproc.drawContours(contoursWithBoundingBoxesMat, rawContours, -1, new Scalar(255, 255, 255));
+
+        Mat inputImageWithBoundingBoxesMat = inputImage.clone();
+
+        for (Rect boundingBox : filteredBoundingBoxes) {
+            Imgproc.rectangle(contoursWithBoundingBoxesMat, boundingBox.tl(), boundingBox.br(), new Scalar(0, 255, 0));
+            Imgproc.rectangle(inputImageWithBoundingBoxesMat, boundingBox.tl(), boundingBox.br(), new Scalar(0, 255, 0));
+        }
+
+
+        Mat previewMat = generatePreviewMat(2, 4, showGrid, inputImage, rawForegroundMask, cleanedForegroundMask, contoursWithBoundingBoxesMat, inputImageWithBoundingBoxesMat);
+        return previewMat;
     }
 
-    protected void findObjects(Mat inputImg, Mat outputImg, Size previewFrameSize) {
+    private Mat generatePreviewMat(final int NUM_ROWS, final int NUM_COLS, boolean showGrid, Mat... mats) {
 
-        if (inputImg.channels() == 4) {
-            Imgproc.cvtColor(inputImg, inputImg, Imgproc.COLOR_BGRA2BGR);
-        } else if (inputImg.channels() == 3) {
-            Imgproc.cvtColor(inputImg, inputImg, Imgproc.COLOR_RGB2BGR);
-        } else {
+        int previewFrameWidth = (int) (SCREEN_SIZE.width / NUM_COLS);
+        int previewFrameHeight = (int) (SCREEN_SIZE.height / NUM_ROWS);
 
+        Mat previewMat = new Mat(SCREEN_SIZE, CvType.CV_8UC3);
+
+        Queue<Mat> matList = new LinkedList<>();
+
+        for (Mat previewFrame : mats) {
+            previewFrame = convertMat(previewFrame);
+
+            if (showGrid) {
+                drawGrid(previewFrame, 100);
+            }
+
+            Imgproc.resize(previewFrame, previewFrame, new Size(previewFrameWidth, previewFrameHeight));
+            matList.add(previewFrame);
         }
 
-        final int displayRow = 2;
-        final int displayCol = 4;
-
-        Mat[][] intermediateMats = new Mat[displayRow][displayCol];
-
-        //Input Image
-        intermediateMats[0][0] = inputImg;
-
-        //Foreground Mask
-        Mat fgMask = intermediateMats[0][1] = this.findMask(inputImg);
-
-        //Threshold (Remove Shadows)
-        Mat fgMaskNoShadows;
-        Imgproc.threshold(fgMask, fgMaskNoShadows = intermediateMats[0][2] = new Mat(inputImg.size(), inputImg.type()), 128, 255, Imgproc.THRESH_BINARY);
-
-
-        //Close (remove holes in mask)
-//        Mat openedMask;
-//        Imgproc.morphologyEx(fgMaskNoShadows, openedMask = intermediateMats[0][3] = new Mat(inputImg.size(), inputImg.type()), Imgproc.MORPH_CLOSE,Mat.ones(new Size(15, 15),CvType.CV_8UC1), new Point(-1,-1), 1);
-
-        ///Median Blur
-        Mat medianFgMask;
-        Imgproc.medianBlur(fgMaskNoShadows, medianFgMask = intermediateMats[0][3] = new Mat(inputImg.size(), inputImg.type()), 75);
-
-        //Dilate
-        Mat dilatedMat;
-        Imgproc.dilate(medianFgMask, dilatedMat = intermediateMats[1][0] = new Mat(inputImg.size(), inputImg.type()), Mat.ones(10, 10, CvType.CV_8UC1), new Point(-1, -1), 3);
-
-        //Draw Contours
-        List<MatOfPoint> contours = this.findContours(dilatedMat);
-        Mat contourMat;
-        Imgproc.drawContours(contourMat = intermediateMats[1][1] = Mat.zeros(inputImg.size(), CvType.CV_8UC3), contours, -1, new Scalar(255, 255, 255));
-
-        //Draw Bounding Boxes on Contours Image
-        List<Rect> boundingBoxes = this.findBoundingBoxes(contours);
-        for (Rect boundingBox : boundingBoxes) {
-            Imgproc.rectangle(contourMat, boundingBox.tl(), boundingBox.br(), new Scalar(0, 255, 0));
-        }
-
-        //Draw Rotated(min Area) Bounding Boxes on Contours Image
-//        List<RotatedRect> rotatedBoundingBoxes = findRotatedBoundingBoxes(contours);
-//        List<MatOfPoint> rotatedBoundingBoxesVertices = new ArrayList<>();
-//        Point[] vertices = new Point[4];
-//        for (RotatedRect rotatedBoundingBox : rotatedBoundingBoxes) {
-//            rotatedBoundingBox.points(vertices);
-//            rotatedBoundingBoxesVertices.add(new MatOfPoint(vertices));
-//        }
-//        Imgproc.drawContours(contourMat, rotatedBoundingBoxesVertices, -1, new Scalar(0, 255, 255));
-
-//        //Draw Rotated(min Area) Bounding Boxes on Input Image
-//        Mat finalMat = intermediateMats[1][2] = inputImg.clone();
-//        for (RotatedRect rotatedBoundingBox : rotatedBoundingBoxes) {
-//            rotatedBoundingBox.points(vertices);
-//            rotatedBoundingBoxesVertices.add(new MatOfPoint(vertices));
-//        }
-//        Imgproc.drawContours(finalMat, rotatedBoundingBoxesVertices, -1, new Scalar(0, 255, 255));
-
-
-        //Draw Bounding Boxes on Input Image
-        Mat finalMat2 = intermediateMats[1][3] = inputImg.clone();
-        for (Rect boundingBox : boundingBoxes) {
-            Imgproc.rectangle(finalMat2, boundingBox.tl(), boundingBox.br(), new Scalar(0, 255, 0));
-        }
-
-
-        //Move Mats to final Mat
-        for (int row = 0; row < displayRow; row++) {
-            for (int col = 0; col < displayCol; col++) {
-                if (intermediateMats[row][col] != null && !intermediateMats[row][col].size().empty()) {
-                    Imgproc.resize(intermediateMats[row][col], intermediateMats[row][col], previewFrameSize);
-
-                    if (intermediateMats[row][col].channels() != 3) {
-                        Imgproc.cvtColor(intermediateMats[row][col], intermediateMats[row][col], Imgproc.COLOR_GRAY2BGR, 3);
-                    }
-
-                    intermediateMats[row][col].copyTo(outputImg.submat(row * (int) previewFrameSize.height, (row + 1) * (int) previewFrameSize.height, col * (int) previewFrameSize.width, (col + 1) * (int) previewFrameSize.width));
+        Mat blank = new Mat(new Size(previewFrameWidth, previewFrameHeight), CvType.CV_8UC3, new Scalar(255, 255, 255));
+        for (int row = 0; row < NUM_ROWS; row++) {
+            for (int col = 0; col < NUM_COLS; col++) {
+                Mat previewSubMat = matList.poll();
+                if (previewSubMat != null) {
+                    previewSubMat.copyTo(previewMat.submat(row * previewFrameHeight, (row + 1) * previewFrameHeight, col * previewFrameWidth, (col + 1) * previewFrameWidth));
                 } else {
-                    intermediateMats[row][col] = new Mat(previewFrameSize, CvType.CV_8UC3, new Scalar(255, 255, 255));
-                    intermediateMats[row][col].copyTo(outputImg.submat(row * (int) previewFrameSize.height, (row + 1) * (int) previewFrameSize.height, col * (int) previewFrameSize.width, (col + 1) * (int) previewFrameSize.width));
+                    blank.copyTo(previewMat.submat(row * previewFrameHeight, (row + 1) * previewFrameHeight, col * previewFrameWidth, (col + 1) * previewFrameWidth));
                 }
             }
         }
+        return previewMat;
     }
 
-    public int getmZone1Count() {
-        return mZone1Count;
-    }
-
-    public int getmZone2Count() {
-        return mZone2Count;
+    private void drawGrid(Mat mat, int size) {
+        for (int row = 0; (row += size) < mat.rows(); ) {
+            Imgproc.line(mat, new Point(0, row), new Point(mat.cols(), row), new Scalar(255, 170, 0));
+        }
+        for (int col = 0; (col += size) < mat.cols(); ) {
+            Imgproc.line(mat, new Point(col, 0), new Point(col, mat.rows()), new Scalar(255, 170, 0));
+        }
+        Imgproc.rectangle(mat, new Point(0, 0), new Point(mat.cols() - 1, mat.rows() - 1), new Scalar(0, 0, 255));
     }
 
 }

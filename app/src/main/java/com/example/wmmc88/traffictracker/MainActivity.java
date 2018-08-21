@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import java.util.Map;
 
-//TODO Permission Requests
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
 

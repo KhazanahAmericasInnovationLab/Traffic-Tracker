@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -15,53 +14,33 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
-
-import static java.lang.Math.round;
 
 public class VideoActivity extends AppCompatActivity implements Runnable {
     public static final int EXTERNAL_STORAGE_PERMISSION_REQUEST = 2;
     private static final String TAG = VideoActivity.class.getSimpleName();
 
+    static {
+        if (!OpenCVLoader.initDebug()) {
+            Log.e(TAG, "ERROR. COULD NOT LOAD STATIC OPENCV LIBRARIES!!!");
+            //TODO Handler to finish activity if not loaded properly
+        } else {
+//            Other OpenCV JNI libs should be here:
+//            System.loadLibrary("my_jni_lib1");
+//            System.loadLibrary("my_jni_lib2");
+        }
+    }
+
     private Thread mProcessingThread = null;
     private volatile boolean mProcessingThreadRunning = false;
-
     private VideoSurfaceView mVideoSurfaceView;
-
-    private CountingSolution mCountingSolution;
+    private KCFTrackerCountingSolution mKCFTrackerCountingSolution;
     private VideoCapture mVC;
-
-
-    private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
-        @Override
-        public void onManagerConnected(int status) {
-            Log.d(TAG, "onManagerConnected");
-            switch (status) {
-                case LoaderCallbackInterface.SUCCESS: {
-                    Log.i(TAG, "OpenCV loaded successfully");
-                    if (permissionsGranted()) {
-                        if (mProcessingThreadRunning == false && mProcessingThread == null) {
-                            mProcessingThreadRunning = true;
-                            mProcessingThread = new Thread(VideoActivity.this, "Processing Thread");
-                            mProcessingThread.start();
-                        }
-                    }
-                }
-                break;
-                default: {
-                    super.onManagerConnected(status);
-                }
-                break;
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +57,10 @@ public class VideoActivity extends AppCompatActivity implements Runnable {
 
 
     @SuppressLint("InlinedApi")
-    private boolean permissionsGranted() {
+    private boolean checkPermissionsGranted() {
         Log.d(TAG, "checkPermissionsGranted");
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, EXTERNAL_STORAGE_PERMISSION_REQUEST);
             return false;
         }
         return true;
@@ -106,7 +84,6 @@ public class VideoActivity extends AppCompatActivity implements Runnable {
                 }
                 return;
             }
-
             //other permission request cases
         }
     }
@@ -116,72 +93,76 @@ public class VideoActivity extends AppCompatActivity implements Runnable {
     public void onResume() {
         Log.d(TAG, "onResume");
         super.onResume();
-        if (!OpenCVLoader.initDebug()) {
-            Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for " +
-                    "initialization");
-            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION, this, mLoaderCallback);
+        if (checkPermissionsGranted() == true) {
+            if (loadVideo()) {
+                mProcessingThreadRunning = true;
+                mProcessingThread = new Thread(VideoActivity.this, "Processing Thread");
+                mProcessingThread.start();
+            } else {
+                finish();
+            }
         } else {
-            Log.d(TAG, "OpenCV library found inside package. Using it!");
-            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, EXTERNAL_STORAGE_PERMISSION_REQUEST);
         }
+
     }
 
     @Override
     public void onPause() {
         Log.d(TAG, "onPause");
-        destroyProcessingThread();
         super.onPause();
     }
 
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
+        if (mProcessingThreadRunning) {
+            destroyProcessingThread();
+        }
         super.onDestroy();
     }
 
     @Override
-    //TODO multiple threads rnning
     public void run() {
         Log.i(TAG, "Processing Thread Started");
-        loadVideo();
-        mCountingSolution = new CountingSolution();
-
         android.graphics.Point size = new android.graphics.Point();
         getWindowManager().getDefaultDisplay().getSize(size);
-        int screenWidth = size.x;
-        int screenHeight = size.y;
+        Size screenSize = new Size(size.x, size.y);
 
-//        int screenWidth = 2960;
-//        int screenHeight = 1440;
-        int previewFrameWidth = (int) round(screenWidth / 4.0);
-        int previewFrameHeight = (int) round(screenHeight / 2.0);
-        Size previewFrameSize = new Size(previewFrameWidth, previewFrameHeight);
+        mKCFTrackerCountingSolution = new KCFTrackerCountingSolution(screenSize);
 
         Mat inputFrame = new Mat();
-        Mat rgb = Mat.zeros(screenHeight, screenWidth, CvType.CV_8UC3);
-        Canvas canvas = new Canvas();
+        Mat previewMat = null;
 
-        while (mProcessingThreadRunning && mVC.grab() && mVC.retrieve(inputFrame)) {
+        while (mProcessingThreadRunning && mVC.read(inputFrame)) {
             Log.v(TAG, "new frame grabbed");
 
-            mCountingSolution.findObjects(inputFrame.clone(), rgb = Mat.zeros(rgb.size(), rgb.type()), previewFrameSize);
+            Imgproc.cvtColor(inputFrame, inputFrame, Imgproc.COLOR_RGB2BGR);
 
-            Bitmap bm = Bitmap.createBitmap(rgb.cols(), rgb.rows(), Bitmap.Config.ARGB_8888);
-            Utils.matToBitmap(rgb, bm);
 
-            Log.v(TAG, "frameSent added to FRAME_BUFFER in SurfaceView Thread");
+            mKCFTrackerCountingSolution.process(inputFrame);
+
+            previewMat = mKCFTrackerCountingSolution.getPreviewMat(true);
+            Bitmap bm = Bitmap.createBitmap(previewMat.cols(), previewMat.rows(), Bitmap.Config.ARGB_8888);
+            Utils.matToBitmap(previewMat, bm);
+
             try {
                 mVideoSurfaceView.FRAME_BUFFER.put(bm);
+                Log.v(TAG, "frame sent to FRAME_BUFFER in SurfaceView Thread");
             } catch (InterruptedException e) {
                 Log.e(TAG, "Interrupted while trying to add frame to buffer!");
                 Log.e(TAG, e.getStackTrace().toString());
             }
-            mVideoSurfaceView.incrementFrameCount();
+            mVideoSurfaceView.mZone1Count.set(mKCFTrackerCountingSolution.mZone1Count);
+            mVideoSurfaceView.mZone2Count.set(mKCFTrackerCountingSolution.mZone2Count);
+
+            mVideoSurfaceView.mReceivedFrameCount.incrementAndGet();
+            Log.v(TAG, "Zone1: " + mKCFTrackerCountingSolution.mZone1Count + "\tZone2: " + mKCFTrackerCountingSolution.mZone2Count + "\tCurrent Trackers: " + mKCFTrackerCountingSolution.getNumActiveTrackers());
         }
         //TODO use handler finish activity from other thread
-        finish();
+//        finish();
     }
 
-    private void loadVideo() {
+    private boolean loadVideo() {
         Log.d(TAG, "loadVideo");
         //TODO select video file location using built in android app
         //TODO use decoder that converts to mjpg in avi container (only acceptable videotype in opencv 3.4.2)
@@ -191,6 +172,7 @@ public class VideoActivity extends AppCompatActivity implements Runnable {
         mVC = new VideoCapture(filePath);
         if (mVC.isOpened()) {
             Log.i(TAG, "Video Opened!!");
+            return true;
         } else {
             Log.e(TAG, "Video at " + filePath + " could not be opened!");
 
@@ -199,12 +181,13 @@ public class VideoActivity extends AppCompatActivity implements Runnable {
                     Toast.makeText(VideoActivity.this, "Video could not be opened!", Toast.LENGTH_LONG).show();
                 }
             });
-            finish();
+            return false;
         }
     }
 
     //call in on pause not on destroy
     private void destroyProcessingThread() {
+        Log.d(TAG, "destroyProcessingThread");
         mProcessingThreadRunning = false;
 
         //Try to join thread with UI thread
