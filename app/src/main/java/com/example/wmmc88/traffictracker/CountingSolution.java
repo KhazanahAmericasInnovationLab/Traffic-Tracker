@@ -2,6 +2,9 @@
 package com.example.wmmc88.traffictracker;
 
 
+import android.util.Log;
+import android.util.Pair;
+
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -19,6 +22,8 @@ import java.util.List;
 import java.util.Queue;
 
 class CountingSolution {
+    private static final String TAG = CountingSolution.class.getSimpleName();
+
     protected final Size SCREEN_SIZE;
     //TODO Switch to using preferences
     private final int mBoxThreshold = 8000;
@@ -31,9 +36,8 @@ class CountingSolution {
     protected volatile List<MatOfPoint> rawContours = null;
     protected volatile List<Rect> filteredBoundingBoxes = null;
 
-
     protected CountingSolution(Size screenSize) {
-        this.mBackgroundSubtractor = Video.createBackgroundSubtractorMOG2(500, 16, true);//change shadow thresh
+        this.mBackgroundSubtractor = Video.createBackgroundSubtractorMOG2(500, 16, true);
         this.SCREEN_SIZE = screenSize;
     }
 
@@ -149,6 +153,23 @@ class CountingSolution {
             Imgproc.line(mat, new Point(col, 0), new Point(col, mat.rows()), new Scalar(255, 170, 0));
         }
         Imgproc.rectangle(mat, new Point(0, 0), new Point(mat.cols() - 1, mat.rows() - 1), new Scalar(0, 0, 255));
+    }
+
+    protected void exportImage(Rect boundingBox, ExitDirection direction) {
+        Log.i(TAG, "New Vehicle Image marked for export");
+        Pair<Mat, ExitDirection> vehicleMat = new Pair<Mat, ExitDirection>(inputImage.submat(boundingBox).clone(), direction);
+
+        boolean retry = true;
+        while (retry) {
+            Log.i(TAG, "Sending Image to CloudRails Queue");
+            try {
+                CloudRailsUnifiedCloudStorageAPIUtils.getStaticInstance().UPLOAD_QUEUE.put(vehicleMat);
+                retry = false;
+            } catch (InterruptedException e) {
+                Log.w(TAG, "Interrupted when trying to send image to CloudRails Queue");
+                e.printStackTrace();
+            }
+        }
     }
 
 }

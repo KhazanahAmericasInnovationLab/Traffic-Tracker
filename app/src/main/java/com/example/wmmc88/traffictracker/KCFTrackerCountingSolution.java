@@ -48,8 +48,8 @@ public class KCFTrackerCountingSolution extends CountingSolution {
     private void addTrackers(Mat img, List<Rect> boundingBoxes) {
         for (Rect boundingBox : boundingBoxes) {
             //TODO change to user set rect
-            Rect Zone1ExitZone = new Rect(0, 0, 25, this.inputImage.height());
-            Rect Zone2ExitZone = new Rect(this.inputImage.width() - 25, 0, 25, this.inputImage.height());
+            Rect Zone1ExitZone = new Rect(new Point(-1, -1), new Point(25, this.inputImage.height() + 1));
+            Rect Zone2ExitZone = new Rect(new Point(this.inputImage.width() - 25, -1), new Point(this.inputImage.width() + 1, this.inputImage.height() + 1));
 
             if (!Zone1ExitZone.contains(boundingBox.tl()) && !Zone2ExitZone.contains(boundingBox.br())) {
                 boolean found = false;
@@ -71,18 +71,19 @@ public class KCFTrackerCountingSolution extends CountingSolution {
                     if (trackerToReinitialize != null) {
                         trackerToReinitialize.reinitialize(img, boundingBox);
                     } else {
-                        if (boundingBox.x < this.inputImage.cols() / 2) { //going right
+                        int boundingBoxCentreX = boundingBox.x + boundingBox.width / 2;
+                        if (boundingBoxCentreX < this.inputImage.cols() / 2) { //going right
                             CustomKCFTracker tracker = new CustomKCFTracker(boundingBox, ExitDirection.ZONE2, img);
                             trackers.add(tracker);
                             this.mZone2Count++;
                             Log.i(TAG, "Vehicle Detected moving to Zone 2");
-                            //TODO export picture
+                            this.exportImage(boundingBox, ExitDirection.ZONE2);
                         } else {
                             CustomKCFTracker tracker = new CustomKCFTracker(boundingBox, ExitDirection.ZONE1, img);
                             trackers.add(tracker);
                             this.mZone1Count++;
                             Log.i(TAG, "Vehicle Detected moving to Zone 1");
-                            //TODO export picture
+                            this.exportImage(boundingBox, ExitDirection.ZONE1);
                         }
                     }
                 }

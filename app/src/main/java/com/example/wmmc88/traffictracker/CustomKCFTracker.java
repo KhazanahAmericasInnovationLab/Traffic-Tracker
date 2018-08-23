@@ -38,7 +38,6 @@ public class CustomKCFTracker {
         return new Point(x, y);
     }
 
-    //TODO take into account non horizontal camera setup
     private void predictTrackerLocation() {
         switch (exitDirection) {
             case ZONE1:

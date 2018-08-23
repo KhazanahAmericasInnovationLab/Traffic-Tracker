@@ -2,7 +2,6 @@ package com.example.wmmc88.traffictracker;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import org.opencv.android.OpenCVLoader;
@@ -34,6 +32,7 @@ public class VideoActivity extends AppCompatActivity implements Runnable {
 //            System.loadLibrary("my_jni_lib1");
 //            System.loadLibrary("my_jni_lib2");
         }
+
     }
 
     private Thread mProcessingThread = null;
@@ -48,11 +47,9 @@ public class VideoActivity extends AppCompatActivity implements Runnable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
 
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        //TODO read orientation from settings
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
         mVideoSurfaceView = findViewById(R.id.vsv);
+
+        CloudRailsUnifiedCloudStorageAPIUtils.getStaticInstance().startUploadThread();
     }
 
 
@@ -75,9 +72,9 @@ public class VideoActivity extends AppCompatActivity implements Runnable {
             case EXTERNAL_STORAGE_PERMISSION_REQUEST: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.i(TAG, "External Storage Permissions Granted!");
-                    mProcessingThreadRunning = true;
-                    mProcessingThread = new Thread(VideoActivity.this, "Processing Thread");
-                    mProcessingThread.start();
+//                    mProcessingThreadRunning = true;
+//                    mProcessingThread = new Thread(VideoActivity.this, "Processing Thread");
+//                    mProcessingThread.start();
                 } else {
                     Log.w(TAG, "Permissions Denied!");
                     this.finish();
@@ -110,14 +107,17 @@ public class VideoActivity extends AppCompatActivity implements Runnable {
     @Override
     public void onPause() {
         Log.d(TAG, "onPause");
+        if (mProcessingThreadRunning) {
+            destroyProcessingThread();
+        }
         super.onPause();
     }
 
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
-        if (mProcessingThreadRunning) {
-            destroyProcessingThread();
-        }
+
+        CloudRailsUnifiedCloudStorageAPIUtils.getStaticInstance().stopUploadThread();
+
         super.onDestroy();
     }
 
@@ -154,10 +154,12 @@ public class VideoActivity extends AppCompatActivity implements Runnable {
             }
             mVideoSurfaceView.mZone1Count.set(mKCFTrackerCountingSolution.mZone1Count);
             mVideoSurfaceView.mZone2Count.set(mKCFTrackerCountingSolution.mZone2Count);
+            mVideoSurfaceView.mActiveTrackersCount.set(mKCFTrackerCountingSolution.getNumActiveTrackers());
 
             mVideoSurfaceView.mReceivedFrameCount.incrementAndGet();
             Log.v(TAG, "Zone1: " + mKCFTrackerCountingSolution.mZone1Count + "\tZone2: " + mKCFTrackerCountingSolution.mZone2Count + "\tCurrent Trackers: " + mKCFTrackerCountingSolution.getNumActiveTrackers());
         }
+        Log.i(TAG, "Processing Thread Finished");
         //TODO use handler finish activity from other thread
 //        finish();
     }
@@ -194,11 +196,11 @@ public class VideoActivity extends AppCompatActivity implements Runnable {
         boolean retry = true;
         while (retry) {
             try {
+                Log.i(TAG, "Waiting for Processing Thread to die");
                 mProcessingThread.join();
                 retry = false;
             } catch (InterruptedException e) {
-                Log.e(TAG, "Interrupted Exception when waiting for processing thread to die");
-                Log.e(TAG, e.getStackTrace().toString());
+                Log.w(TAG, "Interrupted Exception when waiting for processing thread to die");
             }
         }
     }

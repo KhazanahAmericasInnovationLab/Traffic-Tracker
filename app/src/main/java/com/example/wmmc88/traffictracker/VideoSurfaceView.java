@@ -19,11 +19,12 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     private static final String TAG = VideoSurfaceView.class.getSimpleName();
     private static final DecimalFormat FPS_FORMAT = new DecimalFormat("0.00");
     private static final int FPS_SAMPLE_SIZE = 5;
-    private static final double VIDEO_SPEED_MULTIPLE = 1;
+    private static final double VIDEO_SPEED_MULTIPLE = 3; //TODO set to 1
     final ArrayBlockingQueue<Bitmap> FRAME_BUFFER = new ArrayBlockingQueue<Bitmap>(20);
     protected AtomicInteger mReceivedFrameCount = new AtomicInteger(0);
     protected AtomicInteger mZone1Count = new AtomicInteger(0);
     protected AtomicInteger mZone2Count = new AtomicInteger(0);
+    protected AtomicInteger mActiveTrackersCount = new AtomicInteger(0);
     private LinkedList<Long> mFrameTimes = new LinkedList<Long>() {
         {
             this.add(System.nanoTime());
@@ -36,7 +37,7 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     private Paint mTextPaint = new Paint() {
         {
             this.setColor(Color.BLUE);
-            this.setTextSize(40);
+            this.setTextSize(20 * getResources().getDisplayMetrics().scaledDensity);
         }
     };
 
@@ -45,7 +46,7 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         getHolder().addCallback(this);
     }
 
-    //Todo Implement pause and resume for thread
+    //Todo Implement pause and resume for rendering thread
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
@@ -88,8 +89,8 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
                         synchronized (getHolder()) {
                             canvas.drawBitmap(nextFrame, 0, 0, null);
-                            canvas.drawText(fps, 30, 50, mTextPaint);
-                            canvas.drawText("Zone 1: " + mZone1Count + "\tZone 2: " + mZone2Count, 30, nextFrame.getHeight(), mTextPaint);
+                            canvas.drawText(fps, 30, 100, mTextPaint);
+                            canvas.drawText("Zone 1:" + mZone1Count + "      Zone2: " + mZone2Count + "      Active Trackers: " + mActiveTrackersCount, 30, nextFrame.getHeight() - 30, mTextPaint);
 
                             Log.v(TAG, "new frame displayed");
                             mDisplayedFrameCount.incrementAndGet();

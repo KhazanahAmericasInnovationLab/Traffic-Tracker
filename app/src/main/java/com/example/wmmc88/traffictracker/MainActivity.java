@@ -2,13 +2,11 @@ package com.example.wmmc88.traffictracker;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -30,12 +28,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setContentView(R.layout.activity_main);
 
-        //TODO REMOVE
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        //TODO read orientation from settings
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-/////////////////////////////////////////////////////////////////////////////////////
-
         mCurrentSettingsTextView = findViewById(R.id.tv_current_settings);
 
         Button mLaunchButton = findViewById(R.id.b_launch);
@@ -45,6 +37,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mConfigureSettingsButton.setOnClickListener(this);
         setupSettingsTextView();
         mLaunchMode = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.pref_key_camera_selection), null));
+
+        CloudRailsUnifiedCloudStorageAPIUtils.getStaticInstance().init(getApplicationContext());
+
     }
 
     @Override

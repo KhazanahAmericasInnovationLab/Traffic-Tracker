@@ -25,6 +25,8 @@
 
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="landscape"
+
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,10 +42,11 @@
 
         <activity
             android:name=".CameraActivity"
+            android:screenOrientation="landscape"
+
             android:label="@string/camera_activity_label"
             android:parentActivityName=".MainActivity">
-            <!--TODO fullscreen + actionbar?-->
-            <!--android:theme="@android:style/Theme.NoTitleBar.Fullscreen"-->
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
@@ -51,10 +54,11 @@
 
         <activity
             android:name=".VideoActivity"
+            android:screenOrientation="landscape"
+
             android:label="@string/video_activity_label"
             android:parentActivityName=".MainActivity">
-            <!--TODO fullscreen + actionbar?-->
-            <!--android:theme="@android:style/Theme.NoTitleBar.Fullscreen"-->
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />

@@ -1,7 +1,6 @@
 package com.example.wmmc88.traffictracker;
 
 import android.Manifest;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,7 +9,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.SurfaceView;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import org.opencv.android.CameraBridgeViewBase;
@@ -44,34 +42,12 @@ public class CameraActivity extends AppCompatActivity implements CustomCameraVie
 
 
     private CountingSolution mCountingSolution;
-//    private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
-//        @Override
-//        public void onManagerConnected(int status) {
-//            Log.d(TAG, "onManagerConnected");
-//            switch (status) {
-//                case LoaderCallbackInterface.SUCCESS: {
-//                    Log.i(TAG, "OpenCV loaded successfully");
-//                    if (permissionsGranted()) {
-//                        loadOpenCVView();
-//                    }
-//                }
-//                break;
-//                default: {
-//                    super.onManagerConnected(status);
-//                }
-//                break;
-//            }
-//        }
-//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
 
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        //TODO read orientation from settings
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_camera);
 
     }
@@ -113,7 +89,6 @@ public class CameraActivity extends AppCompatActivity implements CustomCameraVie
         mOpenCvCameraView = findViewById(R.id.cbvb_camera);
         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
         mOpenCvCameraView.setCvCameraViewListener(this);
-        //TODO lower resolution
         mOpenCvCameraView.setMaxFrameSize(640, 480);
         mOpenCvCameraView.enableView();
     }
@@ -123,15 +98,6 @@ public class CameraActivity extends AppCompatActivity implements CustomCameraVie
     public void onResume() {
         Log.d(TAG, "onResume");
         super.onResume();
-//        if (!OpenCVLoader.initDebug()) {
-//            Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for " +
-//                    "initialization");
-//            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION, this, mLoaderCallback);
-//        } else {
-//            Log.d(TAG, "OpenCV library found inside package. Using it!");
-//            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
-//        }
-        //TODO add loading back. permissions?
     }
 
 
@@ -182,10 +148,10 @@ public class CameraActivity extends AppCompatActivity implements CustomCameraVie
         mRgb.release();
     }
 
-    //    TODO Rotate Properly
+
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         Log.v(TAG, "onCameraFrame");
-
+//TODO update
 //        mCountingSolution.findObjects(inputFrame.rgba().clone(), mRgb, new Size(mPreviewFrameWidth, mPreviewFrameHeight));
 
         return mRgb;
