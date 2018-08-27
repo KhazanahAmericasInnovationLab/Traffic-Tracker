@@ -5,6 +5,7 @@ package com.example.wmmc88.traffictracker;
 import android.util.Log;
 import android.util.Pair;
 
+import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+
+import static org.opencv.core.Core.FONT_HERSHEY_SIMPLEX;
 
 class CountingSolution {
     private static final String TAG = CountingSolution.class.getSimpleName();
@@ -37,7 +40,8 @@ class CountingSolution {
     protected volatile List<Rect> filteredBoundingBoxes = null;
 
     protected CountingSolution(Size screenSize) {
-        this.mBackgroundSubtractor = Video.createBackgroundSubtractorMOG2(500, 16, true);
+        this.mBackgroundSubtractor = Video.createBackgroundSubtractorMOG2(500, 16, false);
+        Log.e(TAG, "" + mBackgroundSubtractor.getShadowThreshold());
         this.SCREEN_SIZE = screenSize;
     }
 
@@ -63,10 +67,12 @@ class CountingSolution {
 
     private Mat cleanMask(Mat img) {
         img = img.clone();
-        Imgproc.medianBlur(img, img, 11);
-        Imgproc.threshold(img, img, 128, 255, Imgproc.THRESH_BINARY);
+        Imgproc.medianBlur(img, img, 75);
+        Imgproc.blur(img, img, new Size(5, 5));
+        Imgproc.threshold(img, img, 125, 255, Imgproc.THRESH_BINARY);
+        Imgproc.dilate(img, img, Mat.ones(3, 3, CvType.CV_8UC1));
 
-//        Imgproc.dilate(img, img, Mat.ones(3, 3, CvType.CV_8UC1), new Point(-1, -1), 1);
+//        Imgproc.medianBlur(img, img, 5);
         return img;
     }
 
@@ -142,6 +148,16 @@ class CountingSolution {
                 }
             }
         }
+
+        //TODO more elelgant & Adaptable way to do labels
+        String[] labelStrings = {"Source", "Raw Bg", "Cleaned Bg", "Contours", "Bounding Boxes"};
+        for (int row = 0; row < NUM_ROWS; row++) {
+            for (int col = 0; col < NUM_COLS && labelStrings.length > row * NUM_COLS + col; col++) {
+                Imgproc.putText(previewMat, labelStrings[row * NUM_COLS + col], new Point(col * previewFrameWidth + 20, row * previewFrameHeight + 100), FONT_HERSHEY_SIMPLEX
+                        , 2.5, new Scalar(0, 0, 255), 5, Core.FILLED);
+            }
+        }
+
         return previewMat;
     }
 

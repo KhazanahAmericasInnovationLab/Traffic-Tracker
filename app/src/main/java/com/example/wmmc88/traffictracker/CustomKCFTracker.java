@@ -69,10 +69,9 @@ public class CustomKCFTracker {
                 this.trackingLost = true;
                 this.predictTrackerLocation();
             }
-
-            this.center = calculateCenter(this.boundingBox);
-            this.age++;
         }
+        this.center = calculateCenter(this.boundingBox);
+        this.age++;
     }
 
     protected void reinitialize(Mat frame, Rect boundingBox) {

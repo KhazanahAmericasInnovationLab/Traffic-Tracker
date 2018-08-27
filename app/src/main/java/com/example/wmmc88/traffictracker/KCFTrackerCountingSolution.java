@@ -14,7 +14,7 @@ import java.util.List;
 public class KCFTrackerCountingSolution extends CountingSolution {
     private static final String TAG = KCFTrackerCountingSolution.class.getSimpleName();
 
-    private static final int MAX_TRACKER_AGE = 200;//increase from 20
+    private static final int MAX_TRACKER_AGE = 30;//increase from 20
     private List<CustomKCFTracker> trackers = new LinkedList<>();
 
     public KCFTrackerCountingSolution(Size screenSize) {
@@ -42,7 +42,6 @@ public class KCFTrackerCountingSolution extends CountingSolution {
                 iter.remove();
             }
         }
-
     }
 
     private void addTrackers(Mat img, List<Rect> boundingBoxes) {

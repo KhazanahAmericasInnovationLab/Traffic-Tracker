@@ -89,7 +89,7 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
                         synchronized (getHolder()) {
                             canvas.drawBitmap(nextFrame, 0, 0, null);
-                            canvas.drawText(fps, 30, 100, mTextPaint);
+                            canvas.drawText(fps, canvas.getWidth() - 450, canvas.getHeight() - 30, mTextPaint);
                             canvas.drawText("Zone 1:" + mZone1Count + "      Zone2: " + mZone2Count + "      Active Trackers: " + mActiveTrackersCount, 30, nextFrame.getHeight() - 30, mTextPaint);
 
                             Log.v(TAG, "new frame displayed");
@@ -107,14 +107,12 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                     try {
                         Thread.sleep((long) (1000 / (10 * VIDEO_SPEED_MULTIPLE) - (System.currentTimeMillis() - startTime)));
                     } catch (InterruptedException e) {
-                        Log.e(TAG, "Interrupted Exception when trying to sleep to limit fps");
-                        Log.e(TAG, e.getStackTrace().toString());
+                        Log.w(TAG, "Interrupted Exception when trying to sleep to limit fps");
                     }
                 }
 
             } catch (InterruptedException e) {
-                Log.e(TAG, "Interrupted Exception when trying to retrieve frame from buffer");
-                Log.e(TAG, e.getStackTrace().toString());
+                Log.w(TAG, "Interrupted Exception when trying to retrieve frame from buffer");
             }
         }
     }
