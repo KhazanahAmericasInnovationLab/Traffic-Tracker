@@ -13,10 +13,8 @@ import android.widget.Toast;
 
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.OpenCVLoader;
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-
-import static java.lang.Math.round;
+import org.opencv.core.Size;
 
 public class CameraActivity extends AppCompatActivity implements CustomCameraView.CvCameraViewListener2 {
     public static final int CAMERA_PERMISSION_REQUEST = 1;
@@ -41,7 +39,7 @@ public class CameraActivity extends AppCompatActivity implements CustomCameraVie
     private int mPreviewFrameHeight;
 
 
-    private CountingSolution mCountingSolution;
+    private KCFTrackerCountingSolution mKCFTrackerCountingSolution;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,22 +122,13 @@ public class CameraActivity extends AppCompatActivity implements CustomCameraVie
 
         Toast.makeText(this, width + "x" + height, Toast.LENGTH_LONG).show();
 
-//        mCountingSolution = new CountingSolution();
+        android.graphics.Point size = new android.graphics.Point();
+        getWindowManager().getDefaultDisplay().getSize(size);
+        Size screenSize = new Size(size.x, size.y);
 
-//        android.graphics.Point size = new android.graphics.Point();
-//        getWindowManager().getDefaultDisplay().getSize(size);
-//        mScreenWidth = size.x;
-//        mScreenHeight = size.y;
-        //TODO custom frame retrieval
-        mScreenWidth = width;
-        mScreenHeight = height;
+        mKCFTrackerCountingSolution = new KCFTrackerCountingSolution(screenSize);
 
-
-        mPreviewFrameWidth = (int) round(mScreenWidth / 4.0);
-        mPreviewFrameHeight = (int) round(mScreenHeight / 2.0);
-
-        mRgb = Mat.zeros(mScreenHeight, mScreenWidth, CvType.CV_8UC3);
-
+        mRgb = null;
     }
 
     public void onCameraViewStopped() {
@@ -151,9 +140,9 @@ public class CameraActivity extends AppCompatActivity implements CustomCameraVie
 
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         Log.v(TAG, "onCameraFrame");
-//TODO update
-//        mCountingSolution.findObjects(inputFrame.rgba().clone(), mRgb, new Size(mPreviewFrameWidth, mPreviewFrameHeight));
-
+        //FIXME not loading properly
+        mKCFTrackerCountingSolution.process(inputFrame.rgba());
+        mRgb = mKCFTrackerCountingSolution.getPreviewMat(true);
         return mRgb;
     }
 
